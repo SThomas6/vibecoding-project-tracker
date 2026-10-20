@@ -3,6 +3,7 @@ import { Trash2, X } from 'lucide-react';
 import { STAGES, TASK_TYPES, TEAM } from '../constants.js';
 import { formatDate } from '../lib/dates.js';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
+import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 
 const NEW_TASK = {
   title: '',
@@ -94,11 +95,16 @@ export default function TaskModal({ task, onSave, onDelete, onClose }) {
       className="w-[calc(100%-2rem)] max-w-xl rounded-xl bg-surface-card p-0 text-ink shadow-xl backdrop:bg-ink/60"
     >
       <form onSubmit={handleSubmit} noValidate className="flex max-h-[calc(100dvh-2rem)] flex-col">
-        <div className="flex items-start justify-between gap-4 border-b border-line px-6 py-4">
+        <div
+          className={`flex items-start justify-between gap-4 rounded-t-xl border-b border-t-4 border-b-line ${typeStyle(form.type).stripeTop} px-6 py-4`}
+        >
           <div>
-            <h2 id={`${id}-heading`} className="text-lg font-semibold">
-              {isEdit ? 'Edit task' : 'New task'}
-            </h2>
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 id={`${id}-heading`} className="text-lg font-semibold">
+                {isEdit ? 'Edit task' : 'New task'}
+              </h2>
+              <TypeBadge type={form.type} />
+            </div>
             {isEdit && <p className="text-sm text-ink-muted">Created {formatDate(task.createdDate)}</p>}
           </div>
           <button
@@ -151,22 +157,26 @@ export default function TaskModal({ task, onSave, onDelete, onClose }) {
           <fieldset>
             <legend className={labelStyles}>Type</legend>
             <div className="mt-1.5 flex gap-3">
-              {TASK_TYPES.map((type) => (
-                <label
-                  key={type.id}
-                  className="flex min-h-11 flex-1 cursor-pointer items-center gap-2 rounded-lg border border-line-control px-3 text-sm font-medium has-[:checked]:border-brand has-[:checked]:bg-surface-sunken"
-                >
-                  <input
-                    type="radio"
-                    name={`${id}-type`}
-                    value={type.id}
-                    checked={form.type === type.id}
-                    onChange={update('type')}
-                    className="h-4 w-4 accent-brand"
-                  />
-                  {type.label}
-                </label>
-              ))}
+              {TASK_TYPES.map((type) => {
+                const style = typeStyle(type.id);
+                return (
+                  <label
+                    key={type.id}
+                    className={`flex min-h-11 flex-1 cursor-pointer items-center gap-2 rounded-lg border border-line-control px-3 text-sm font-medium ${style.selected}`}
+                  >
+                    <input
+                      type="radio"
+                      name={`${id}-type`}
+                      value={type.id}
+                      checked={form.type === type.id}
+                      onChange={update('type')}
+                      className="h-4 w-4 accent-brand"
+                    />
+                    <style.Icon aria-hidden="true" className={`h-4 w-4 ${style.icon}`} />
+                    {type.label}
+                  </label>
+                );
+              })}
             </div>
           </fieldset>
 
