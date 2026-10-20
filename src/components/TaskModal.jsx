@@ -1,12 +1,15 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Trash2, X } from 'lucide-react';
-import { STAGES, TASK_TYPES, TEAM } from '../constants.js';
+import { CONTEXT_TEMPLATE, STAGES, TASK_TYPES, TEAM } from '../constants.js';
 import { formatDate } from '../lib/dates.js';
+import { cleanContext } from '../lib/tasks.js';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
+import ContextFields from './ContextFields.jsx';
+import Dialog from './Dialog.jsx';
 import DueBadge from './DueBadge.jsx';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 
-// New tasks start Unassigned (PRD FR15, DR6).
+// New tasks start Unassigned (PRD FR9, DR2).
 const NEW_TASK = {
   title: '',
   description: '',
@@ -16,43 +19,25 @@ const NEW_TASK = {
   dueDate: '',
 };
 
-// The add / edit form. It uses the browser's native <dialog>, which handles
-// the hard accessibility parts for us: focus stays inside the dialog, the page
-// behind it can't be reached, and Escape closes it.
-//
+// The add / edit form, in the shared native <dialog> (Dialog.jsx).
 // `task` is null when adding a new task, or the task being edited.
 export default function TaskModal({ task, onSave, onDelete, onClose }) {
   const isEdit = Boolean(task);
-  const [form, setForm] = useState(() => ({ ...NEW_TASK, ...task, dueDate: task?.dueDate ?? '' }));
+  const [form, setForm] = useState(() => ({
+    ...NEW_TASK,
+    ...task,
+    dueDate: task?.dueDate ?? '',
+    // An empty Context box shows the template (PRD FR17).
+    context: task?.context || CONTEXT_TEMPLATE,
+    contextTool: task?.contextTool ?? '',
+  }));
   const [titleError, setTitleError] = useState('');
   const [confirmingDelete, setConfirmingDelete] = useState(false);
 
-  const dialogRef = useRef(null);
   const titleRef = useRef(null);
   const deleteRef = useRef(null);
   const keepRef = useRef(null);
   const id = useId();
-
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    const returnFocusTo = document.activeElement;
-    dialog.showModal();
-    titleRef.current.focus();
-
-    return () => {
-      dialog.close();
-      // Put focus back where it was (the card or the "New task" button).
-      // If the card moved to another column it's a new element, so find it by
-      // task id; if the task was deleted, fall back to the board.
-      if (returnFocusTo?.isConnected) {
-        returnFocusTo.focus();
-        return;
-      }
-      const taskId = returnFocusTo?.dataset?.taskId;
-      const movedCard = taskId && document.querySelector(`[data-task-id="${CSS.escape(taskId)}"]`);
-      (movedCard || document.getElementById('board'))?.focus();
-    };
-  }, []);
 
   useEffect(() => {
     if (confirmingDelete) keepRef.current.focus();
@@ -70,6 +55,10 @@ export default function TaskModal({ task, onSave, onDelete, onClose }) {
       titleRef.current.focus();
       return;
     }
+    // The "last updated" time only moves when the context itself changes (DR5).
+    const context = cleanContext(form.context);
+    const contextTool = form.contextTool || null;
+    const contextChanged = context !== (task?.context ?? '') || contextTool !== (task?.contextTool ?? null);
     onSave({
       title,
       description: form.description.trim(),
@@ -77,6 +66,9 @@ export default function TaskModal({ task, onSave, onDelete, onClose }) {
       status: form.status,
       assignee: form.assignee,
       dueDate: form.dueDate || null,
+      context,
+      contextTool,
+      contextUpdatedAt: contextChanged ? new Date().toISOString() : (task?.contextUpdatedAt ?? null),
     });
   }
 
@@ -86,16 +78,7 @@ export default function TaskModal({ task, onSave, onDelete, onClose }) {
   }
 
   return (
-    <dialog
-      ref={dialogRef}
-      aria-labelledby={`${id}-heading`}
-      onCancel={(event) => {
-        // Escape key: let React close the dialog so state stays in sync.
-        event.preventDefault();
-        onClose();
-      }}
-      className="w-[calc(100%-2rem)] max-w-xl rounded-xl bg-surface-card p-0 text-ink shadow-xl backdrop:bg-ink/60"
-    >
+    <Dialog labelledBy={`${id}-heading`} initialFocusRef={titleRef} onClose={onClose}>
       <form onSubmit={handleSubmit} noValidate className="flex max-h-[calc(100dvh-2rem)] flex-col">
         <div
           className={`flex items-start justify-between gap-4 rounded-t-xl border-b border-t-4 border-b-line ${typeStyle(form.type).stripeTop} px-6 py-4`}
@@ -218,6 +201,14 @@ export default function TaskModal({ task, onSave, onDelete, onClose }) {
               />
             </div>
           </div>
+
+          <ContextFields
+            id={id}
+            context={form.context}
+            tool={form.contextTool}
+            updatedAt={task?.contextUpdatedAt}
+            onChange={update}
+          />
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-6 py-4">
@@ -262,6 +253,6 @@ export default function TaskModal({ task, onSave, onDelete, onClose }) {
           )}
         </div>
       </form>
-    </dialog>
+    </Dialog>
   );
 }

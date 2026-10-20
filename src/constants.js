@@ -23,6 +23,24 @@ export const TEAM = [
   { id: 'priya',  name: 'Priya Shah', email: 'priya.shah@example.com', github: 'priyashah-demo' },
 ];
 
+// The AI tools a task's context can come from (PRD FR16).
+export const AI_TOOLS = ['Claude', 'ChatGPT', 'Cursor', 'Lovable', 'Replit', 'Other'];
+
+// Shown in an empty Context box, so there's always a prompt for what the next
+// person needs (PRD FR17). An untouched template is saved as no context.
+export const CONTEXT_TEMPLATE = [
+  '## Background',
+  '',
+  '## Constraints',
+  '',
+  '## Tried so far',
+  '',
+  '## Pick up from here',
+  '',
+].join('\n');
+
+export const CONTEXT_MAX_LENGTH = 20000; // PRD DR4
+
 // Where the app keeps its data in the browser (localStorage).
 export const STORAGE_KEYS = {
   tasks: 'vibetracker.tasks',

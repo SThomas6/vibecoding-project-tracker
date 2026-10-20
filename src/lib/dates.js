@@ -29,3 +29,16 @@ export function daysFromToday(days) {
   date.setDate(date.getDate() + days);
   return toISODate(date);
 }
+
+const RELATIVE_TIME = new Intl.RelativeTimeFormat('en-GB', { numeric: 'auto' });
+
+// An ISO timestamp as time passed: 'just now', '5 minutes ago', '2 hours ago',
+// 'yesterday', '3 days ago'.
+export function timeAgo(timestamp, now = new Date()) {
+  const minutes = Math.round((now - new Date(timestamp)) / 60_000);
+  if (minutes < 1) return 'just now';
+  if (minutes < 60) return RELATIVE_TIME.format(-minutes, 'minute');
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return RELATIVE_TIME.format(-hours, 'hour');
+  return RELATIVE_TIME.format(-Math.round(hours / 24), 'day');
+}

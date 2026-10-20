@@ -22,8 +22,9 @@ import { getMember } from './lib/team.js';
  *   - hooks/useLocalStorage.js: saves state in the browser across reloads
  *   - lib/                    : small helpers (dates, team members, new tasks)
  *   - components/             : Header, Board (columns), TaskCard, Avatar,
- *                               TaskModal (add / edit / delete), Toast,
- *                               TypeBadge, TeamStrip
+ *                               TaskModal (add / edit / delete) with
+ *                               ContextFields, Dialog, Toast, TypeBadge,
+ *                               TeamStrip
  *
  * Build sequence (Phase 3):
  *   - M4  data-model           : four columns + demo task cards (done)
@@ -31,7 +32,7 @@ import { getMember } from './lib/team.js';
  *   - M6  tag-style            : feature vs. bug colour + icon (done)
  *   - M7  task-owner           : owner on every card + "Hand off to..." (done)
  *   - M8  due-tint             : due-date badge: calm / warning / overdue / done (done)
- *   - M9  task-context         : curated Context briefing field on the modal
+ *   - M9  task-context         : Context notes, AI tool and "last updated" on the form (done)
  *   - M10 copy-context         : "Copy Context" button that serialises the task
  *   - M11 project-deliverables : the deliverable anchor cards above the board
  *   - M12 secret-sauce         : the one thing that makes this tracker ours
