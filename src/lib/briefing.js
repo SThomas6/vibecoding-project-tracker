@@ -6,7 +6,7 @@ import { getMember } from './team.js';
 
 // Turns a task into a Markdown briefing to paste into an AI tool (M10, PRD
 // FR18, DR9): the title as a heading, the key facts, then the description,
-// pasted handoff, handoff trail, context, and optional TACO Actor / Output
+// pasted handoff, handoff trail, and optional TACO Actor / Output
 // format instructions. Empty fields are left out.
 export function buildBriefing(task, team, now = new Date(), modeId = null) {
   const pastNames = getPastContributors(task)
@@ -36,14 +36,13 @@ export function buildBriefing(task, team, now = new Date(), modeId = null) {
     sections.push(`## Handoff notes\n\n${lines.join('\n')}`);
   }
 
-  if (task.context) sections.push(`## Context\n\n${task.context}`);
 
 
   if (mode) sections.push(`## Output format\n\n${mode.output}`);
 
   const footer = [
     task.contextTool && `AI tool: ${task.contextTool}`,
-    task.contextUpdatedAt && `Context last updated ${formatDateTime(task.contextUpdatedAt)}`,
+    task.handoffUpdatedAt && `Handoff last updated ${formatDateTime(task.handoffUpdatedAt)}`,
   ].filter(Boolean);
   if (footer.length > 0) sections.push(`---\n\n${footer.join(' · ')}`);
 

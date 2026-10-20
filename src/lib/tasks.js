@@ -1,4 +1,3 @@
-import { CONTEXT_TEMPLATE } from '../constants.js';
 import { todayISO } from './dates.js';
 
 // Builds a complete new task from the form fields. The id and created date
@@ -7,9 +6,7 @@ export function createTask(fields) {
   return {
     id: newId(),
     createdDate: todayISO(),
-    context: '',
     contextTool: null,
-    contextUpdatedAt: null,
     handoffText: '',
     handoffUpdatedAt: null,
     handoffs: [],
@@ -36,11 +33,4 @@ export function getContributors(task) {
 // Team member IDs who worked on the task previously, excluding the current owner.
 export function getPastContributors(task) {
   return getContributors(task).filter((id) => id !== task.assignee);
-}
-
-// What gets saved from the Context box: an untouched template counts as no
-// context, so it isn't stored or copied.
-export function cleanContext(text) {
-  const trimmed = text.trim();
-  return trimmed === CONTEXT_TEMPLATE.trim() ? '' : trimmed;
 }

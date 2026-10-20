@@ -16,7 +16,7 @@ Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10
 | Owner on every card, Unassigned by default, one-step "Hand off" with optional handoff note and contributor trail ("Previously worked on by…") | FR9, FR10 |
 | Team strip: email, GitHub handle, what each person is driving, one-click work filter and "Add member" | FR11, FR12 |
 | Due-date badge: calm, warning (under 24 hours), overdue or done | FR13, FR14 |
-| Context notes in Markdown, one-click AI reply paste, AI tool used, and "Last updated" | FR15–FR17 |
+| The AI tool used, and a prompt goal (TACO structure) for the copied briefing | FR16 |
 | "Copy context": the task as a TACO-structured Markdown briefing for an AI tool | FR18 |
 | Four deliverable link cards and an editable project name | FR19 |
 | Reset to the demo project, after confirming | FR20 |
@@ -47,7 +47,7 @@ src/
   lib/             small pure helpers: dates, due states, team, tasks,
                    briefing (Markdown for "Copy context"), clipboard, links
   components/      one component per file, e.g. Board, TaskCard, TaskModal,
-                   ContextFields, PromptLog, Deliverables, Dialog (shared shell)
+                   HandoffFields, BriefingFields, Deliverables, Dialog (shared shell)
 ```
 
 Shared button and field styles are in `components/styles.js`, and colour tokens in `tailwind.config.js`. Keep every file under 300 lines.

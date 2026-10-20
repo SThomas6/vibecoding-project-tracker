@@ -37,7 +37,7 @@ export function filterTasks(tasks, filters, now = new Date()) {
 
 function matchesQuery(task, query) {
   const handoffNotes = (task.handoffs ?? []).map((item) => item.note ?? '').join(' ');
-  const haystack = [task.title, task.description, task.context, task.contextTool, task.handoffText, handoffNotes]
+  const haystack = [task.title, task.description, task.contextTool, task.handoffText, handoffNotes]
     .filter(Boolean)
     .join(' ')
     .toLowerCase();
@@ -63,7 +63,6 @@ function matchesDue(task, dueFilter, now) {
 
 function matchesContext(task, contextFilter) {
   if (contextFilter === 'all') return true;
-  if (contextFilter === 'has-context') return Boolean(task.context?.trim());
   if (contextFilter === 'has-handoff') return Boolean(task.handoffText?.trim()) || (task.handoffs?.length ?? 0) > 0;
   if (contextFilter.startsWith('tool:')) return task.contextTool === contextFilter.slice('tool:'.length);
   return true;

@@ -1,10 +1,10 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Trash2, X } from 'lucide-react';
-import { CONTEXT_TEMPLATE, STAGES, TASK_TYPES } from '../constants.js';
+import { STAGES, TASK_TYPES } from '../constants.js';
 import { formatDate } from '../lib/dates.js';
-import { cleanContext, newId } from '../lib/tasks.js';
+import { newId } from '../lib/tasks.js';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
-import ContextFields from './ContextFields.jsx';
+import BriefingFields from './BriefingFields.jsx';
 import Dialog from './Dialog.jsx';
 import DueBadge from './DueBadge.jsx';
 import HandoffFields from './HandoffFields.jsx';
@@ -29,8 +29,6 @@ export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy,
     ...NEW_TASK,
     ...task,
     dueDate: task?.dueDate ?? '',
-    // An empty Context box shows the template (PRD FR17).
-    context: task?.context || CONTEXT_TEMPLATE,
     contextTool: task?.contextTool ?? '',
     handoffText: task?.handoffText ?? '',
   }));
@@ -190,26 +188,22 @@ export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy,
             </div>
           </div>
 
-          <ContextFields
-            id={id}
-            context={form.context}
-            tool={form.contextTool}
-            handoffs={task?.handoffs ?? []}
-            team={team}
-            updatedAt={task?.contextUpdatedAt}
-            onChange={update}
-            onSetContext={(context) => setForm((prev) => ({ ...prev, context }))}
-            onCopy={(modeId) => onCopy({ ...task, ...fieldsFromForm(form, task) }, modeId)}
-            onNotify={onNotify}
-          />
-
           <HandoffFields
             id={id}
             text={form.handoffText}
             updatedAt={task?.handoffUpdatedAt}
+            handoffs={task?.handoffs ?? []}
+            team={team}
             onSetText={(handoffText) => setForm((prev) => ({ ...prev, handoffText }))}
             onCopy={() => onCopyHandoff({ ...task, ...fieldsFromForm(form, task) })}
             onNotify={onNotify}
+          />
+
+          <BriefingFields
+            id={id}
+            tool={form.contextTool}
+            onChange={update}
+            onCopy={(modeId) => onCopy({ ...task, ...fieldsFromForm(form, task) }, modeId)}
           />
         </div>
 
@@ -261,15 +255,13 @@ export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy,
 }
 
 // The task as it would be saved from the form, used by Save and by Copy
-// context. Each "last updated" time only moves when its own text changes (DR5).
+// context. The handoff's "last updated" time only moves when its text changes.
 function fieldsFromForm(form, task) {
-  const context = cleanContext(form.context);
   const contextTool = form.contextTool || null;
   const ownerChanged = task && form.assignee !== (task.assignee ?? '');
   const handoffs = ownerChanged
     ? [...(task.handoffs ?? []), { id: newId(), from: task.assignee || '', to: form.assignee, note: '', at: new Date().toISOString() }]
     : (task?.handoffs ?? []);
-  const contextChanged = context !== (task?.context ?? '') || contextTool !== (task?.contextTool ?? null);
   const handoffText = form.handoffText.trim();
   const handoffChanged = handoffText !== (task?.handoffText ?? '');
   return {
@@ -279,11 +271,9 @@ function fieldsFromForm(form, task) {
     status: form.status,
     assignee: form.assignee,
     dueDate: form.dueDate || null,
-    context,
     contextTool,
     handoffText,
     handoffUpdatedAt: handoffChanged ? new Date().toISOString() : (task?.handoffUpdatedAt ?? null),
     handoffs,
-    contextUpdatedAt: contextChanged ? new Date().toISOString() : (task?.contextUpdatedAt ?? null),
   };
 }

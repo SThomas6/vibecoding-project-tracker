@@ -1,8 +1,9 @@
 import { useRef } from 'react';
-import { ClipboardPaste, Copy } from 'lucide-react';
-import { CONTEXT_MAX_LENGTH } from '../constants.js';
+import { ClipboardPaste, Copy, KeyRound, MessageSquareQuote } from 'lucide-react';
+import { HANDOFF_TEXT_MAX_LENGTH } from '../constants.js';
 import { readClipboardText } from '../lib/clipboard.js';
-import { timeAgo } from '../lib/dates.js';
+import { formatDateTime, timeAgo } from '../lib/dates.js';
+import { getMember } from '../lib/team.js';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 
 // The handoff for the next developer (M12 secret sauce). Instead of logging
@@ -10,7 +11,7 @@ import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 // as the summary their AI agent wrote at the end of a session. Whoever picks
 // the task up reads it here (and on the card) and copies it straight into their
 // own AI agent. It's a plain textarea, so pasted code is never run (NFR12).
-export default function HandoffFields({ id, text, updatedAt, onSetText, onCopy, onNotify }) {
+export default function HandoffFields({ id, text, updatedAt, handoffs = [], team = [], onSetText, onCopy, onNotify }) {
   const textRef = useRef(null);
 
   async function paste() {
@@ -20,7 +21,7 @@ export default function HandoffFields({ id, text, updatedAt, onSetText, onCopy, 
       onNotify('Press Ctrl+V (⌘V on a Mac) in the handoff box to paste.');
       return;
     }
-    onSetText(clipboard.slice(0, CONTEXT_MAX_LENGTH));
+    onSetText(clipboard.slice(0, HANDOFF_TEXT_MAX_LENGTH));
     textRef.current?.focus();
     onNotify('Handoff pasted. Save changes to keep it.');
   }
@@ -50,6 +51,28 @@ export default function HandoffFields({ id, text, updatedAt, onSetText, onCopy, 
           )}
         </p>
       </div>
+      {handoffs.length > 0 && (
+        <div className="rounded-lg border border-line bg-surface-sunken p-3">
+          <p className="flex items-center gap-1.5 text-xs font-semibold text-ink">
+            <MessageSquareQuote aria-hidden="true" className="h-4 w-4 text-brand" />
+            Handoff history ({handoffs.length})
+          </p>
+          <ol className="mt-2 flex flex-col gap-1.5 text-xs text-ink-muted">
+            {[...handoffs].reverse().map((item) => (
+              <li key={item.id} className="rounded bg-surface-card px-2.5 py-1.5 text-ink">
+                <span className="font-semibold">
+                  {getMember(team, item.from)?.name ?? 'Unassigned'} → {getMember(team, item.to)?.name ?? 'Unassigned'}
+                </span>{' '}
+                <time dateTime={item.at} className="text-ink-muted">
+                  ({formatDateTime(item.at)})
+                </time>
+                {item.note && <p className="mt-0.5 text-ink">{item.note}</p>}
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+
       <div>
         <label htmlFor={`${id}-handoff`} className={labelStyles}>
           Handoff text
@@ -62,12 +85,16 @@ export default function HandoffFields({ id, text, updatedAt, onSetText, onCopy, 
           id={`${id}-handoff`}
           ref={textRef}
           rows={8}
-          maxLength={CONTEXT_MAX_LENGTH}
+          maxLength={HANDOFF_TEXT_MAX_LENGTH}
           value={text}
           onChange={(event) => onSetText(event.target.value)}
-          aria-describedby={`${id}-handoff-hint`}
+          aria-describedby={`${id}-handoff-hint ${id}-handoff-secrets`}
           className={`${inputStyles} py-2 font-mono leading-relaxed`}
         />
+        <p id={`${id}-handoff-secrets`} className="mt-1.5 flex items-start gap-1.5 text-sm text-ink-muted">
+          <KeyRound aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
+          Never paste passwords, API keys or tokens. The handoff is saved in this browser and copied into AI chats.
+        </p>
       </div>
       <div className="flex flex-wrap justify-end gap-3">
         <button type="button" onClick={paste} className={buttonStyles.secondary}>

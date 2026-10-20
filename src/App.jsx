@@ -32,7 +32,7 @@ import { getMember } from './lib/team.js';
  *   - lib/                    : small helpers (dates, due states, filters, briefing, tasks)
  *   - components/             : Header, Deliverables + DeliverableCard, TeamStrip,
  *                               FilterBar, Board (columns), TaskCard, Avatar,
- *                               TypeBadge, DueBadge, TaskModal with ContextFields
+ *                               TypeBadge, DueBadge, TaskModal with BriefingFields
  *                               and HandoffFields, Dialog, CopyFallbackDialog,
  *                               RenameProjectDialog, AddMemberDialog, ResetDemoDialog, Toast
  *
@@ -49,9 +49,7 @@ import { getMember } from './lib/team.js';
  * @property {string} assignee               id of a TEAM member
  * @property {string|null} dueDate           ISO 'YYYY-MM-DD'
  * @property {string} createdDate            ISO 'YYYY-MM-DD'
- * @property {string} context                M9: curated briefing for the next AI / teammate
- * @property {string|null} contextTool       M9: 'Claude' | 'ChatGPT' | 'Cursor' | 'Lovable' | 'Replit' | 'Other'
- * @property {string|null} contextUpdatedAt  M9: ISO timestamp, set automatically on save
+ * @property {string|null} contextTool       'Claude' | 'ChatGPT' | 'Cursor' | 'Lovable' | 'Replit' | 'Other'
  * @property {string} handoffText            M12: pasted handoff for the next developer's AI agent
  * @property {string|null} handoffUpdatedAt  M12: ISO timestamp, set when the handoff text changes
  * @property {Array} handoffs                M7/M12: handoff trail ({ id, from, to, note, at })
@@ -146,7 +144,6 @@ export default function App() {
           ...task,
           assignee: memberId,
           handoffs: [...(task.handoffs ?? []), entry],
-          contextUpdatedAt: note ? at : task.contextUpdatedAt,
         };
       })
     );

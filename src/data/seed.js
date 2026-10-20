@@ -4,7 +4,7 @@ import { daysFromToday } from '../lib/dates.js';
 // building a personal portfolio site, with three tasks per column. `due` and
 // `created` are days relative to today and `ago` is hours before now, so every
 // due-date state (calm, warning, overdue, done, none) shows whenever the
-// prototype is opened. Two tasks carry full context and a prompt log.
+// prototype is opened. Two tasks carry a pasted handoff and a handoff history.
 const SEED_TASKS = [
   // To Do
   {
@@ -29,21 +29,6 @@ const SEED_TASKS = [
     id: 't5', title: 'Project carousel skips slides', type: 'bug', status: 'in-progress', assignee: 'alex', due: 2, created: -2,
     description: 'Clicking "next" quickly jumps two slides. Probably a duplicate event listener.',
     contextTool: 'Claude',
-    ago: 2,
-    context: [
-      '## Background',
-      'The project carousel on the home page jumps two slides when "Next" is clicked quickly. It happens in Chrome and Safari, but not on first load.',
-      '',
-      '## Constraints',
-      'Keep the current Carousel component and its props. No new libraries.',
-      '',
-      '## Tried so far',
-      '- Logged the click handler: it fires twice after any re-render.',
-      '- Debouncing the button hides the bug but makes the carousel feel slow.',
-      '',
-      '## Pick up from here',
-      'The click listener is added in the component body on every render. Move it into useEffect with a cleanup that removes it, then test fast clicking on a phone.',
-    ].join('\n'),
     handoffAgo: 1,
     handoffText: [
       '## Handoff: carousel skips slides',
@@ -83,21 +68,6 @@ const SEED_TASKS = [
     id: 't7', title: 'Footer links 404 after deploy', type: 'bug', status: 'review', assignee: 'priya', due: -2, created: -3,
     description: 'Links work locally but break on Vercel. Likely relative paths.',
     contextTool: 'Cursor',
-    ago: 26,
-    context: [
-      '## Background',
-      'The footer links (About, CV, Contact) work locally but return 404 on the Vercel deploy.',
-      '',
-      '## Constraints',
-      'Must work on Vercel and locally. Keep the links as plain anchors.',
-      '',
-      '## Tried so far',
-      '- The links use relative paths like "about.html", so on nested routes they resolve to /projects/about.html.',
-      '- A vercel.json rewrite fixed /about, but not the nested routes.',
-      '',
-      '## Pick up from here',
-      'Change the footer links to root-relative paths ("/about") and remove the rewrite. Check every footer link on the preview deploy before merging.',
-    ].join('\n'),
     handoffAgo: 25,
     handoffText: [
       '## Handoff: footer links 404 on Vercel',
@@ -135,13 +105,11 @@ const SEED_TASKS = [
 ];
 
 export function createSeedTasks() {
-  return SEED_TASKS.map(({ due, created, ago, handoffAgo, handoffText, handoffs = [], ...task }) => ({
-    context: '',
+  return SEED_TASKS.map(({ due, created, handoffAgo, handoffText, handoffs = [], ...task }) => ({
     contextTool: null,
     ...task,
     dueDate: due == null ? null : daysFromToday(due),
     createdDate: daysFromToday(created),
-    contextUpdatedAt: ago == null ? null : hoursAgo(ago),
     handoffText: handoffText ?? '',
     handoffUpdatedAt: handoffAgo == null ? null : hoursAgo(handoffAgo),
     handoffs: handoffs.map(({ ago: handoffAgo, ...entry }, index) => ({

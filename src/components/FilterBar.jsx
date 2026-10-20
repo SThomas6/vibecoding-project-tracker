@@ -65,7 +65,7 @@ export default function FilterBar({ filters, team, totalCount, shownCount, onCha
             />
           </div>
           <p id={`${id}-query-hint`} className="mt-1 text-xs text-ink-muted">
-            Title, description, context or handoff notes
+            Title, description or handoff
           </p>
         </div>
 
@@ -123,11 +123,10 @@ export default function FilterBar({ filters, team, totalCount, shownCount, onCha
 
         <div>
           <label htmlFor={`${id}-context`} className={labelStyles}>
-            AI context &amp; handoffs
+            Handoff &amp; AI tool
           </label>
           <select id={`${id}-context`} value={filters.context} onChange={update('context')} className={inputStyles}>
             <option value="all">All tasks</option>
-            <option value="has-context">Has AI context notes</option>
             <option value="has-handoff">Has a handoff</option>
             <optgroup label="By AI tool used">
               {AI_TOOLS.map((tool) => (
