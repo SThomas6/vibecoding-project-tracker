@@ -3,7 +3,6 @@ import { ArrowRightLeft, Copy, ScrollText } from 'lucide-react';
 import Avatar from './Avatar.jsx';
 import DueBadge from './DueBadge.jsx';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
-import { TEAM } from '../constants.js';
 import { getMember } from '../lib/team.js';
 
 // One task on the board: the title with its type badge in the corner, then
@@ -16,9 +15,9 @@ import { getMember } from '../lib/team.js';
 const actionStyles =
   'relative z-10 inline-flex min-h-9 shrink-0 items-center gap-1 rounded-md px-2 text-xs font-semibold text-brand hover:bg-surface-sunken';
 
-export default function TaskCard({ task, onOpen, onHandOff, onCopy, highlighted, now }) {
-  const member = getMember(task.assignee);
-  const others = TEAM.filter((m) => m.id !== task.assignee);
+export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, highlighted, now }) {
+  const member = getMember(team, task.assignee);
+  const others = team.filter((m) => m.id !== task.assignee);
   const [handOffOpen, setHandOffOpen] = useState(false);
   const handOffRef = useRef(null);
   const panelId = useId();

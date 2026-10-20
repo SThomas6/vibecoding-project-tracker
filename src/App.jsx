@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Plus, RotateCcw } from 'lucide-react';
+import AddMemberDialog from './components/AddMemberDialog.jsx';
 import Board from './components/Board.jsx';
 import CopyFallbackDialog from './components/CopyFallbackDialog.jsx';
 import Deliverables from './components/Deliverables.jsx';
@@ -10,7 +11,7 @@ import TaskModal from './components/TaskModal.jsx';
 import TeamStrip from './components/TeamStrip.jsx';
 import Toast from './components/Toast.jsx';
 import { buttonStyles } from './components/styles.js';
-import { STORAGE_KEYS } from './constants.js';
+import { STORAGE_KEYS, TEAM } from './constants.js';
 import { createSeedProject, createSeedTasks } from './data/seed.js';
 import { useLocalStorage } from './hooks/useLocalStorage.js';
 import { useNow } from './hooks/useNow.js';
@@ -86,6 +87,10 @@ export default function App() {
   // The briefing to copy by hand when the browser blocks copying (M10).
   const [fallbackText, setFallbackText] = useState(null);
 
+  // The team, which can grow (PRD FR12). Starts with the demo team.
+  const [team, setTeam] = useLocalStorage(STORAGE_KEYS.team, TEAM);
+  const [addingMember, setAddingMember] = useState(false);
+
   // The project's name and deliverable links (M11).
   const [project, setProject] = useLocalStorage(STORAGE_KEYS.project, createSeedProject);
   const [renaming, setRenaming] = useState(false);
@@ -123,7 +128,7 @@ export default function App() {
 
   function handOff(taskId, memberId) {
     setTasks((prev) => prev.map((task) => (task.id === taskId ? { ...task, assignee: memberId } : task)));
-    showToast(`Handed off to ${getMember(memberId).name}.`);
+    showToast(`Handed off to ${getMember(team, memberId).name}.`);
     clearTimeout(highlightTimer.current);
     setHighlightedId(taskId);
     highlightTimer.current = setTimeout(() => setHighlightedId(null), 2000);
@@ -143,12 +148,19 @@ export default function App() {
   function resetDemo() {
     setTasks(createSeedTasks());
     setProject(createSeedProject());
+    setTeam(TEAM);
     setResetting(false);
     showToast('Demo project restored');
   }
 
+  function addMember(member) {
+    setTeam((prev) => [...prev, member]);
+    setAddingMember(false);
+    showToast(`${member.name} added to the team`);
+  }
+
   async function copyContext(task) {
-    const text = buildBriefing(task, new Date());
+    const text = buildBriefing(task, team, new Date());
     if (await copyText(text)) showToast('Context copied. Paste it into your AI tool.');
     else setFallbackText(text);
   }
@@ -177,10 +189,11 @@ export default function App() {
 
       <main className="mx-auto max-w-screen-2xl px-4 py-6 sm:px-6">
         <Deliverables links={project.links} onSave={saveLink} />
-        <TeamStrip tasks={tasks} />
+        <TeamStrip team={team} tasks={tasks} onAddMember={() => setAddingMember(true)} />
         <div id="board" tabIndex={-1} className="focus:outline-none">
           <Board
             tasks={tasks}
+            team={team}
             onOpenTask={(task) => setEditing({ task })}
             onHandOff={handOff}
             onCopy={copyContext}
@@ -193,6 +206,7 @@ export default function App() {
       {editing && (
         <TaskModal
           task={editing.task}
+          team={team}
           toast={toast}
           onSave={saveTask}
           onDelete={deleteTask}
@@ -205,6 +219,8 @@ export default function App() {
       {renaming && (
         <RenameProjectDialog name={project.name} onSave={renameProject} onClose={() => setRenaming(false)} />
       )}
+
+      {addingMember && <AddMemberDialog onSave={addMember} onClose={() => setAddingMember(false)} />}
 
       {resetting && <ResetDemoDialog onConfirm={resetDemo} onClose={() => setResetting(false)} />}
 

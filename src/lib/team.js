@@ -1,7 +1,6 @@
-import { TEAM } from '../constants.js';
-
-export function getMember(id) {
-  return TEAM.find((member) => member.id === id) ?? null;
+// The member with this id in the team list, or null (e.g. Unassigned).
+export function getMember(team, id) {
+  return team.find((member) => member.id === id) ?? null;
 }
 
 // 'Priya Shah' -> 'PS'

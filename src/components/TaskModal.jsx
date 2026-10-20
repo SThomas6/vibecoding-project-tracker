@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Trash2, X } from 'lucide-react';
-import { CONTEXT_TEMPLATE, STAGES, TASK_TYPES, TEAM } from '../constants.js';
+import { CONTEXT_TEMPLATE, STAGES, TASK_TYPES } from '../constants.js';
 import { formatDate } from '../lib/dates.js';
 import { cleanContext } from '../lib/tasks.js';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
@@ -23,7 +23,7 @@ const NEW_TASK = {
 
 // The add / edit form, in the shared native <dialog> (Dialog.jsx).
 // `task` is null when adding a new task, or the task being edited.
-export default function TaskModal({ task, toast, onSave, onDelete, onCopy, onNotify, onClose }) {
+export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy, onNotify, onClose }) {
   const isEdit = Boolean(task);
   const [form, setForm] = useState(() => ({
     ...NEW_TASK,
@@ -170,7 +170,7 @@ export default function TaskModal({ task, toast, onSave, onDelete, onCopy, onNot
               <label htmlFor={`${id}-assignee`} className={labelStyles}>Assigned to</label>
               <select id={`${id}-assignee`} value={form.assignee} onChange={update('assignee')} className={inputStyles}>
                 <option value="">Unassigned</option>
-                {TEAM.map((member) => (
+                {team.map((member) => (
                   <option key={member.id} value={member.id}>{member.name}</option>
                 ))}
               </select>

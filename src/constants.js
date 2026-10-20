@@ -16,7 +16,8 @@ export const TASK_TYPES = [
 // The team. For each member the clients asked us to store a name (to see who
 // a task is assigned to), an email (to contact a task's owner directly) and a
 // GitHub handle. `Task.assignee` holds a member's `id`.
-// These are made-up people for the prototype.
+// These are made-up people for the demo; more can be added in the Team strip
+// (PRD FR12), so the live list is kept in localStorage.
 export const TEAM = [
   { id: 'alex',   name: 'Alex Kim',   email: 'alex.kim@example.com',   github: 'alexkim-demo' },
   { id: 'jordan', name: 'Jordan Lee', email: 'jordan.lee@example.com', github: 'jordanlee-demo' },
@@ -61,4 +62,5 @@ export const DELIVERABLES = [
 export const STORAGE_KEYS = {
   tasks: 'vibetracker.tasks',
   project: 'vibetracker.project',
+  team: 'vibetracker.team',
 };

@@ -6,11 +6,11 @@ import { getMember } from './team.js';
 // Turns a task into a Markdown briefing to paste into an AI tool (M10, PRD
 // FR18, DR9): the title as a heading, the key facts, then the description and
 // context. Empty fields are left out, so the AI isn't given blank sections.
-export function buildBriefing(task, now = new Date()) {
+export function buildBriefing(task, team, now = new Date()) {
   const facts = [
     ['Type', labelOf(TASK_TYPES, task.type)],
     ['Status', labelOf(STAGES, task.status)],
-    ['Owner', getMember(task.assignee)?.name ?? 'Unassigned'],
+    ['Owner', getMember(team, task.assignee)?.name ?? 'Unassigned'],
     ['Due', task.dueDate && `${formatDate(task.dueDate)} (${dueState(task, now).label})`],
   ]
     .filter(([, value]) => value)
