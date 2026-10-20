@@ -85,7 +85,7 @@ One short sentence per element. These set the tone for the build phase — Perso
 
 - **Cards:** White cards on a light grey column with a 1px border and no heavy shadow; the title comes first, with owner and dates in one quiet row underneath.
 - **Buttons:** A solid indigo fill for the one main action on screen (New task, Save) and outlined for everything else, at least 44 px tall so they're easy to hit.
-- **Modal:** Centred, about 32 rem wide, on a dimmed backdrop. Focus moves into it when it opens and returns to the card when it closes, and Escape closes it.
+- **Modal:** Centred, about 36 rem wide, on a dimmed backdrop. Focus moves into it when it opens and returns to the card when it closes, and Escape closes it.
 - **Empty states:** A dashed border with muted text that says what to do next. Never sad.
 - **Drag affordance (if used):** None in the core build, which uses a status dropdown. If drag-and-drop is added later, the dropdown stays as the keyboard alternative.
 
