@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Plus, RotateCcw } from 'lucide-react';
+import { Moon, Plus, RotateCcw, Sun } from 'lucide-react';
 import AddMemberDialog from './components/AddMemberDialog.jsx';
 import Board from './components/Board.jsx';
 import CopyFallbackDialog from './components/CopyFallbackDialog.jsx';
@@ -100,13 +100,26 @@ export default function App() {
   // "Reset demo" confirmation (PRD FR20).
   const [resetting, setResetting] = useState(false);
 
-  // Search and advanced board filters (PRD FR23).
+  // Light / Dark theme preference (PRD FR23, DR14), saved across visits.
+  const [theme, setTheme] = useLocalStorage(STORAGE_KEYS.theme, 'light');
+
+  // Search and advanced board filters (PRD FR21).
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const filteredTasks = filterTasks(tasks, filters, now);
 
   useEffect(() => {
     document.title = `${project.name} · Vibecoding Project Tracker`;
   }, [project.name]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
+
+  function toggleTheme() {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    showToast(next === 'dark' ? 'Dark mode enabled' : 'Light mode enabled');
+  }
 
   function showToast(message) {
     clearTimeout(toastTimer.current);
@@ -195,6 +208,19 @@ export default function App() {
 
       <Header projectName={project.name} onRename={() => setRenaming(true)}>
         <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            aria-pressed={theme === 'dark'}
+            onClick={toggleTheme}
+            className={buttonStyles.secondary}
+          >
+            {theme === 'dark' ? (
+              <Sun aria-hidden="true" className="h-4 w-4" />
+            ) : (
+              <Moon aria-hidden="true" className="h-4 w-4" />
+            )}
+            {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+          </button>
           <button type="button" onClick={() => setResetting(true)} className={buttonStyles.secondary}>
             <RotateCcw aria-hidden="true" className="h-4 w-4" />
             Reset demo

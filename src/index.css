@@ -2,6 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  color-scheme: light;
+  --brand: 67 56 202;
+  --brand-hover: 55 48 163;
+  --brand-accent: 14 116 144;
+  --brand-tint: 238 242 255;
+  --surface-page: 248 250 252;
+  --surface-card: 255 255 255;
+  --surface-sunken: 241 245 249;
+  --ink: 15 23 42;
+  --ink-muted: 71 85 105;
+  --line: 226 232 240;
+  --line-control: 100 116 139;
+  --danger: 185 28 28;
+  --danger-hover: 153 27 27;
+  --danger-tint: 254 242 242;
+  --feature: 29 78 216;
+  --feature-tint: 219 234 254;
+  --bug: 157 23 77;
+  --bug-tint: 252 231 243;
+  --due-safe: 22 101 52;
+  --due-safe-tint: 220 252 231;
+  --due-warning: 146 64 14;
+  --due-warning-tint: 254 243 199;
+  --due-overdue: 185 28 28;
+  --due-neutral: 71 85 105;
+  --due-neutral-tint: 241 245 249;
+}
+
+/* Accessible dark palette (PRD FR24, NFR2): every text pair meets WCAG 2.2 AA
+   (6.47:1 to 16.96:1), and form borders exceed 3:1 (5.71:1). */
+html.dark {
+  color-scheme: dark;
+  --brand: 67 56 202;
+  --brand-hover: 79 70 229;
+  --brand-accent: 56 189 248;
+  --brand-tint: 30 27 75;
+  --surface-page: 11 15 25;
+  --surface-card: 30 41 59;
+  --surface-sunken: 17 24 39;
+  --ink: 248 250 252;
+  --ink-muted: 203 213 225;
+  --line: 51 65 85;
+  --line-control: 148 163 184;
+  --danger: 185 28 28;
+  --danger-hover: 153 27 27;
+  --danger-tint: 69 10 10;
+  --feature: 147 197 253;
+  --feature-tint: 23 37 84;
+  --bug: 249 168 212;
+  --bug-tint: 80 7 36;
+  --due-safe: 134 239 172;
+  --due-safe-tint: 5 46 22;
+  --due-warning: 252 211 77;
+  --due-warning-tint: 69 26 3;
+  --due-overdue: 185 28 28;
+  --due-neutral: 226 232 240;
+  --due-neutral-tint: 51 65 85;
+}
+
 html, body, #root {
   height: 100%;
 }
@@ -16,6 +76,22 @@ html, body, #root {
     outline: 2px solid theme('colors.brand.DEFAULT');
     outline-offset: 2px;
   }
+
+  html.dark :focus-visible {
+    outline-color: #A5B4FC;
+  }
+}
+
+/* Lighter indigo and red for text/borders on dark cards (7.34:1 and 7.71:1),
+   while keeping solid button fills dark enough for white text (7.90:1 and 6.47:1). */
+html.dark .text-brand {
+  color: #A5B4FC;
+}
+html.dark .text-danger {
+  color: #FCA5A5;
+}
+html.dark .border-danger {
+  border-color: #FCA5A5;
 }
 
 /* Respect users who ask their OS for less motion. */

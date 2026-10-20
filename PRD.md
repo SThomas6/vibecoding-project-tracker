@@ -44,13 +44,13 @@ What the tracker must do (Sommerville, 2016).
 | FR20 | The tracker shall let the user reset it to the demo project, after confirming. | Extra: lets a demo or an assessment start from a known state. | Should |
 | FR21 | The tracker shall let the user search tasks and filter the board by who has worked on or owns a task, task type, due-date state and AI context or tool, and clear active filters in one step. | Extra: lets teammates focus on one person's work, urgent bugs or tasks with AI context as the board grows (Nielsen, 1994). | Should |
 | FR22 | Each task shall have a collapsible Saved prompts log recording key prompts, the AI tool, the result and whether it worked. Prompts that worked are added to the copied briefing. | Our "secret sauce", since IA invited extra features ("collapsible content"). Brief ("note useful prompts and results"); Starter PRD ("no one remembers the prompt that produced it"). | Could |
+| FR23 | The tracker shall let the user switch between Light mode and Dark mode, with both palettes meeting NFR2 and the choice saved between visits. | N: "make it customizable", if time allows. Preset light and dark palettes keep every text and border pair WCAG 2.2 AA compliant. | Could |
 
 **Out of scope for this prototype:**
 - **Login:** IA and N saw it as a later extra, and the link must open without registering (FL).
 - **More than one team or project:** IA said this can come later.
 - **A shared, real-time board:** it needs a server and a database, which FL and the Starter PRD ruled out.
 - **Drag-and-drop:** changing the status already moves tasks, and dragging is hard to make accessible.
-- **Multiple colour themes / dark mode:** one accessible palette is shipped consistently (`DESIGN.md` §7).
 
 ---
 
@@ -96,7 +96,7 @@ What the tracker stores, why, and where it comes from (Wiegers and Beatty, 2013)
 | DR10 | **Demo project:** a fictional team (with example.com email addresses) and about three tasks per column, covering every due-date state, with at least two holding full context, handoff notes and saved prompts. Dates are set relative to today. | So the board is never empty and every feature can be seen (FR3, FR20). Fictional people mean no real personal data is stored. | Written by the developer in the code. | ✅ |
 | DR11 | **Calculated, not stored:** due-date states, initials, column counts, who is working on or has worked on what, deliverable status and "last updated" times are worked out when shown. | Stored copies would go out of date. | Calculated from DR1–DR8 and the device's clock. | ✅ |
 | DR12 | **Storage:** all data saved as JSON in the browser's localStorage (about 5 MiB per site), and kept until the user clears or resets it. Nothing is stored on a server. | The Starter PRD chose localStorage, and FL said not to use databases. Keeping the data on the device protects it (NFR11). | Written by the tracker on every change (NFR9). | ✅ |
-| DR13 | **Board filter state:** the active search text and the selected member ("worked on by" or "current owner"), type, due-date and AI context filters. | Lets the user narrow the board without altering the saved tasks (FR21). | Chosen by the user in the filter bar or Team strip. | Should |
+| DR13 | **Board filter state & theme preference:** the active search text and filters (in memory), and the chosen Light or Dark theme (`vibetracker.theme` in `localStorage`). | Lets the user narrow the board (FR21) and remembers their Light/Dark theme between visits (FR23). | Chosen by the user in the filter bar, Team strip or header. | Should |
 | DR14 | **Personal data limits:** only names, and optionally email addresses and GitHub handles. No roles, photos, passwords or usage data. | UK GDPR data minimisation (Article 5(1)(c)). The clients asked only for these (IA, N). | Applies to DR7. | ✅ |
 
 ---

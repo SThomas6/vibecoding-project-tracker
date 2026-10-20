@@ -94,4 +94,5 @@ export const STORAGE_KEYS = {
   tasks: 'vibetracker.tasks',
   project: 'vibetracker.project',
   team: 'vibetracker.team',
+  theme: 'vibetracker.theme',
 };

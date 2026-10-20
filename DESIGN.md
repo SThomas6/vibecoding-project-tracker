@@ -108,14 +108,10 @@ Plain, short and calm: the words a stressed user reads at 11pm.
 - **Product name:** Vibecoding Project Tracker
 - **Wordmark style:** The name in Inter semibold, ink colour, next to a small indigo board icon (Lucide `square-kanban`), top left of every page.
 
-## 7. Out of scope (this hackathon)
+## 7. Theme switching and out of scope
 
-To keep design tight, the following are explicitly not part of `design-done`:
-
-- A dark mode toggle. Pick one mode and ship it.
-- Multiple themes. One brand, applied consistently.
-- Animations beyond a 200 ms fade on toast notifications.
-- A custom icon set. Use [Lucide icons](https://lucide.dev) via Tailwind classes if you need any.
+- **Light and Dark mode (FR23):** Light mode ("Clear desk") is the default. A header toggle switches to an accessible Dark mode (`html.dark` CSS variables in `src/index.css`), where every text pair meets WCAG 2.2 AA (`#F8FAFC` ink on `#1E293B` card = 13.98:1; `#CBD5E1` muted on `#1E293B` = 9.85:1; `#94A3B8` control borders on `#1E293B` = 5.71:1; all type and due-state badges between 6.47:1 and 10.62:1).
+- **Out of scope:** arbitrary user-picked colour wheels (which could break contrast), animations beyond a 200 ms fade, and custom icon sets (Lucide icons are used throughout).
 
 ## 8. Accessibility rules
 
