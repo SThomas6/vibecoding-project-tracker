@@ -100,6 +100,8 @@ Plain, short and calm: the words a stressed user reads at 11pm.
 | Toast after "Copy as Prompt Context" | "Context copied. Paste it into your AI tool." |
 | Confirm-delete message | "Delete this task? This can't be undone." |
 | Handoff toast (M7 `task-owner`) | "Handed off to {name}." |
+| Toasts after add / edit / delete (M5) | "Task added" · "Task updated" · "Task deleted" |
+| Missing title error | "Enter a title for the task." |
 
 ## 6. Logo / wordmark
 

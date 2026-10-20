@@ -24,6 +24,8 @@ export default {
           DEFAULT: '#E2E8F0', // decorative borders (cards, dividers)
           control: '#64748B', // form-control borders, 4.76:1 against white
         },
+        // Destructive actions (delete). White on red 6.47:1, red on tint 5.91:1.
+        danger: { DEFAULT: '#B91C1C', hover: '#991B1B', tint: '#FEF2F2' },
         // M6 tag-style: type colour is always paired with an icon and a word.
         feature: { DEFAULT: '#1D4ED8', tint: '#DBEAFE' },
         bug: { DEFAULT: '#9D174D', tint: '#FCE7F3' },

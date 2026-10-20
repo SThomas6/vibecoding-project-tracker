@@ -13,6 +13,16 @@ export function todayISO() {
   return toISODate(new Date());
 }
 
+// '2026-10-20' -> '20 Oct 2026'
+export function formatDate(iso) {
+  const [year, month, day] = iso.split('-').map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+}
+
 // A date relative to today, e.g. daysFromToday(-2) is two days ago.
 export function daysFromToday(days) {
   const date = new Date();

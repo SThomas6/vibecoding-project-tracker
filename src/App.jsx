@@ -1,8 +1,14 @@
+import { useRef, useState } from 'react';
+import { Plus } from 'lucide-react';
 import Board from './components/Board.jsx';
 import Header from './components/Header.jsx';
+import TaskModal from './components/TaskModal.jsx';
+import Toast from './components/Toast.jsx';
+import { buttonStyles } from './components/styles.js';
 import { STORAGE_KEYS } from './constants.js';
 import { createSeedTasks } from './data/seed.js';
 import { useLocalStorage } from './hooks/useLocalStorage.js';
+import { createTask } from './lib/tasks.js';
 
 /**
  * Vibecoding Project Tracker.
@@ -11,12 +17,13 @@ import { useLocalStorage } from './hooks/useLocalStorage.js';
  *   - constants.js            : STAGES (board columns), TEAM, storage keys
  *   - data/seed.js            : demo tasks shown on first load
  *   - hooks/useLocalStorage.js: saves state in the browser across reloads
- *   - lib/                    : small helpers (dates, team members)
- *   - components/             : Header, Board (columns), TaskCard, Avatar
+ *   - lib/                    : small helpers (dates, team members, new tasks)
+ *   - components/             : Header, Board (columns), TaskCard, Avatar,
+ *                               TaskModal (add / edit / delete), Toast
  *
  * Build sequence (Phase 3):
  *   - M4  data-model           : four columns + demo task cards (done)
- *   - M5  crud-modal           : "New task" modal and edit-on-click
+ *   - M5  crud-modal           : "New task" modal and edit-on-click (done)
  *   - M6  tag-style            : feature vs. bug colour + icon (DESIGN.md §2)
  *   - M7  task-owner           : assignee badge + "Hand off to..." dropdown
  *   - M8  due-tint             : colour cards by due date (DESIGN.md §2)
@@ -48,13 +55,40 @@ export { STAGES, TEAM } from './constants.js';
 export { useLocalStorage } from './hooks/useLocalStorage.js';
 
 export default function App() {
-  const [tasks] = useLocalStorage(STORAGE_KEYS.tasks, createSeedTasks);
+  const [tasks, setTasks] = useLocalStorage(STORAGE_KEYS.tasks, createSeedTasks);
 
-  // TODO M5 crud-modal:
-  //   const [editing, setEditing] = useState(null);
-  //
+  // null = modal closed; { task: null } = adding; { task } = editing that task.
+  const [editing, setEditing] = useState(null);
+
+  const [toast, setToast] = useState('');
+  const toastTimer = useRef(null);
+
   // TODO M11 project-deliverables:
   //   const [anchors, setAnchors] = useLocalStorage('vibetracker.anchors', [...]);
+
+  function showToast(message) {
+    clearTimeout(toastTimer.current);
+    setToast(message);
+    toastTimer.current = setTimeout(() => setToast(''), 4000);
+  }
+
+  function saveTask(fields) {
+    if (editing.task) {
+      const id = editing.task.id;
+      setTasks((prev) => prev.map((task) => (task.id === id ? { ...task, ...fields } : task)));
+      showToast('Task updated');
+    } else {
+      setTasks((prev) => [...prev, createTask(fields)]);
+      showToast('Task added');
+    }
+    setEditing(null);
+  }
+
+  function deleteTask(id) {
+    setTasks((prev) => prev.filter((task) => task.id !== id));
+    setEditing(null);
+    showToast('Task deleted');
+  }
 
   return (
     <div className="min-h-screen">
@@ -65,13 +99,29 @@ export default function App() {
         Skip to board
       </a>
 
-      <Header />
+      <Header>
+        <button type="button" onClick={() => setEditing({ task: null })} className={buttonStyles.primary}>
+          <Plus aria-hidden="true" className="h-4 w-4" />
+          New task
+        </button>
+      </Header>
 
       {/* TODO M11 project-deliverables: render the anchor cards (Presentation / Demo / Report / Documentation) above the board. */}
 
       <main id="board" tabIndex={-1} className="mx-auto max-w-screen-2xl px-4 py-6 focus:outline-none sm:px-6">
-        <Board tasks={tasks} />
+        <Board tasks={tasks} onOpenTask={(task) => setEditing({ task })} />
       </main>
+
+      {editing && (
+        <TaskModal
+          task={editing.task}
+          onSave={saveTask}
+          onDelete={deleteTask}
+          onClose={() => setEditing(null)}
+        />
+      )}
+
+      <Toast message={toast} />
     </div>
   );
 }

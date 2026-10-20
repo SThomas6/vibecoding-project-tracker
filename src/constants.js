@@ -7,6 +7,12 @@ export const STAGES = [
   { id: 'done',        label: 'Done' },
 ];
 
+// The two kinds of task (M6 gives each its own colour and icon).
+export const TASK_TYPES = [
+  { id: 'feature', label: 'Feature' },
+  { id: 'bug',     label: 'Bug' },
+];
+
 // The team. For each member the clients asked us to store a name (to see who
 // a task is assigned to), an email (to contact a task's owner directly) and a
 // GitHub handle. `Task.assignee` holds a member's `id`.
