@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, RotateCcw } from 'lucide-react';
 import Board from './components/Board.jsx';
 import CopyFallbackDialog from './components/CopyFallbackDialog.jsx';
 import Deliverables from './components/Deliverables.jsx';
 import Header from './components/Header.jsx';
 import RenameProjectDialog from './components/RenameProjectDialog.jsx';
+import ResetDemoDialog from './components/ResetDemoDialog.jsx';
 import TaskModal from './components/TaskModal.jsx';
 import TeamStrip from './components/TeamStrip.jsx';
 import Toast from './components/Toast.jsx';
@@ -89,6 +90,9 @@ export default function App() {
   const [project, setProject] = useLocalStorage(STORAGE_KEYS.project, createSeedProject);
   const [renaming, setRenaming] = useState(false);
 
+  // "Reset demo" confirmation (PRD FR20).
+  const [resetting, setResetting] = useState(false);
+
   useEffect(() => {
     document.title = `${project.name} · Vibecoding Project Tracker`;
   }, [project.name]);
@@ -136,6 +140,13 @@ export default function App() {
     showToast('Project renamed');
   }
 
+  function resetDemo() {
+    setTasks(createSeedTasks());
+    setProject(createSeedProject());
+    setResetting(false);
+    showToast('Demo project restored');
+  }
+
   async function copyContext(task) {
     const text = buildBriefing(task, new Date());
     if (await copyText(text)) showToast('Context copied. Paste it into your AI tool.');
@@ -152,10 +163,16 @@ export default function App() {
       </a>
 
       <Header projectName={project.name} onRename={() => setRenaming(true)}>
-        <button type="button" onClick={() => setEditing({ task: null })} className={buttonStyles.primary}>
-          <Plus aria-hidden="true" className="h-4 w-4" />
-          New task
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button type="button" onClick={() => setResetting(true)} className={buttonStyles.secondary}>
+            <RotateCcw aria-hidden="true" className="h-4 w-4" />
+            Reset demo
+          </button>
+          <button type="button" onClick={() => setEditing({ task: null })} className={buttonStyles.primary}>
+            <Plus aria-hidden="true" className="h-4 w-4" />
+            New task
+          </button>
+        </div>
       </Header>
 
       <main className="mx-auto max-w-screen-2xl px-4 py-6 sm:px-6">
@@ -188,6 +205,8 @@ export default function App() {
       {renaming && (
         <RenameProjectDialog name={project.name} onSave={renameProject} onClose={() => setRenaming(false)} />
       )}
+
+      {resetting && <ResetDemoDialog onConfirm={resetDemo} onClose={() => setResetting(false)} />}
 
       {/* After the task form, so it opens on top when copying from there. */}
       {fallbackText !== null && (
