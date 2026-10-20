@@ -7,7 +7,7 @@ import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 import ContextFields from './ContextFields.jsx';
 import Dialog from './Dialog.jsx';
 import DueBadge from './DueBadge.jsx';
-import PromptLog from './PromptLog.jsx';
+import HandoffFields from './HandoffFields.jsx';
 import Toast from './Toast.jsx';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 
@@ -23,7 +23,7 @@ const NEW_TASK = {
 
 // The add / edit form, in the shared native <dialog> (Dialog.jsx).
 // `task` is null when adding a new task, or the task being edited.
-export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy, onNotify, onClose }) {
+export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy, onCopyHandoff, onNotify, onClose }) {
   const isEdit = Boolean(task);
   const [form, setForm] = useState(() => ({
     ...NEW_TASK,
@@ -32,7 +32,7 @@ export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy,
     // An empty Context box shows the template (PRD FR17).
     context: task?.context || CONTEXT_TEMPLATE,
     contextTool: task?.contextTool ?? '',
-    promptLog: task?.promptLog ?? [],
+    handoffText: task?.handoffText ?? '',
   }));
   const [titleError, setTitleError] = useState('');
   const [confirmingDelete, setConfirmingDelete] = useState(false);
@@ -203,11 +203,12 @@ export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy,
             onNotify={onNotify}
           />
 
-          <PromptLog
+          <HandoffFields
             id={id}
-            entries={form.promptLog}
-            defaultTool={form.contextTool}
-            onChange={(promptLog) => setForm((prev) => ({ ...prev, promptLog }))}
+            text={form.handoffText}
+            updatedAt={task?.handoffUpdatedAt}
+            onSetText={(handoffText) => setForm((prev) => ({ ...prev, handoffText }))}
+            onCopy={() => onCopyHandoff({ ...task, ...fieldsFromForm(form, task) })}
             onNotify={onNotify}
           />
         </div>
@@ -260,8 +261,7 @@ export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy,
 }
 
 // The task as it would be saved from the form, used by Save and by Copy
-// context. The "last updated" time only moves when the context, AI tool or
-// prompt log changes (DR5).
+// context. Each "last updated" time only moves when its own text changes (DR5).
 function fieldsFromForm(form, task) {
   const context = cleanContext(form.context);
   const contextTool = form.contextTool || null;
@@ -269,10 +269,9 @@ function fieldsFromForm(form, task) {
   const handoffs = ownerChanged
     ? [...(task.handoffs ?? []), { id: newId(), from: task.assignee || '', to: form.assignee, note: '', at: new Date().toISOString() }]
     : (task?.handoffs ?? []);
-  const contextChanged =
-    context !== (task?.context ?? '') ||
-    contextTool !== (task?.contextTool ?? null) ||
-    JSON.stringify(form.promptLog) !== JSON.stringify(task?.promptLog ?? []);
+  const contextChanged = context !== (task?.context ?? '') || contextTool !== (task?.contextTool ?? null);
+  const handoffText = form.handoffText.trim();
+  const handoffChanged = handoffText !== (task?.handoffText ?? '');
   return {
     title: form.title.trim(),
     description: form.description.trim(),
@@ -282,7 +281,8 @@ function fieldsFromForm(form, task) {
     dueDate: form.dueDate || null,
     context,
     contextTool,
-    promptLog: form.promptLog,
+    handoffText,
+    handoffUpdatedAt: handoffChanged ? new Date().toISOString() : (task?.handoffUpdatedAt ?? null),
     handoffs,
     contextUpdatedAt: contextChanged ? new Date().toISOString() : (task?.contextUpdatedAt ?? null),
   };

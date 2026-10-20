@@ -21,7 +21,7 @@ Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10
 | Four deliverable link cards and an editable project name | FR19 |
 | Reset to the demo project, after confirming | FR20 |
 | Search issues and filter the board by who has worked on or owns a task, task type, due state and AI context or tool | FR21 |
-| Collapsible Saved prompts log: key prompts, result and whether it worked | FR22 |
+| Handoff box: paste in the handoff text; the next developer reads it on the card and copies it into their AI agent | FR22 |
 | Light and Dark mode toggle (WCAG 2.2 AA contrast in both palettes), saved across visits | FR23 |
 
 ## Run it
@@ -56,7 +56,7 @@ Shared button and field styles are in `components/styles.js`, and colour tokens 
 
 There's no server or database. Everything is saved as JSON in the browser's localStorage:
 
-- `vibetracker.tasks`: the tasks, including context, handoff history and saved prompts
+- `vibetracker.tasks`: the tasks, including context, the pasted handoff and the handoff history
 - `vibetracker.project`: the project name and deliverable links
 - `vibetracker.team`: the team members (starts with the demo team)
 - `vibetracker.theme`: `'light'` or `'dark'` theme preference

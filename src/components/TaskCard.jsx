@@ -1,5 +1,5 @@
 import { useId, useRef, useState } from 'react';
-import { ArrowRightLeft, Copy, History, MessageSquareQuote, ScrollText } from 'lucide-react';
+import { ArrowRightLeft, ClipboardCopy, Copy, History, MessageSquareQuote } from 'lucide-react';
 import { HANDOFF_NOTE_MAX_LENGTH } from '../constants.js';
 import { getPastContributors } from '../lib/tasks.js';
 import { getMember } from '../lib/team.js';
@@ -17,7 +17,7 @@ import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 const actionStyles =
   'relative z-10 inline-flex min-h-9 shrink-0 items-center gap-1 rounded-md px-2 text-xs font-semibold text-brand hover:bg-surface-sunken';
 
-export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, highlighted, now }) {
+export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopyHandoff, highlighted, now }) {
   const member = getMember(team, task.assignee);
   const others = team.filter((m) => m.id !== task.assignee);
   const pastNames = getPastContributors(task)
@@ -65,20 +65,16 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, highli
         <DueBadge task={task} now={now} />
       </div>
 
-      {latestHandoff?.note && (
+      {/* The pasted handoff (M12) comes first; otherwise the last hand-off note. */}
+      {(task.handoffText || latestHandoff?.note) && (
         <p className="mt-2 rounded-md bg-surface-sunken px-2 py-1.5 text-xs text-ink">
           <span className="flex items-center gap-1 font-semibold text-ink-muted">
             <MessageSquareQuote aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-brand" />
-            {handoffFrom ? `Handoff from ${handoffFrom}:` : 'Latest handoff:'}
+            {handoffFrom ? `Handoff from ${handoffFrom}:` : 'Handoff:'}
           </span>
-          <span className="mt-0.5 block line-clamp-2">{latestHandoff.note}</span>
-        </p>
-      )}
-
-      {task.promptLog?.length > 0 && (
-        <p className="mt-2 flex items-center gap-1 text-xs text-ink-muted">
-          <ScrollText aria-hidden="true" className="h-3.5 w-3.5" />
-          {task.promptLog.length} {task.promptLog.length === 1 ? 'prompt' : 'prompts'} logged
+          <span className="mt-0.5 line-clamp-2 whitespace-pre-line">
+            {(task.handoffText || latestHandoff.note).replace(/^#+\s*/gm, '')}
+          </span>
         </p>
       )}
 
@@ -116,6 +112,12 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, highli
           <Copy aria-hidden="true" className="h-3.5 w-3.5" />
           Copy context<span className="sr-only"> for "{task.title}"</span>
         </button>
+        {task.handoffText && (
+          <button type="button" onClick={() => onCopyHandoff(task)} className={actionStyles}>
+            <ClipboardCopy aria-hidden="true" className="h-3.5 w-3.5" />
+            Copy handoff<span className="sr-only"> for "{task.title}"</span>
+          </button>
+        )}
       </div>
 
       {handOffOpen && (

@@ -42,13 +42,6 @@ export const CONTEXT_TEMPLATE = [
 
 export const CONTEXT_MAX_LENGTH = 20000; // PRD DR4
 
-// How a logged prompt turned out (M12 prompt log, PRD DR6).
-export const PROMPT_OUTCOMES = [
-  { id: 'worked', label: 'Worked' },
-  { id: 'partly', label: 'Partly' },
-  { id: 'failed', label: "Didn't work" },
-];
-
 // TACO prompt modes for "Copy context" (PRD FR18, DR9): tailors the Actor and
 // Output format sections of the copied briefing without manual typing.
 export const PROMPT_MODES = [

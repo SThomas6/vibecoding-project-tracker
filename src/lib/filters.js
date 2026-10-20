@@ -36,11 +36,8 @@ export function filterTasks(tasks, filters, now = new Date()) {
 }
 
 function matchesQuery(task, query) {
-  const handoffText = (task.handoffs ?? []).map((item) => item.note ?? '').join(' ');
-  const promptText = (task.promptLog ?? [])
-    .map((entry) => `${entry.prompt ?? ''} ${entry.result ?? ''}`)
-    .join(' ');
-  const haystack = [task.title, task.description, task.context, task.contextTool, handoffText, promptText]
+  const handoffNotes = (task.handoffs ?? []).map((item) => item.note ?? '').join(' ');
+  const haystack = [task.title, task.description, task.context, task.contextTool, task.handoffText, handoffNotes]
     .filter(Boolean)
     .join(' ')
     .toLowerCase();
@@ -67,12 +64,7 @@ function matchesDue(task, dueFilter, now) {
 function matchesContext(task, contextFilter) {
   if (contextFilter === 'all') return true;
   if (contextFilter === 'has-context') return Boolean(task.context?.trim());
-  if (contextFilter === 'has-handoff') return (task.handoffs?.length ?? 0) > 0;
-  if (contextFilter === 'has-prompts') return (task.promptLog?.length ?? 0) > 0;
-  if (contextFilter.startsWith('tool:')) {
-    const tool = contextFilter.slice('tool:'.length);
-    const inLog = (task.promptLog ?? []).some((entry) => entry.tool === tool);
-    return task.contextTool === tool || inLog;
-  }
+  if (contextFilter === 'has-handoff') return Boolean(task.handoffText?.trim()) || (task.handoffs?.length ?? 0) > 0;
+  if (contextFilter.startsWith('tool:')) return task.contextTool === contextFilter.slice('tool:'.length);
   return true;
 }

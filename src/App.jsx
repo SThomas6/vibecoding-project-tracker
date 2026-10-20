@@ -16,7 +16,7 @@ import { STORAGE_KEYS, TEAM } from './constants.js';
 import { createSeedProject, createSeedTasks } from './data/seed.js';
 import { useLocalStorage } from './hooks/useLocalStorage.js';
 import { useNow } from './hooks/useNow.js';
-import { buildBriefing } from './lib/briefing.js';
+import { buildBriefing, buildHandoff } from './lib/briefing.js';
 import { copyText } from './lib/clipboard.js';
 import { DEFAULT_FILTERS, filterTasks, hasActiveFilters } from './lib/filters.js';
 import { createTask, newId } from './lib/tasks.js';
@@ -33,20 +33,10 @@ import { getMember } from './lib/team.js';
  *   - components/             : Header, Deliverables + DeliverableCard, TeamStrip,
  *                               FilterBar, Board (columns), TaskCard, Avatar,
  *                               TypeBadge, DueBadge, TaskModal with ContextFields
- *                               and PromptLog, Dialog, CopyFallbackDialog,
+ *                               and HandoffFields, Dialog, CopyFallbackDialog,
  *                               RenameProjectDialog, AddMemberDialog, ResetDemoDialog, Toast
  *
- * Build sequence (Phase 3):
- *   - M4  data-model           : four columns + demo task cards (done)
- *   - M5  crud-modal           : "New task" modal and edit-on-click (done)
- *   - M6  tag-style            : feature vs. bug colour + icon (done)
- *   - M7  task-owner           : owner on every card + "Hand off to..." (done)
- *   - M8  due-tint             : due-date badge: calm / warning / overdue / done (done)
- *   - M9  task-context         : Context notes, AI tool and "last updated" on the form (done)
- *   - M10 copy-context         : "Copy context" on cards and the form: Markdown briefing (done)
- *   - M11 project-deliverables : deliverable link cards above the board + project name (done)
- *   - M12 secret-sauce         : handoff notes, TACO prompt modes, smart paste & saved prompts (done)
- *   - M13 pitch-ready          : demo project, 3 tasks per column, full context & handoffs (done)
+ * Milestones M4–M13 are all built; README.md maps each feature to the PRD.
  */
 
 /**
@@ -62,7 +52,8 @@ import { getMember } from './lib/team.js';
  * @property {string} context                M9: curated briefing for the next AI / teammate
  * @property {string|null} contextTool       M9: 'Claude' | 'ChatGPT' | 'Cursor' | 'Lovable' | 'Replit' | 'Other'
  * @property {string|null} contextUpdatedAt  M9: ISO timestamp, set automatically on save
- * @property {Array} promptLog               M12: saved prompts with tool, result and outcome
+ * @property {string} handoffText            M12: pasted handoff for the next developer's AI agent
+ * @property {string|null} handoffUpdatedAt  M12: ISO timestamp, set when the handoff text changes
  * @property {Array} handoffs                M7/M12: handoff trail ({ id, from, to, note, at })
  */
 
@@ -191,6 +182,12 @@ export default function App() {
     showToast(`${member.name} added to the team`);
   }
 
+  async function copyHandoff(task) {
+    const text = buildHandoff(task);
+    if (await copyText(text)) showToast('Handoff copied. Paste it into your AI agent.');
+    else setFallbackText(text);
+  }
+
   async function copyContext(task, modeId = 'continue') {
     const text = buildBriefing(task, team, new Date(), modeId);
     if (await copyText(text)) showToast('Context copied. Paste it into your AI tool.');
@@ -256,6 +253,7 @@ export default function App() {
             onOpenTask={(task) => setEditing({ task })}
             onHandOff={handOff}
             onCopy={copyContext}
+            onCopyHandoff={copyHandoff}
             highlightedId={highlightedId}
             now={now}
           />
@@ -270,6 +268,7 @@ export default function App() {
           onSave={saveTask}
           onDelete={deleteTask}
           onCopy={copyContext}
+          onCopyHandoff={copyHandoff}
           onNotify={showToast}
           onClose={() => setEditing(null)}
         />

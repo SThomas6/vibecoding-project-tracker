@@ -44,23 +44,14 @@ const SEED_TASKS = [
       '## Pick up from here',
       'The click listener is added in the component body on every render. Move it into useEffect with a cleanup that removes it, then test fast clicking on a phone.',
     ].join('\n'),
-    prompts: [
-      {
-        ago: 5, tool: 'Claude', outcome: 'worked',
-        prompt: 'Why does my React carousel skip two slides when I click Next quickly? Here is the component.',
-        result: 'Found a click listener added on every render, and showed how to move it into useEffect with a cleanup.',
-      },
-      {
-        ago: 4, tool: 'ChatGPT', outcome: 'partly',
-        prompt: 'Add a debounce to the Next button in this carousel component.',
-        result: 'Stops the skipping, but clicks less than 300 ms apart are ignored, so it feels laggy.',
-      },
-      {
-        ago: 3, tool: 'Cursor', outcome: 'failed',
-        prompt: 'Rewrite the carousel with CSS scroll snap.',
-        result: 'Rewrote the whole component and broke the autoplay and the dots.',
-      },
-    ],
+    handoffAgo: 1,
+    handoffText: [
+      '## Handoff: carousel skips slides',
+      'Done: found the cause. A click listener is added on every render, so fast clicks fire twice.',
+      'Left: move the listener into useEffect with a cleanup, then remove the debounce workaround.',
+      'Watch out: autoplay and the dots share the same index state, so test both after the change.',
+      'Start with: "Move the Next button listener into useEffect with a cleanup, keeping autoplay and the dots working."',
+    ].join('\n'),
     handoffs: [
       {
         ago: 2,
@@ -107,18 +98,13 @@ const SEED_TASKS = [
       '## Pick up from here',
       'Change the footer links to root-relative paths ("/about") and remove the rewrite. Check every footer link on the preview deploy before merging.',
     ].join('\n'),
-    prompts: [
-      {
-        ago: 30, tool: 'Cursor', outcome: 'worked',
-        prompt: 'Why do my footer links 404 on Vercel but work locally?',
-        result: 'Relative paths resolve against the current route; suggested root-relative links.',
-      },
-      {
-        ago: 27, tool: 'Claude', outcome: 'partly',
-        prompt: 'Write a vercel.json rewrite so /about serves about.html.',
-        result: 'Fixed /about only; nested routes still 404.',
-      },
-    ],
+    handoffAgo: 25,
+    handoffText: [
+      '## Handoff: footer links 404 on Vercel',
+      'Done: relative paths break on nested routes; a vercel.json rewrite only fixed /about.',
+      'Left: switch the footer links to root-relative paths ("/about", "/cv", "/contact") and remove the rewrite.',
+      'Check: every footer link on the preview deploy, including from /projects pages.',
+    ].join('\n'),
     handoffs: [
       {
         ago: 26,
@@ -149,18 +135,15 @@ const SEED_TASKS = [
 ];
 
 export function createSeedTasks() {
-  return SEED_TASKS.map(({ due, created, ago, prompts = [], handoffs = [], ...task }) => ({
+  return SEED_TASKS.map(({ due, created, ago, handoffAgo, handoffText, handoffs = [], ...task }) => ({
     context: '',
     contextTool: null,
     ...task,
     dueDate: due == null ? null : daysFromToday(due),
     createdDate: daysFromToday(created),
     contextUpdatedAt: ago == null ? null : hoursAgo(ago),
-    promptLog: prompts.map(({ ago: promptAgo, ...entry }, index) => ({
-      id: `${task.id}-p${index + 1}`,
-      at: hoursAgo(promptAgo),
-      ...entry,
-    })),
+    handoffText: handoffText ?? '',
+    handoffUpdatedAt: handoffAgo == null ? null : hoursAgo(handoffAgo),
     handoffs: handoffs.map(({ ago: handoffAgo, ...entry }, index) => ({
       id: `${task.id}-h${index + 1}`,
       at: hoursAgo(handoffAgo),

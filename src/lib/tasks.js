@@ -10,7 +10,8 @@ export function createTask(fields) {
     context: '',
     contextTool: null,
     contextUpdatedAt: null,
-    promptLog: [],
+    handoffText: '',
+    handoffUpdatedAt: null,
     handoffs: [],
     ...fields,
   };

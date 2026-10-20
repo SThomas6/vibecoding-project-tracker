@@ -128,8 +128,7 @@ export default function FilterBar({ filters, team, totalCount, shownCount, onCha
           <select id={`${id}-context`} value={filters.context} onChange={update('context')} className={inputStyles}>
             <option value="all">All tasks</option>
             <option value="has-context">Has AI context notes</option>
-            <option value="has-handoff">Has handoff note</option>
-            <option value="has-prompts">Has saved prompts</option>
+            <option value="has-handoff">Has a handoff</option>
             <optgroup label="By AI tool used">
               {AI_TOOLS.map((tool) => (
                 <option key={tool} value={`tool:${tool}`}>

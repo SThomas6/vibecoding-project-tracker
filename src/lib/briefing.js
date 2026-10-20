@@ -6,7 +6,7 @@ import { getMember } from './team.js';
 
 // Turns a task into a Markdown briefing to paste into an AI tool (M10, PRD
 // FR18, DR9): the title as a heading, the key facts, then the description,
-// handoff notes, context, prompts that worked, and optional TACO Actor / Output
+// pasted handoff, handoff trail, context, and optional TACO Actor / Output
 // format instructions. Empty fields are left out.
 export function buildBriefing(task, team, now = new Date(), modeId = null) {
   const pastNames = getPastContributors(task)
@@ -28,6 +28,7 @@ export function buildBriefing(task, team, now = new Date(), modeId = null) {
 
   if (mode) sections.push(`## Actor\n\n${mode.actor}`);
   if (task.description) sections.push(`## Description\n\n${task.description}`);
+  if (task.handoffText) sections.push(`## Handoff\n\n${task.handoffText}`);
 
   const handoffs = task.handoffs ?? [];
   if (handoffs.length > 0) {
@@ -37,9 +38,6 @@ export function buildBriefing(task, team, now = new Date(), modeId = null) {
 
   if (task.context) sections.push(`## Context\n\n${task.context}`);
 
-  // Only prompts that worked, oldest first (M12, PRD FR22).
-  const worked = (task.promptLog ?? []).filter((entry) => entry.outcome === 'worked');
-  if (worked.length > 0) sections.push(`## Prompts that worked\n\n${worked.map(formatPrompt).join('\n\n')}`);
 
   if (mode) sections.push(`## Output format\n\n${mode.output}`);
 
@@ -59,13 +57,9 @@ function formatHandoff(item, team) {
   return `- **${formatDateTime(item.at)} (${from} → ${to})**${note}`;
 }
 
-// One numbered list item; later lines are indented so they stay inside it.
-function formatPrompt(entry, index) {
-  const indent = (text) => text.replace(/\n/g, '\n   ');
-  const heading = [entry.tool, formatDateTime(entry.at)].filter(Boolean).join(', ');
-  const parts = [`${index + 1}. **${heading}**`, `   Prompt: ${indent(entry.prompt)}`];
-  if (entry.result) parts.push(`   Result: ${indent(entry.result)}`);
-  return parts.join('\n\n');
+// Just the pasted handoff, with the task title, for "Copy handoff" (M12).
+export function buildHandoff(task) {
+  return `# Handoff: ${task.title || 'Untitled task'}\n\n${task.handoffText}\n`;
 }
 
 function labelOf(list, id) {
