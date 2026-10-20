@@ -1,5 +1,5 @@
 import { useId, useRef, useState } from 'react';
-import { ArrowRightLeft, Copy } from 'lucide-react';
+import { ArrowRightLeft, Copy, ScrollText } from 'lucide-react';
 import Avatar from './Avatar.jsx';
 import DueBadge from './DueBadge.jsx';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
@@ -55,6 +55,13 @@ export default function TaskCard({ task, onOpen, onHandOff, onCopy, highlighted,
       <div className="mt-2 empty:hidden">
         <DueBadge task={task} now={now} />
       </div>
+
+      {task.promptLog?.length > 0 && (
+        <p className="mt-2 flex items-center gap-1 text-xs text-ink-muted">
+          <ScrollText aria-hidden="true" className="h-3.5 w-3.5" />
+          {task.promptLog.length} {task.promptLog.length === 1 ? 'prompt' : 'prompts'} logged
+        </p>
+      )}
 
       <p className="mt-3 flex min-w-0 items-center gap-2 text-xs text-ink-muted">
         <Avatar member={member} />

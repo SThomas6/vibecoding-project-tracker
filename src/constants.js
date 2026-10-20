@@ -41,6 +41,13 @@ export const CONTEXT_TEMPLATE = [
 
 export const CONTEXT_MAX_LENGTH = 20000; // PRD DR4
 
+// How a logged prompt turned out (M12 prompt log, PRD DR6).
+export const PROMPT_OUTCOMES = [
+  { id: 'worked', label: 'Worked' },
+  { id: 'partly', label: 'Partly' },
+  { id: 'failed', label: "Didn't work" },
+];
+
 // The project's deliverables, pinned above the board as link cards
 // (M11, PRD FR19).
 export const DELIVERABLES = [

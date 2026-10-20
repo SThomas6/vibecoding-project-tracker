@@ -7,6 +7,7 @@ import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 import ContextFields from './ContextFields.jsx';
 import Dialog from './Dialog.jsx';
 import DueBadge from './DueBadge.jsx';
+import PromptLog from './PromptLog.jsx';
 import Toast from './Toast.jsx';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 
@@ -22,7 +23,7 @@ const NEW_TASK = {
 
 // The add / edit form, in the shared native <dialog> (Dialog.jsx).
 // `task` is null when adding a new task, or the task being edited.
-export default function TaskModal({ task, toast, onSave, onDelete, onCopy, onClose }) {
+export default function TaskModal({ task, toast, onSave, onDelete, onCopy, onNotify, onClose }) {
   const isEdit = Boolean(task);
   const [form, setForm] = useState(() => ({
     ...NEW_TASK,
@@ -31,6 +32,7 @@ export default function TaskModal({ task, toast, onSave, onDelete, onCopy, onClo
     // An empty Context box shows the template (PRD FR17).
     context: task?.context || CONTEXT_TEMPLATE,
     contextTool: task?.contextTool ?? '',
+    promptLog: task?.promptLog ?? [],
   }));
   const [titleError, setTitleError] = useState('');
   const [confirmingDelete, setConfirmingDelete] = useState(false);
@@ -196,6 +198,14 @@ export default function TaskModal({ task, toast, onSave, onDelete, onCopy, onClo
             onChange={update}
             onCopy={() => onCopy({ ...task, ...fieldsFromForm(form, task) })}
           />
+
+          <PromptLog
+            id={id}
+            entries={form.promptLog}
+            defaultTool={form.contextTool}
+            onChange={(promptLog) => setForm((prev) => ({ ...prev, promptLog }))}
+            onNotify={onNotify}
+          />
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-6 py-4">
@@ -246,11 +256,15 @@ export default function TaskModal({ task, toast, onSave, onDelete, onCopy, onClo
 }
 
 // The task as it would be saved from the form, used by Save and by Copy
-// context. The "last updated" time only moves when the context changes (DR5).
+// context. The "last updated" time only moves when the context, AI tool or
+// prompt log changes (DR5).
 function fieldsFromForm(form, task) {
   const context = cleanContext(form.context);
   const contextTool = form.contextTool || null;
-  const contextChanged = context !== (task?.context ?? '') || contextTool !== (task?.contextTool ?? null);
+  const contextChanged =
+    context !== (task?.context ?? '') ||
+    contextTool !== (task?.contextTool ?? null) ||
+    JSON.stringify(form.promptLog) !== JSON.stringify(task?.promptLog ?? []);
   return {
     title: form.title.trim(),
     description: form.description.trim(),
@@ -260,6 +274,7 @@ function fieldsFromForm(form, task) {
     dueDate: form.dueDate || null,
     context,
     contextTool,
+    promptLog: form.promptLog,
     contextUpdatedAt: contextChanged ? new Date().toISOString() : (task?.contextUpdatedAt ?? null),
   };
 }

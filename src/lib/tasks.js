@@ -10,11 +10,12 @@ export function createTask(fields) {
     context: '',
     contextTool: null,
     contextUpdatedAt: null,
+    promptLog: [],
     ...fields,
   };
 }
 
-function newId() {
+export function newId() {
   return globalThis.crypto?.randomUUID?.() ?? `task-${Date.now()}`;
 }
 

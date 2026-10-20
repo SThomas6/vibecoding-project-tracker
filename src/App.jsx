@@ -41,7 +41,7 @@ import { getMember } from './lib/team.js';
  *   - M9  task-context         : Context notes, AI tool and "last updated" on the form (done)
  *   - M10 copy-context         : "Copy context" on cards and the form: Markdown briefing (done)
  *   - M11 project-deliverables : deliverable link cards above the board + project name (done)
- *   - M12 secret-sauce         : the one thing that makes this tracker ours
+ *   - M12 secret-sauce         : prompt log per task; prompts that worked go in the briefing (done)
  *
  * Search for `TODO M<n>` to find the hook for each remaining milestone.
  */
@@ -179,6 +179,7 @@ export default function App() {
           onSave={saveTask}
           onDelete={deleteTask}
           onCopy={copyContext}
+          onNotify={showToast}
           onClose={() => setEditing(null)}
         />
       )}

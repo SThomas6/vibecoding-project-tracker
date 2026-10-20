@@ -51,6 +51,7 @@ export function createSeedTasks() {
     context: '',
     contextTool: null,
     contextUpdatedAt: null,
+    promptLog: [],
   }));
 }
 

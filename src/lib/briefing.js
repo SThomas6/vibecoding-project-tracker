@@ -20,6 +20,10 @@ export function buildBriefing(task, now = new Date()) {
   if (task.description) sections.push(`## Description\n\n${task.description}`);
   if (task.context) sections.push(`## Context\n\n${task.context}`);
 
+  // Only prompts that worked, oldest first (M12, PRD FR22).
+  const worked = (task.promptLog ?? []).filter((entry) => entry.outcome === 'worked');
+  if (worked.length > 0) sections.push(`## Prompts that worked\n\n${worked.map(formatPrompt).join('\n\n')}`);
+
   const footer = [
     task.contextTool && `AI tool: ${task.contextTool}`,
     task.contextUpdatedAt && `Context last updated ${formatDateTime(task.contextUpdatedAt)}`,
@@ -27,6 +31,15 @@ export function buildBriefing(task, now = new Date()) {
   if (footer.length > 0) sections.push(`---\n\n${footer.join(' · ')}`);
 
   return `${sections.join('\n\n')}\n`;
+}
+
+// One numbered list item; later lines are indented so they stay inside it.
+function formatPrompt(entry, index) {
+  const indent = (text) => text.replace(/\n/g, '\n   ');
+  const heading = [entry.tool, formatDateTime(entry.at)].filter(Boolean).join(', ');
+  const parts = [`${index + 1}. **${heading}**`, `   Prompt: ${indent(entry.prompt)}`];
+  if (entry.result) parts.push(`   Result: ${indent(entry.result)}`);
+  return parts.join('\n\n');
 }
 
 function labelOf(list, id) {
