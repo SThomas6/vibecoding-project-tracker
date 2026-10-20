@@ -1,24 +1,31 @@
-import { useState, useEffect } from 'react';
+import Board from './components/Board.jsx';
+import Header from './components/Header.jsx';
+import { STORAGE_KEYS } from './constants.js';
+import { createSeedTasks } from './data/seed.js';
+import { useLocalStorage } from './hooks/useLocalStorage.js';
 
 /**
- * Vibecoding Project Tracker — starter scaffold.
+ * Vibecoding Project Tracker.
  *
- * This file is intentionally almost empty. The boilerplate (Vite, React,
- * Tailwind) is configured for you, plus a few shared constants and a
- * localStorage helper. Everything visible on screen, you build.
+ * Where things live:
+ *   - constants.js            : STAGES (board columns), TEAM, storage keys
+ *   - data/seed.js            : demo tasks shown on first load
+ *   - hooks/useLocalStorage.js: saves state in the browser across reloads
+ *   - lib/                    : small helpers (dates, team members)
+ *   - components/             : Header, Board (columns), TaskCard, Avatar
  *
- * Where to start (build sequence in Phase 3):
- *   - M4  data-model    : render the four columns and the task cards below.
- *   - M5  crud-modal    : add the "+" button modal and the edit-on-click modal.
- *   - M6  tag-style     : feature vs. bug color coding (uses DESIGN.md §2 colors).
- *   - M7  task-owner    : assignee badge + "Hand off to..." dropdown.
- *   - M8  due-tint      : color cards by due date (uses DESIGN.md §2 due-state colors).
- *   - M9  context       : a curated Context briefing field on the modal.
- *   - M10 copy-prompt   : a "Copy as Prompt Context" button that serializes the task + context.
- *   - M11 anchors       : the Anchor Board above the Kanban.
- *   - M12 secret-sauce  : the one open-ended thing that makes your tracker yours.
+ * Build sequence (Phase 3):
+ *   - M4  data-model           : four columns + demo task cards (done)
+ *   - M5  crud-modal           : "New task" modal and edit-on-click
+ *   - M6  tag-style            : feature vs. bug colour + icon (DESIGN.md §2)
+ *   - M7  task-owner           : assignee badge + "Hand off to..." dropdown
+ *   - M8  due-tint             : colour cards by due date (DESIGN.md §2)
+ *   - M9  task-context         : curated Context briefing field on the modal
+ *   - M10 copy-context         : "Copy Context" button that serialises the task
+ *   - M11 project-deliverables : the deliverable anchor cards above the board
+ *   - M12 secret-sauce         : the one thing that makes this tracker ours
  *
- * Search the file for `TODO M<n>` to find the right hook for each milestone.
+ * Search for `TODO M<n>` to find the hook for each remaining milestone.
  */
 
 /**
@@ -28,89 +35,42 @@ import { useState, useEffect } from 'react';
  * @property {string} description
  * @property {'feature'|'bug'} type
  * @property {'todo'|'in-progress'|'review'|'done'} status
- * @property {string} assignee
- * @property {string|null} dueDate     ISO 'YYYY-MM-DD'
- * @property {string} createdDate      ISO 'YYYY-MM-DD'
+ * @property {string} assignee               id of a TEAM member
+ * @property {string|null} dueDate           ISO 'YYYY-MM-DD'
+ * @property {string} createdDate            ISO 'YYYY-MM-DD'
+ * @property {string} context                M9: curated briefing for the next AI / teammate
+ * @property {string|null} contextTool       M9: 'Claude' | 'ChatGPT' | 'Cursor' | 'Lovable' | 'Replit' | 'Other'
+ * @property {string|null} contextUpdatedAt  M9: ISO timestamp, set automatically on save
  */
 
-// The four columns of the board, in render order.
-// Use these IDs everywhere — do not invent new ones.
-export const STAGES = [
-  { id: 'todo',        label: 'To Do' },
-  { id: 'in-progress', label: 'In Progress' },
-  { id: 'review',      label: 'Review' },
-  { id: 'done',        label: 'Done' },
-];
-
-// Replace these placeholders with the three names from PRD §8 before M4.
-// They become the only valid values for `Task.assignee`.
-export const TEAM = ['Teammate A', 'Teammate B', 'Teammate C'];
-
-/**
- * A tiny localStorage hook — survives reloads, no library needed.
- *
- * Usage:
- *   const [tasks, setTasks] = useLocalStorage('vibetracker.tasks', []);
- */
-export function useLocalStorage(key, initialValue) {
-  const [value, setValue] = useState(() => {
-    try {
-      const raw = window.localStorage.getItem(key);
-      return raw != null ? JSON.parse(raw) : initialValue;
-    } catch {
-      return initialValue;
-    }
-  });
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(key, JSON.stringify(value));
-    } catch {
-      /* quota or private-mode error — silently ignore for hackathon */
-    }
-  }, [key, value]);
-
-  return [value, setValue];
-}
+// Re-exported so anything importing these from App.jsx (as in the starter) still works.
+export { STAGES, TEAM } from './constants.js';
+export { useLocalStorage } from './hooks/useLocalStorage.js';
 
 export default function App() {
-  // TODO M4 data-model:
-  //   const [tasks, setTasks] = useLocalStorage('vibetracker.tasks', [/* 3-4 seed tasks */]);
-  //
+  const [tasks] = useLocalStorage(STORAGE_KEYS.tasks, createSeedTasks);
+
   // TODO M5 crud-modal:
   //   const [editing, setEditing] = useState(null);
   //
-  // TODO M11 anchors:
+  // TODO M11 project-deliverables:
   //   const [anchors, setAnchors] = useLocalStorage('vibetracker.anchors', [...]);
 
   return (
-    <div className="min-h-screen p-6">
-      <header className="mb-6 flex items-end justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">
-            Vibecoding Project Tracker
-          </h1>
-          <p className="text-sm text-slate-500">
-            {/* Replace this line with your team name from PRD §11. */}
-            Team starter
-          </p>
-        </div>
-      </header>
+    <div className="min-h-screen">
+      <a
+        href="#board"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-surface-card focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-brand focus:shadow"
+      >
+        Skip to board
+      </a>
 
-      {/* TODO M11 anchors: render the Anchor Board (Presentation / Demo / Report / Documentation) above the board. */}
+      <Header />
 
-      {/*
-        TODO M4 data-model:
-          Render a Kanban board with the four columns from STAGES.
-          Each column should display the tasks whose status matches its id.
-          Pre-populate 3-4 mock tasks so the board isn't empty on first load.
+      {/* TODO M11 project-deliverables: render the anchor cards (Presentation / Demo / Report / Documentation) above the board. */}
 
-        TODO M5 crud-modal:
-          Add a "+" button that opens a modal with every Task field.
-          Clicking a card should open the same modal in edit mode.
-      */}
-      <main className="flex h-64 items-center justify-center rounded-lg border-2 border-dashed border-slate-300 text-slate-400">
-        Build the four-column board here · M4
+      <main id="board" tabIndex={-1} className="mx-auto max-w-screen-2xl px-4 py-6 focus:outline-none sm:px-6">
+        <Board tasks={tasks} />
       </main>
     </div>
   );
