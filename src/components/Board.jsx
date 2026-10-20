@@ -3,7 +3,7 @@ import TaskCard from './TaskCard.jsx';
 
 // The Kanban board: one column per stage, each showing the tasks whose status
 // matches. Four columns on wide screens, two on tablets, one on phones.
-export default function Board({ tasks, team, onOpenTask, onHandOff, onCopy, highlightedId, now }) {
+export default function Board({ tasks, team, hasFilters, onOpenTask, onHandOff, onCopy, highlightedId, now }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {STAGES.map((stage) => (
@@ -12,6 +12,7 @@ export default function Board({ tasks, team, onOpenTask, onHandOff, onCopy, high
           stage={stage}
           tasks={tasks.filter((task) => task.status === stage.id)}
           team={team}
+          hasFilters={hasFilters}
           onOpenTask={onOpenTask}
           onHandOff={onHandOff}
           onCopy={onCopy}
@@ -23,7 +24,7 @@ export default function Board({ tasks, team, onOpenTask, onHandOff, onCopy, high
   );
 }
 
-function Column({ stage, tasks, team, onOpenTask, onHandOff, onCopy, highlightedId, now }) {
+function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy, highlightedId, now }) {
   const headingId = `column-${stage.id}`;
 
   return (
@@ -58,7 +59,7 @@ function Column({ stage, tasks, team, onOpenTask, onHandOff, onCopy, highlighted
         </ul>
       ) : (
         <p className="mt-3 rounded-lg border border-dashed border-line-control p-4 text-center text-sm text-ink-muted">
-          No tasks here yet.
+          {hasFilters ? 'No matching tasks in this column.' : 'No tasks here yet.'}
         </p>
       )}
     </section>

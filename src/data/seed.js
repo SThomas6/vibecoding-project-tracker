@@ -61,6 +61,14 @@ const SEED_TASKS = [
         result: 'Rewrote the whole component and broke the autoplay and the dots.',
       },
     ],
+    handoffs: [
+      {
+        ago: 2,
+        from: 'priya',
+        to: 'alex',
+        note: 'Found a duplicate click listener on re-render; move it into useEffect and check phone Safari.',
+      },
+    ],
   },
   {
     id: 't2', title: 'Set up contact form', type: 'feature', status: 'in-progress', assignee: 'jordan', due: 1, created: -2,
@@ -71,6 +79,14 @@ const SEED_TASKS = [
   {
     id: 't6', title: 'CV layout and download button', type: 'feature', status: 'review', assignee: 'jordan', due: 3, created: -5,
     description: 'One-page CV section with a PDF download link.',
+    handoffs: [
+      {
+        ago: 18,
+        from: 'alex',
+        to: 'jordan',
+        note: 'Grid layout is ready; please review the PDF download link and keyboard focus order.',
+      },
+    ],
   },
   {
     id: 't7', title: 'Footer links 404 after deploy', type: 'bug', status: 'review', assignee: 'priya', due: -2, created: -3,
@@ -103,6 +119,14 @@ const SEED_TASKS = [
         result: 'Fixed /about only; nested routes still 404.',
       },
     ],
+    handoffs: [
+      {
+        ago: 26,
+        from: 'alex',
+        to: 'priya',
+        note: 'vercel.json rewrite only fixed /about; switch footer links to root-relative paths and test preview.',
+      },
+    ],
   },
   {
     id: 't11', title: 'Check colour contrast with axe', type: 'feature', status: 'review', assignee: 'alex', due: 1, created: -1,
@@ -125,7 +149,7 @@ const SEED_TASKS = [
 ];
 
 export function createSeedTasks() {
-  return SEED_TASKS.map(({ due, created, ago, prompts = [], ...task }) => ({
+  return SEED_TASKS.map(({ due, created, ago, prompts = [], handoffs = [], ...task }) => ({
     context: '',
     contextTool: null,
     ...task,
@@ -135,6 +159,11 @@ export function createSeedTasks() {
     promptLog: prompts.map(({ ago: promptAgo, ...entry }, index) => ({
       id: `${task.id}-p${index + 1}`,
       at: hoursAgo(promptAgo),
+      ...entry,
+    })),
+    handoffs: handoffs.map(({ ago: handoffAgo, ...entry }, index) => ({
+      id: `${task.id}-h${index + 1}`,
+      at: hoursAgo(handoffAgo),
       ...entry,
     })),
   }));

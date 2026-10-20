@@ -11,12 +11,30 @@ export function createTask(fields) {
     contextTool: null,
     contextUpdatedAt: null,
     promptLog: [],
+    handoffs: [],
     ...fields,
   };
 }
 
 export function newId() {
   return globalThis.crypto?.randomUUID?.() ?? `task-${Date.now()}`;
+}
+
+// Every team member ID who currently owns or has previously worked on / handed
+// off this task (PRD FR10, FR23).
+export function getContributors(task) {
+  const ids = new Set();
+  if (task.assignee) ids.add(task.assignee);
+  for (const item of task.handoffs ?? []) {
+    if (item.from) ids.add(item.from);
+    if (item.to) ids.add(item.to);
+  }
+  return [...ids];
+}
+
+// Team member IDs who worked on the task previously, excluding the current owner.
+export function getPastContributors(task) {
+  return getContributors(task).filter((id) => id !== task.assignee);
 }
 
 // What gets saved from the Context box: an untouched template counts as no

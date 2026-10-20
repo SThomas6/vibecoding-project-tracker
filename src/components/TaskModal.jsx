@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { Trash2, X } from 'lucide-react';
 import { CONTEXT_TEMPLATE, STAGES, TASK_TYPES } from '../constants.js';
 import { formatDate } from '../lib/dates.js';
-import { cleanContext } from '../lib/tasks.js';
+import { cleanContext, newId } from '../lib/tasks.js';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 import ContextFields from './ContextFields.jsx';
 import Dialog from './Dialog.jsx';
@@ -194,9 +194,13 @@ export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy,
             id={id}
             context={form.context}
             tool={form.contextTool}
+            handoffs={task?.handoffs ?? []}
+            team={team}
             updatedAt={task?.contextUpdatedAt}
             onChange={update}
-            onCopy={() => onCopy({ ...task, ...fieldsFromForm(form, task) })}
+            onSetContext={(context) => setForm((prev) => ({ ...prev, context }))}
+            onCopy={(modeId) => onCopy({ ...task, ...fieldsFromForm(form, task) }, modeId)}
+            onNotify={onNotify}
           />
 
           <PromptLog
@@ -261,6 +265,10 @@ export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy,
 function fieldsFromForm(form, task) {
   const context = cleanContext(form.context);
   const contextTool = form.contextTool || null;
+  const ownerChanged = task && form.assignee !== (task.assignee ?? '');
+  const handoffs = ownerChanged
+    ? [...(task.handoffs ?? []), { id: newId(), from: task.assignee || '', to: form.assignee, note: '', at: new Date().toISOString() }]
+    : (task?.handoffs ?? []);
   const contextChanged =
     context !== (task?.context ?? '') ||
     contextTool !== (task?.contextTool ?? null) ||
@@ -275,6 +283,7 @@ function fieldsFromForm(form, task) {
     context,
     contextTool,
     promptLog: form.promptLog,
+    handoffs,
     contextUpdatedAt: contextChanged ? new Date().toISOString() : (task?.contextUpdatedAt ?? null),
   };
 }

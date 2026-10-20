@@ -60,10 +60,10 @@ export default function PromptLog({ id, entries, defaultTool, onChange, onNotify
     <section aria-labelledby={`${id}-log-heading`} className="flex flex-col gap-4 border-t border-line pt-5">
       <div>
         <h3 id={`${id}-log-heading`} className="text-base font-semibold text-ink">
-          Prompt log <span className="font-normal text-ink-muted">({entries.length})</span>
+          Saved prompts <span className="font-normal text-ink-muted">({entries.length})</span>
         </h3>
         <p className="mt-1 text-sm text-ink-muted">
-          Record each prompt you try and whether it worked. Prompts that worked are added to the copied context.
+          Pin only the key prompts worth remembering (no need to log every chat turn). Prompts marked Worked are added to the copied briefing.
         </p>
       </div>
 
@@ -75,8 +75,12 @@ export default function PromptLog({ id, entries, defaultTool, onChange, onNotify
         </ol>
       )}
 
-      <fieldset className="flex flex-col gap-4 rounded-lg border border-line bg-surface-sunken p-4">
-        <legend className="px-1 text-sm font-semibold text-ink">Add a prompt</legend>
+      <details className="rounded-lg border border-line bg-surface-sunken p-4">
+        <summary className="cursor-pointer select-none text-sm font-semibold text-brand">
+          Pin a prompt or dead end to the log
+        </summary>
+        <fieldset className="mt-4 flex flex-col gap-4">
+          <legend className="sr-only">Add a prompt</legend>
         <div>
           <label htmlFor={`${id}-log-prompt`} className={labelStyles}>
             Prompt
@@ -155,7 +159,8 @@ export default function PromptLog({ id, entries, defaultTool, onChange, onNotify
             Add to log
           </button>
         </div>
-      </fieldset>
+        </fieldset>
+      </details>
     </section>
   );
 }

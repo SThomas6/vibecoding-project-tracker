@@ -13,14 +13,15 @@ Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10
 | Four-column board (To Do, In Progress, Review, Done) with task counts | FR1, FR2 |
 | Add, edit and delete tasks in a dialog; change status to move a card | FR4–FR6 |
 | Feature or Bug, each with its own colour, icon and label | FR8 |
-| Owner on every card, Unassigned by default, one-step "Hand off" | FR9, FR10 |
-| Team strip: email, GitHub handle and what each person is driving | FR11 |
+| Owner on every card, Unassigned by default, one-step "Hand off" with optional handoff note and contributor trail ("Previously worked on by…") | FR9, FR10 |
+| Team strip: email, GitHub handle, what each person is driving, one-click work filter and "Add member" | FR11, FR12 |
 | Due-date badge: calm, warning (under 24 hours), overdue or done | FR13, FR14 |
-| Context notes in Markdown, the AI tool used, and "Last updated" | FR15–FR17 |
-| "Copy context": the task as a Markdown briefing for an AI tool | FR18 |
+| Context notes in Markdown, one-click AI reply paste, AI tool used, and "Last updated" | FR15–FR17 |
+| "Copy context": the task as a TACO-structured Markdown briefing for an AI tool | FR18 |
 | Four deliverable link cards and an editable project name | FR19 |
 | Reset to the demo project, after confirming | FR20 |
-| Prompt log: each prompt, its result and whether it worked | FR22 |
+| Search issues and filter the board by who has worked on or owns a task, task type, due state and AI context or tool | FR21 |
+| Collapsible Saved prompts log: key prompts, result and whether it worked | FR22 |
 
 ## Run it
 
@@ -54,8 +55,9 @@ Shared button and field styles are in `components/styles.js`, and colour tokens 
 
 There's no server or database. Everything is saved as JSON in the browser's localStorage:
 
-- `vibetracker.tasks`: the tasks, including context and prompt logs
+- `vibetracker.tasks`: the tasks, including context, handoff history and saved prompts
 - `vibetracker.project`: the project name and deliverable links
+- `vibetracker.team`: the team members (starts with the demo team)
 
 The first visit loads the demo project. **Reset demo** in the header (or clearing site data) brings it back.
 

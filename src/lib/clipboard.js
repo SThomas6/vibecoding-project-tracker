@@ -9,3 +9,14 @@ export async function copyText(text) {
     return false;
   }
 }
+
+// Reads text from the clipboard for one-click AI reply paste-back. Returns
+// null if the browser blocks clipboard reading or the clipboard is empty.
+export async function readClipboardText() {
+  try {
+    const text = await navigator.clipboard.readText();
+    return text?.trim() ? text.trim() : null;
+  } catch {
+    return null;
+  }
+}

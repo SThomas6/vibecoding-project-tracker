@@ -49,6 +49,37 @@ export const PROMPT_OUTCOMES = [
   { id: 'failed', label: "Didn't work" },
 ];
 
+// TACO prompt modes for "Copy context" (PRD FR18, DR9): tailors the Actor and
+// Output format sections of the copied briefing without manual typing.
+export const PROMPT_MODES = [
+  {
+    id: 'continue',
+    label: 'Continue building',
+    actor: 'Act as a senior pair-programming developer picking up an in-progress vibecoding task.',
+    output: 'Provide the minimal, working code changes needed for the next step, then end with a short "## Handoff update" block (Tried so far / Pick up from here) I can paste back into the tracker.',
+  },
+  {
+    id: 'debug',
+    label: 'Debug and fix',
+    actor: 'Act as a debugging specialist investigating the root cause of this issue.',
+    output: 'Explain the root cause in two sentences, give the exact fix without breaking existing behaviour, and end with a short "## Handoff update" block I can paste back into the tracker.',
+  },
+  {
+    id: 'review',
+    label: 'Accessibility & code review',
+    actor: 'Act as a WCAG 2.2 AA accessibility and code-quality reviewer.',
+    output: 'List any bugs, accessibility gaps or edge cases in priority order with concrete fixes, then end with a short "## Handoff update" block.',
+  },
+  {
+    id: 'handoff',
+    label: 'Write handoff summary',
+    actor: 'Act as a technical lead summarising our current AI session for the next teammate.',
+    output: 'Write a concise Markdown update with "## Background", "## Constraints", "## Tried so far" and "## Pick up from here", plus a one-line handoff note.',
+  },
+];
+
+export const HANDOFF_NOTE_MAX_LENGTH = 280; // PRD DR2
+
 // The project's deliverables, pinned above the board as link cards
 // (M11, PRD FR19).
 export const DELIVERABLES = [

@@ -4,6 +4,7 @@ import AddMemberDialog from './components/AddMemberDialog.jsx';
 import Board from './components/Board.jsx';
 import CopyFallbackDialog from './components/CopyFallbackDialog.jsx';
 import Deliverables from './components/Deliverables.jsx';
+import FilterBar from './components/FilterBar.jsx';
 import Header from './components/Header.jsx';
 import RenameProjectDialog from './components/RenameProjectDialog.jsx';
 import ResetDemoDialog from './components/ResetDemoDialog.jsx';
@@ -17,22 +18,23 @@ import { useLocalStorage } from './hooks/useLocalStorage.js';
 import { useNow } from './hooks/useNow.js';
 import { buildBriefing } from './lib/briefing.js';
 import { copyText } from './lib/clipboard.js';
-import { createTask } from './lib/tasks.js';
+import { DEFAULT_FILTERS, filterTasks, hasActiveFilters } from './lib/filters.js';
+import { createTask, newId } from './lib/tasks.js';
 import { getMember } from './lib/team.js';
 
 /**
  * Vibecoding Project Tracker.
  *
  * Where things live:
- *   - constants.js            : STAGES (board columns), TEAM, storage keys
- *   - data/seed.js            : demo tasks shown on first load
+ *   - constants.js            : STAGES (board columns), TEAM, PROMPT_MODES, storage keys
+ *   - data/seed.js            : demo project and tasks shown on first load
  *   - hooks/useLocalStorage.js: saves state in the browser across reloads
- *   - lib/                    : small helpers (dates, team members, new tasks)
+ *   - lib/                    : small helpers (dates, due states, filters, briefing, tasks)
  *   - components/             : Header, Deliverables + DeliverableCard, TeamStrip,
- *                               Board (columns), TaskCard, Avatar, TypeBadge,
- *                               DueBadge, TaskModal (add / edit / delete) with
- *                               ContextFields, Dialog (shared shell),
- *                               CopyFallbackDialog, RenameProjectDialog, Toast
+ *                               FilterBar, Board (columns), TaskCard, Avatar,
+ *                               TypeBadge, DueBadge, TaskModal with ContextFields
+ *                               and PromptLog, Dialog, CopyFallbackDialog,
+ *                               RenameProjectDialog, AddMemberDialog, ResetDemoDialog, Toast
  *
  * Build sequence (Phase 3):
  *   - M4  data-model           : four columns + demo task cards (done)
@@ -43,10 +45,8 @@ import { getMember } from './lib/team.js';
  *   - M9  task-context         : Context notes, AI tool and "last updated" on the form (done)
  *   - M10 copy-context         : "Copy context" on cards and the form: Markdown briefing (done)
  *   - M11 project-deliverables : deliverable link cards above the board + project name (done)
- *   - M12 secret-sauce         : prompt log per task; prompts that worked go in the briefing (done)
- *   - M13 pitch-ready          : demo project, 3 tasks per column, 2 with full context (done)
- *
- * Search for `TODO M<n>` to find the hook for each remaining milestone.
+ *   - M12 secret-sauce         : handoff notes, TACO prompt modes, smart paste & saved prompts (done)
+ *   - M13 pitch-ready          : demo project, 3 tasks per column, full context & handoffs (done)
  */
 
 /**
@@ -62,6 +62,8 @@ import { getMember } from './lib/team.js';
  * @property {string} context                M9: curated briefing for the next AI / teammate
  * @property {string|null} contextTool       M9: 'Claude' | 'ChatGPT' | 'Cursor' | 'Lovable' | 'Replit' | 'Other'
  * @property {string|null} contextUpdatedAt  M9: ISO timestamp, set automatically on save
+ * @property {Array} promptLog               M12: saved prompts with tool, result and outcome
+ * @property {Array} handoffs                M7/M12: handoff trail ({ id, from, to, note, at })
  */
 
 // Re-exported so anything importing these from App.jsx (as in the starter) still works.
@@ -98,6 +100,10 @@ export default function App() {
   // "Reset demo" confirmation (PRD FR20).
   const [resetting, setResetting] = useState(false);
 
+  // Search and advanced board filters (PRD FR23).
+  const [filters, setFilters] = useState(DEFAULT_FILTERS);
+  const filteredTasks = filterTasks(tasks, filters, now);
+
   useEffect(() => {
     document.title = `${project.name} · Vibecoding Project Tracker`;
   }, [project.name]);
@@ -126,8 +132,20 @@ export default function App() {
     showToast('Task deleted');
   }
 
-  function handOff(taskId, memberId) {
-    setTasks((prev) => prev.map((task) => (task.id === taskId ? { ...task, assignee: memberId } : task)));
+  function handOff(taskId, memberId, note = '') {
+    const at = new Date().toISOString();
+    setTasks((prev) =>
+      prev.map((task) => {
+        if (task.id !== taskId) return task;
+        const entry = { id: newId(), from: task.assignee || '', to: memberId, note, at };
+        return {
+          ...task,
+          assignee: memberId,
+          handoffs: [...(task.handoffs ?? []), entry],
+          contextUpdatedAt: note ? at : task.contextUpdatedAt,
+        };
+      })
+    );
     showToast(`Handed off to ${getMember(team, memberId).name}.`);
     clearTimeout(highlightTimer.current);
     setHighlightedId(taskId);
@@ -149,6 +167,7 @@ export default function App() {
     setTasks(createSeedTasks());
     setProject(createSeedProject());
     setTeam(TEAM);
+    setFilters(DEFAULT_FILTERS);
     setResetting(false);
     showToast('Demo project restored');
   }
@@ -159,8 +178,8 @@ export default function App() {
     showToast(`${member.name} added to the team`);
   }
 
-  async function copyContext(task) {
-    const text = buildBriefing(task, team, new Date());
+  async function copyContext(task, modeId = 'continue') {
+    const text = buildBriefing(task, team, new Date(), modeId);
     if (await copyText(text)) showToast('Context copied. Paste it into your AI tool.');
     else setFallbackText(text);
   }
@@ -189,11 +208,25 @@ export default function App() {
 
       <main className="mx-auto max-w-screen-2xl px-4 py-6 sm:px-6">
         <Deliverables links={project.links} onSave={saveLink} />
-        <TeamStrip team={team} tasks={tasks} onAddMember={() => setAddingMember(true)} />
+        <TeamStrip
+          team={team}
+          tasks={tasks}
+          activeMember={filters.member}
+          onFilterMember={(member) => setFilters((prev) => ({ ...prev, member }))}
+          onAddMember={() => setAddingMember(true)}
+        />
+        <FilterBar
+          filters={filters}
+          team={team}
+          totalCount={tasks.length}
+          shownCount={filteredTasks.length}
+          onChange={setFilters}
+        />
         <div id="board" tabIndex={-1} className="focus:outline-none">
           <Board
-            tasks={tasks}
+            tasks={filteredTasks}
             team={team}
+            hasFilters={hasActiveFilters(filters)}
             onOpenTask={(task) => setEditing({ task })}
             onHandOff={handOff}
             onCopy={copyContext}
