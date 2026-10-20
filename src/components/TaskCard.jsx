@@ -1,6 +1,7 @@
 import { useId, useRef, useState } from 'react';
 import { ArrowRightLeft } from 'lucide-react';
 import Avatar from './Avatar.jsx';
+import DueBadge from './DueBadge.jsx';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 import { TEAM } from '../constants.js';
 import { getMember } from '../lib/team.js';
@@ -11,7 +12,7 @@ import { getMember } from '../lib/team.js';
 // the whole card, so the full card is clickable but is only one tab stop.
 // The hand-off controls sit above that layer (relative z-10) so they get
 // their own clicks.
-export default function TaskCard({ task, onOpen, onHandOff, highlighted }) {
+export default function TaskCard({ task, onOpen, onHandOff, highlighted, now }) {
   const member = getMember(task.assignee);
   const others = TEAM.filter((m) => m.id !== task.assignee);
   const [handOffOpen, setHandOffOpen] = useState(false);
@@ -44,6 +45,11 @@ export default function TaskCard({ task, onOpen, onHandOff, highlighted }) {
           </button>
         </h3>
         <TypeBadge type={task.type} />
+      </div>
+
+      {/* Due-date badge (M8); the wrapper hides itself when there's no badge. */}
+      <div className="mt-2 empty:hidden">
+        <DueBadge task={task} now={now} />
       </div>
 
       <div className="mt-3 flex items-center justify-between gap-2">

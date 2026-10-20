@@ -9,6 +9,7 @@ import { buttonStyles } from './components/styles.js';
 import { STORAGE_KEYS } from './constants.js';
 import { createSeedTasks } from './data/seed.js';
 import { useLocalStorage } from './hooks/useLocalStorage.js';
+import { useNow } from './hooks/useNow.js';
 import { createTask } from './lib/tasks.js';
 import { getMember } from './lib/team.js';
 
@@ -29,7 +30,7 @@ import { getMember } from './lib/team.js';
  *   - M5  crud-modal           : "New task" modal and edit-on-click (done)
  *   - M6  tag-style            : feature vs. bug colour + icon (done)
  *   - M7  task-owner           : owner on every card + "Hand off to..." (done)
- *   - M8  due-tint             : colour cards by due date (DESIGN.md §2)
+ *   - M8  due-tint             : due-date badge: calm / warning / overdue / done (done)
  *   - M9  task-context         : curated Context briefing field on the modal
  *   - M10 copy-context         : "Copy Context" button that serialises the task
  *   - M11 project-deliverables : the deliverable anchor cards above the board
@@ -59,6 +60,9 @@ export { useLocalStorage } from './hooks/useLocalStorage.js';
 
 export default function App() {
   const [tasks, setTasks] = useLocalStorage(STORAGE_KEYS.tasks, createSeedTasks);
+
+  // Refreshed every minute so due-date colours update by themselves (M8).
+  const now = useNow(60_000);
 
   // null = modal closed; { task: null } = adding; { task } = editing that task.
   const [editing, setEditing] = useState(null);
@@ -131,6 +135,7 @@ export default function App() {
             onOpenTask={(task) => setEditing({ task })}
             onHandOff={handOff}
             highlightedId={highlightedId}
+            now={now}
           />
         </div>
       </main>

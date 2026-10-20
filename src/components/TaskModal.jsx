@@ -3,14 +3,16 @@ import { Trash2, X } from 'lucide-react';
 import { STAGES, TASK_TYPES, TEAM } from '../constants.js';
 import { formatDate } from '../lib/dates.js';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
+import DueBadge from './DueBadge.jsx';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 
+// New tasks start Unassigned (PRD FR15, DR6).
 const NEW_TASK = {
   title: '',
   description: '',
   type: 'feature',
   status: 'todo',
-  assignee: TEAM[0].id,
+  assignee: '',
   dueDate: '',
 };
 
@@ -104,6 +106,7 @@ export default function TaskModal({ task, onSave, onDelete, onClose }) {
                 {isEdit ? 'Edit task' : 'New task'}
               </h2>
               <TypeBadge type={form.type} />
+              <DueBadge task={{ status: form.status, dueDate: form.dueDate || null }} now={new Date()} />
             </div>
             {isEdit && <p className="text-sm text-ink-muted">Created {formatDate(task.createdDate)}</p>}
           </div>
@@ -125,6 +128,7 @@ export default function TaskModal({ task, onSave, onDelete, onClose }) {
               ref={titleRef}
               type="text"
               required
+              maxLength={120}
               value={form.title}
               onChange={(event) => {
                 update('title')(event);
@@ -148,6 +152,7 @@ export default function TaskModal({ task, onSave, onDelete, onClose }) {
             <textarea
               id={`${id}-description`}
               rows={3}
+              maxLength={2000}
               value={form.description}
               onChange={update('description')}
               className={`${inputStyles} py-2`}
@@ -193,6 +198,7 @@ export default function TaskModal({ task, onSave, onDelete, onClose }) {
             <div>
               <label htmlFor={`${id}-assignee`} className={labelStyles}>Assigned to</label>
               <select id={`${id}-assignee`} value={form.assignee} onChange={update('assignee')} className={inputStyles}>
+                <option value="">Unassigned</option>
                 {TEAM.map((member) => (
                   <option key={member.id} value={member.id}>{member.name}</option>
                 ))}

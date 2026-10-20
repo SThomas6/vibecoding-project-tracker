@@ -6,12 +6,13 @@ const SIZES = {
 };
 
 // Round initials badge for a team member. It's decorative: the member's name
-// is always written out next to it for screen readers.
+// (or "Unassigned") is always written out next to it for screen readers.
+// Unassigned tasks get a grey "?" (white on grey 4.76:1).
 export default function Avatar({ member, size = 'md' }) {
   return (
     <span
       aria-hidden="true"
-      className={`inline-flex shrink-0 items-center justify-center rounded-full bg-brand font-semibold text-white ${SIZES[size]}`}
+      className={`inline-flex shrink-0 items-center justify-center rounded-full font-semibold text-white ${member ? 'bg-brand' : 'bg-line-control'} ${SIZES[size]}`}
     >
       {member ? initials(member.name) : '?'}
     </span>
