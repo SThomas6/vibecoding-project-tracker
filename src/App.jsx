@@ -42,6 +42,7 @@ import { getMember } from './lib/team.js';
  *   - M10 copy-context         : "Copy context" on cards and the form: Markdown briefing (done)
  *   - M11 project-deliverables : deliverable link cards above the board + project name (done)
  *   - M12 secret-sauce         : prompt log per task; prompts that worked go in the briefing (done)
+ *   - M13 pitch-ready          : demo project, 3 tasks per column, 2 with full context (done)
  *
  * Search for `TODO M<n>` to find the hook for each remaining milestone.
  */
