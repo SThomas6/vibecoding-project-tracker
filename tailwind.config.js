@@ -10,6 +10,7 @@ export default {
           DEFAULT: '#4338CA', // brand-primary: logo mark, primary buttons, focus ring
           hover: '#3730A3',
           accent: '#0E7490',  // brand-accent: links and highlights
+          tint: '#EEF2FF',    // brief highlight after a hand-off (M7); ink-muted on it 6.8:1
         },
         surface: {
           page: '#F8FAFC',

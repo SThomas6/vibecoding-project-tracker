@@ -3,7 +3,7 @@ import TaskCard from './TaskCard.jsx';
 
 // The Kanban board: one column per stage, each showing the tasks whose status
 // matches. Four columns on wide screens, two on tablets, one on phones.
-export default function Board({ tasks, onOpenTask }) {
+export default function Board({ tasks, onOpenTask, onHandOff, highlightedId }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {STAGES.map((stage) => (
@@ -12,13 +12,15 @@ export default function Board({ tasks, onOpenTask }) {
           stage={stage}
           tasks={tasks.filter((task) => task.status === stage.id)}
           onOpenTask={onOpenTask}
+          onHandOff={onHandOff}
+          highlightedId={highlightedId}
         />
       ))}
     </div>
   );
 }
 
-function Column({ stage, tasks, onOpenTask }) {
+function Column({ stage, tasks, onOpenTask, onHandOff, highlightedId }) {
   const headingId = `column-${stage.id}`;
 
   return (
@@ -39,7 +41,12 @@ function Column({ stage, tasks, onOpenTask }) {
         <ul className="mt-3 flex flex-col gap-2">
           {tasks.map((task) => (
             <li key={task.id}>
-              <TaskCard task={task} onOpen={onOpenTask} />
+              <TaskCard
+                task={task}
+                onOpen={onOpenTask}
+                onHandOff={onHandOff}
+                highlighted={task.id === highlightedId}
+              />
             </li>
           ))}
         </ul>

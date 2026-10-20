@@ -3,12 +3,14 @@ import { Plus } from 'lucide-react';
 import Board from './components/Board.jsx';
 import Header from './components/Header.jsx';
 import TaskModal from './components/TaskModal.jsx';
+import TeamStrip from './components/TeamStrip.jsx';
 import Toast from './components/Toast.jsx';
 import { buttonStyles } from './components/styles.js';
 import { STORAGE_KEYS } from './constants.js';
 import { createSeedTasks } from './data/seed.js';
 import { useLocalStorage } from './hooks/useLocalStorage.js';
 import { createTask } from './lib/tasks.js';
+import { getMember } from './lib/team.js';
 
 /**
  * Vibecoding Project Tracker.
@@ -19,13 +21,14 @@ import { createTask } from './lib/tasks.js';
  *   - hooks/useLocalStorage.js: saves state in the browser across reloads
  *   - lib/                    : small helpers (dates, team members, new tasks)
  *   - components/             : Header, Board (columns), TaskCard, Avatar,
- *                               TaskModal (add / edit / delete), Toast
+ *                               TaskModal (add / edit / delete), Toast,
+ *                               TypeBadge, TeamStrip
  *
  * Build sequence (Phase 3):
  *   - M4  data-model           : four columns + demo task cards (done)
  *   - M5  crud-modal           : "New task" modal and edit-on-click (done)
- *   - M6  tag-style            : feature vs. bug colour + icon (DESIGN.md §2)
- *   - M7  task-owner           : assignee badge + "Hand off to..." dropdown
+ *   - M6  tag-style            : feature vs. bug colour + icon (done)
+ *   - M7  task-owner           : owner on every card + "Hand off to..." (done)
  *   - M8  due-tint             : colour cards by due date (DESIGN.md §2)
  *   - M9  task-context         : curated Context briefing field on the modal
  *   - M10 copy-context         : "Copy Context" button that serialises the task
@@ -63,6 +66,10 @@ export default function App() {
   const [toast, setToast] = useState('');
   const toastTimer = useRef(null);
 
+  // The card that was just handed off gets a brief highlight (M7).
+  const [highlightedId, setHighlightedId] = useState(null);
+  const highlightTimer = useRef(null);
+
   // TODO M11 project-deliverables:
   //   const [anchors, setAnchors] = useLocalStorage('vibetracker.anchors', [...]);
 
@@ -90,6 +97,14 @@ export default function App() {
     showToast('Task deleted');
   }
 
+  function handOff(taskId, memberId) {
+    setTasks((prev) => prev.map((task) => (task.id === taskId ? { ...task, assignee: memberId } : task)));
+    showToast(`Handed off to ${getMember(memberId).name}.`);
+    clearTimeout(highlightTimer.current);
+    setHighlightedId(taskId);
+    highlightTimer.current = setTimeout(() => setHighlightedId(null), 2000);
+  }
+
   return (
     <div className="min-h-screen">
       <a
@@ -108,8 +123,16 @@ export default function App() {
 
       {/* TODO M11 project-deliverables: render the anchor cards (Presentation / Demo / Report / Documentation) above the board. */}
 
-      <main id="board" tabIndex={-1} className="mx-auto max-w-screen-2xl px-4 py-6 focus:outline-none sm:px-6">
-        <Board tasks={tasks} onOpenTask={(task) => setEditing({ task })} />
+      <main className="mx-auto max-w-screen-2xl px-4 py-6 sm:px-6">
+        <TeamStrip tasks={tasks} />
+        <div id="board" tabIndex={-1} className="focus:outline-none">
+          <Board
+            tasks={tasks}
+            onOpenTask={(task) => setEditing({ task })}
+            onHandOff={handOff}
+            highlightedId={highlightedId}
+          />
+        </div>
       </main>
 
       {editing && (
