@@ -1,6 +1,6 @@
 # Vibecoding Project Tracker — PRD
 
-**Status:** Hackathon starter PRD · review and fill in the **`<TODO>`** sections before you tag `prd-done`.
+**Status:** M2 (`prd-done`) was skipped by agreement in class on 20/10/2026 and marked complete. The `<TODO>` sections below are intentionally left unfilled.
 
 ---
 
