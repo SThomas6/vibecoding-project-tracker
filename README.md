@@ -1,5 +1,7 @@
 # Vibecoding Project Tracker — Hackathon Starter
 
+> **This fork:** [SThomas6/vibecoding-project-tracker](https://github.com/SThomas6/vibecoding-project-tracker), registered on the Hackathon Portal for CM6312.
+
 You're forking this repo as the starting point for the **UXD Vibecoding Hackathon 2026**. The goal of the hackathon is to ship a Vibecoding Project Tracker in ~3 hours: a Kanban-style tool that tracks your vibecoding tasks and stores the prompts that produced them.
 
 This starter gives you:
