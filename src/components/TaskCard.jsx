@@ -1,5 +1,5 @@
 import { useId, useRef, useState } from 'react';
-import { ArrowRightLeft } from 'lucide-react';
+import { ArrowRightLeft, Copy } from 'lucide-react';
 import Avatar from './Avatar.jsx';
 import DueBadge from './DueBadge.jsx';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
@@ -7,12 +7,16 @@ import { TEAM } from '../constants.js';
 import { getMember } from '../lib/team.js';
 
 // One task on the board: the title with its type badge in the corner, then
-// who it's assigned to and a "Hand off" control (M7).
+// who it's assigned to, and a row of actions: "Hand off" (M7) and
+// "Copy context" (M10).
 // The title is a button that opens the task. Its ::after layer stretches over
 // the whole card, so the full card is clickable but is only one tab stop.
-// The hand-off controls sit above that layer (relative z-10) so they get
-// their own clicks.
-export default function TaskCard({ task, onOpen, onHandOff, highlighted, now }) {
+// The action buttons sit above that layer (relative z-10) so they get their
+// own clicks.
+const actionStyles =
+  'relative z-10 inline-flex min-h-9 shrink-0 items-center gap-1 rounded-md px-2 text-xs font-semibold text-brand hover:bg-surface-sunken';
+
+export default function TaskCard({ task, onOpen, onHandOff, onCopy, highlighted, now }) {
   const member = getMember(task.assignee);
   const others = TEAM.filter((m) => m.id !== task.assignee);
   const [handOffOpen, setHandOffOpen] = useState(false);
@@ -52,14 +56,15 @@ export default function TaskCard({ task, onOpen, onHandOff, highlighted, now }) 
         <DueBadge task={task} now={now} />
       </div>
 
-      <div className="mt-3 flex items-center justify-between gap-2">
-        <p className="flex min-w-0 items-center gap-2 text-xs text-ink-muted">
-          <Avatar member={member} />
-          <span className="truncate">
-            <span className="sr-only">Assigned to </span>
-            {member ? member.name : 'Unassigned'}
-          </span>
-        </p>
+      <p className="mt-3 flex min-w-0 items-center gap-2 text-xs text-ink-muted">
+        <Avatar member={member} />
+        <span className="truncate">
+          <span className="sr-only">Assigned to </span>
+          {member ? member.name : 'Unassigned'}
+        </span>
+      </p>
+
+      <div className="mt-2 flex flex-wrap gap-1 border-t border-line pt-2">
         <button
           ref={handOffRef}
           type="button"
@@ -69,10 +74,14 @@ export default function TaskCard({ task, onOpen, onHandOff, highlighted, now }) 
           onKeyDown={(event) => {
             if (event.key === 'Escape' && handOffOpen) setHandOffOpen(false);
           }}
-          className="relative z-10 inline-flex min-h-9 shrink-0 items-center gap-1 rounded-md px-2 text-xs font-semibold text-brand hover:bg-surface-sunken"
+          className={actionStyles}
         >
           <ArrowRightLeft aria-hidden="true" className="h-3.5 w-3.5" />
           Hand off<span className="sr-only"> "{task.title}"</span>
+        </button>
+        <button type="button" onClick={() => onCopy(task)} className={actionStyles}>
+          <Copy aria-hidden="true" className="h-3.5 w-3.5" />
+          Copy context<span className="sr-only"> for "{task.title}"</span>
         </button>
       </div>
 

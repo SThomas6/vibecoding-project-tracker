@@ -42,3 +42,14 @@ export function timeAgo(timestamp, now = new Date()) {
   if (hours < 24) return RELATIVE_TIME.format(-hours, 'hour');
   return RELATIVE_TIME.format(-Math.round(hours / 24), 'day');
 }
+
+// '2026-10-20T13:35:00Z' -> '20 Oct 2026, 14:35' (in the user's time zone)
+export function formatDateTime(timestamp) {
+  return new Date(timestamp).toLocaleString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}

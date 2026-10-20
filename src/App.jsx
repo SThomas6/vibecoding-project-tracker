@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Plus } from 'lucide-react';
 import Board from './components/Board.jsx';
+import CopyFallbackDialog from './components/CopyFallbackDialog.jsx';
 import Header from './components/Header.jsx';
 import TaskModal from './components/TaskModal.jsx';
 import TeamStrip from './components/TeamStrip.jsx';
@@ -10,6 +11,8 @@ import { STORAGE_KEYS } from './constants.js';
 import { createSeedTasks } from './data/seed.js';
 import { useLocalStorage } from './hooks/useLocalStorage.js';
 import { useNow } from './hooks/useNow.js';
+import { buildBriefing } from './lib/briefing.js';
+import { copyText } from './lib/clipboard.js';
 import { createTask } from './lib/tasks.js';
 import { getMember } from './lib/team.js';
 
@@ -33,7 +36,7 @@ import { getMember } from './lib/team.js';
  *   - M7  task-owner           : owner on every card + "Hand off to..." (done)
  *   - M8  due-tint             : due-date badge: calm / warning / overdue / done (done)
  *   - M9  task-context         : Context notes, AI tool and "last updated" on the form (done)
- *   - M10 copy-context         : "Copy Context" button that serialises the task
+ *   - M10 copy-context         : "Copy context" on cards and the form: Markdown briefing (done)
  *   - M11 project-deliverables : the deliverable anchor cards above the board
  *   - M12 secret-sauce         : the one thing that makes this tracker ours
  *
@@ -75,6 +78,9 @@ export default function App() {
   const [highlightedId, setHighlightedId] = useState(null);
   const highlightTimer = useRef(null);
 
+  // The briefing to copy by hand when the browser blocks copying (M10).
+  const [fallbackText, setFallbackText] = useState(null);
+
   // TODO M11 project-deliverables:
   //   const [anchors, setAnchors] = useLocalStorage('vibetracker.anchors', [...]);
 
@@ -110,6 +116,12 @@ export default function App() {
     highlightTimer.current = setTimeout(() => setHighlightedId(null), 2000);
   }
 
+  async function copyContext(task) {
+    const text = buildBriefing(task, new Date());
+    if (await copyText(text)) showToast('Context copied. Paste it into your AI tool.');
+    else setFallbackText(text);
+  }
+
   return (
     <div className="min-h-screen">
       <a
@@ -135,6 +147,7 @@ export default function App() {
             tasks={tasks}
             onOpenTask={(task) => setEditing({ task })}
             onHandOff={handOff}
+            onCopy={copyContext}
             highlightedId={highlightedId}
             now={now}
           />
@@ -144,13 +157,22 @@ export default function App() {
       {editing && (
         <TaskModal
           task={editing.task}
+          toast={toast}
           onSave={saveTask}
           onDelete={deleteTask}
+          onCopy={copyContext}
           onClose={() => setEditing(null)}
         />
       )}
 
-      <Toast message={toast} />
+      {/* After the task form, so it opens on top when copying from there. */}
+      {fallbackText !== null && (
+        <CopyFallbackDialog text={fallbackText} onClose={() => setFallbackText(null)} />
+      )}
+
+      {/* While the task form is open the page behind it can't be seen or
+          heard, so the form shows its own copy of the toast instead. */}
+      <Toast message={editing ? '' : toast} />
     </div>
   );
 }

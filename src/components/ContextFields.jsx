@@ -1,13 +1,13 @@
-import { KeyRound } from 'lucide-react';
+import { Copy, KeyRound } from 'lucide-react';
 import { AI_TOOLS, CONTEXT_MAX_LENGTH } from '../constants.js';
 import { timeAgo } from '../lib/dates.js';
-import { inputStyles, labelStyles } from './styles.js';
+import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 
 // The task's AI context (M9, PRD FR15–FR17): the prompts, replies, logs and
 // next steps someone needs to pick the task up without starting from scratch.
 // It's a plain textarea, so pasted code or HTML is shown as text and never
 // run (NFR12).
-export default function ContextFields({ id, context, tool, updatedAt, onChange }) {
+export default function ContextFields({ id, context, tool, updatedAt, onChange, onCopy }) {
   return (
     <section aria-labelledby={`${id}-context-heading`} className="flex flex-col gap-4 border-t border-line pt-5">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
@@ -47,16 +47,23 @@ export default function ContextFields({ id, context, tool, updatedAt, onChange }
         </p>
       </div>
 
-      <div className="sm:w-1/2">
-        <label htmlFor={`${id}-tool`} className={labelStyles}>
-          AI tool used
-        </label>
-        <select id={`${id}-tool`} value={tool} onChange={onChange('contextTool')} className={inputStyles}>
-          <option value="">Not recorded</option>
-          {AI_TOOLS.map((name) => (
-            <option key={name} value={name}>{name}</option>
-          ))}
-        </select>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="w-full sm:w-1/2">
+          <label htmlFor={`${id}-tool`} className={labelStyles}>
+            AI tool used
+          </label>
+          <select id={`${id}-tool`} value={tool} onChange={onChange('contextTool')} className={inputStyles}>
+            <option value="">Not recorded</option>
+            {AI_TOOLS.map((name) => (
+              <option key={name} value={name}>{name}</option>
+            ))}
+          </select>
+        </div>
+        {/* Copies what's on screen, including unsaved changes (M10). */}
+        <button type="button" onClick={onCopy} className={buttonStyles.secondary}>
+          <Copy aria-hidden="true" className="h-4 w-4" />
+          Copy context
+        </button>
       </div>
     </section>
   );

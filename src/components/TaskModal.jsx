@@ -7,6 +7,7 @@ import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 import ContextFields from './ContextFields.jsx';
 import Dialog from './Dialog.jsx';
 import DueBadge from './DueBadge.jsx';
+import Toast from './Toast.jsx';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 
 // New tasks start Unassigned (PRD FR9, DR2).
@@ -21,7 +22,7 @@ const NEW_TASK = {
 
 // The add / edit form, in the shared native <dialog> (Dialog.jsx).
 // `task` is null when adding a new task, or the task being edited.
-export default function TaskModal({ task, onSave, onDelete, onClose }) {
+export default function TaskModal({ task, toast, onSave, onDelete, onCopy, onClose }) {
   const isEdit = Boolean(task);
   const [form, setForm] = useState(() => ({
     ...NEW_TASK,
@@ -49,27 +50,12 @@ export default function TaskModal({ task, onSave, onDelete, onClose }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    const title = form.title.trim();
-    if (!title) {
+    if (!form.title.trim()) {
       setTitleError('Enter a title for the task.');
       titleRef.current.focus();
       return;
     }
-    // The "last updated" time only moves when the context itself changes (DR5).
-    const context = cleanContext(form.context);
-    const contextTool = form.contextTool || null;
-    const contextChanged = context !== (task?.context ?? '') || contextTool !== (task?.contextTool ?? null);
-    onSave({
-      title,
-      description: form.description.trim(),
-      type: form.type,
-      status: form.status,
-      assignee: form.assignee,
-      dueDate: form.dueDate || null,
-      context,
-      contextTool,
-      contextUpdatedAt: contextChanged ? new Date().toISOString() : (task?.contextUpdatedAt ?? null),
-    });
+    onSave(fieldsFromForm(form, task));
   }
 
   function cancelDelete() {
@@ -208,6 +194,7 @@ export default function TaskModal({ task, onSave, onDelete, onClose }) {
             tool={form.contextTool}
             updatedAt={task?.contextUpdatedAt}
             onChange={update}
+            onCopy={() => onCopy({ ...task, ...fieldsFromForm(form, task) })}
           />
         </div>
 
@@ -253,6 +240,26 @@ export default function TaskModal({ task, onSave, onDelete, onClose }) {
           )}
         </div>
       </form>
+      <Toast message={toast} />
     </Dialog>
   );
+}
+
+// The task as it would be saved from the form, used by Save and by Copy
+// context. The "last updated" time only moves when the context changes (DR5).
+function fieldsFromForm(form, task) {
+  const context = cleanContext(form.context);
+  const contextTool = form.contextTool || null;
+  const contextChanged = context !== (task?.context ?? '') || contextTool !== (task?.contextTool ?? null);
+  return {
+    title: form.title.trim(),
+    description: form.description.trim(),
+    type: form.type,
+    status: form.status,
+    assignee: form.assignee,
+    dueDate: form.dueDate || null,
+    context,
+    contextTool,
+    contextUpdatedAt: contextChanged ? new Date().toISOString() : (task?.contextUpdatedAt ?? null),
+  };
 }
