@@ -121,13 +121,14 @@ export function createSeedTasks() {
 }
 
 // The demo project (M11, PRD DR8): its name and one link per deliverable.
-// Documentation points at the real repo; the rest are left for the team to add.
+// Demo and Documentation point at the live site and the repo; the rest are left
+// for the team to add, so both card states show.
 export function createSeedProject() {
   return {
     name: 'Portfolio site',
     links: {
       presentation: '',
-      demo: '',
+      demo: 'https://vibecoding-project-tracker-tau.vercel.app/',
       report: '',
       documentation: 'https://github.com/SThomas6/vibecoding-project-tracker',
     },

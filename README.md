@@ -4,7 +4,7 @@ A Kanban board for vibecoding projects that also keeps the AI context behind eac
 
 Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10/2026. Clients: Prof. Dr. Ignacio Alvarez and Nathan. Requirements are in [`PRD.md`](PRD.md) and the design system in [`DESIGN.md`](DESIGN.md).
 
-**Live demo:** _Vercel link to be added._ It opens without login; all data stays in your browser.
+**Live demo:** <https://vibecoding-project-tracker-tau.vercel.app/>. It opens without login; all data stays in your browser.
 
 ## What it does
 
