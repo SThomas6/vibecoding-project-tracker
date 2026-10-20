@@ -1,0 +1,146 @@
+import { useId, useRef, useState } from 'react';
+import {
+  BookOpen,
+  CircleCheck,
+  CircleDashed,
+  ExternalLink,
+  FileText,
+  MonitorPlay,
+  Pencil,
+  Plus,
+  Presentation,
+} from 'lucide-react';
+import { isWebLink } from '../lib/links.js';
+import { buttonStyles, inputStyles, labelStyles } from './styles.js';
+
+const ICONS = { presentation: Presentation, demo: MonitorPlay, report: FileText, documentation: BookOpen };
+
+const smallButton =
+  'inline-flex min-h-9 items-center gap-1 rounded-md px-2 text-xs font-semibold text-brand hover:bg-surface-sunken';
+
+// One deliverable card (M11, PRD FR19, DR8): its link, whether one has been
+// added (shown with an icon and words, not just colour), and an inline form
+// to add, change or remove the link. Only http(s) links are saved or opened.
+export default function DeliverableCard({ deliverable, url, onSave }) {
+  const Icon = ICONS[deliverable.id];
+  const hasLink = isWebLink(url);
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState('');
+  const [error, setError] = useState('');
+  const inputRef = useRef(null);
+  const editButtonRef = useRef(null);
+  const id = useId();
+
+  function startEditing() {
+    setDraft(url);
+    setError('');
+    setEditing(true);
+    requestAnimationFrame(() => inputRef.current?.focus());
+  }
+
+  function stopEditing() {
+    setEditing(false);
+    requestAnimationFrame(() => editButtonRef.current?.focus());
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const value = draft.trim();
+    if (value && !isWebLink(value)) {
+      setError('Enter a link that starts with http:// or https://.');
+      inputRef.current.focus();
+      return;
+    }
+    // Saving an empty box removes the link.
+    if (value !== url) onSave(deliverable.id, value);
+    stopEditing();
+  }
+
+  return (
+    <li className="rounded-lg border border-line bg-surface-card p-3 shadow-sm">
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <h3 className="flex items-center gap-2 text-sm font-semibold text-ink">
+          <Icon aria-hidden="true" className="h-4 w-4 text-brand" />
+          {deliverable.label}
+        </h3>
+        {hasLink ? (
+          <span className="inline-flex items-center gap-1 rounded-md bg-due-safe-tint px-1.5 py-0.5 text-xs font-semibold text-due-safe">
+            <CircleCheck aria-hidden="true" className="h-3.5 w-3.5" />
+            Link added
+          </span>
+        ) : (
+          <span className="inline-flex items-center gap-1 rounded-md bg-due-neutral-tint px-1.5 py-0.5 text-xs font-semibold text-due-neutral">
+            <CircleDashed aria-hidden="true" className="h-3.5 w-3.5" />
+            No link yet
+          </span>
+        )}
+      </div>
+      {hasLink && !editing && <p className="mt-1 truncate text-xs text-ink-muted">{new URL(url).host}</p>}
+
+      {editing ? (
+        <form
+          noValidate
+          onSubmit={handleSubmit}
+          onKeyDown={(event) => {
+            if (event.key === 'Escape') stopEditing();
+          }}
+          className="mt-3"
+        >
+          <label htmlFor={`${id}-url`} className={labelStyles}>
+            {deliverable.label} link
+          </label>
+          <input
+            id={`${id}-url`}
+            ref={inputRef}
+            type="url"
+            inputMode="url"
+            maxLength={2000}
+            value={draft}
+            onChange={(event) => {
+              setDraft(event.target.value);
+              if (error) setError('');
+            }}
+            aria-invalid={Boolean(error)}
+            aria-describedby={error ? `${id}-error` : `${id}-hint`}
+            className={inputStyles}
+          />
+          {error ? (
+            <p id={`${id}-error`} className="mt-1.5 text-sm font-medium text-danger">
+              {error}
+            </p>
+          ) : (
+            <p id={`${id}-hint`} className="mt-1.5 text-xs text-ink-muted">
+              Leave it empty to remove the link.
+            </p>
+          )}
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button type="submit" className={buttonStyles.primary}>
+              Save link
+            </button>
+            <button type="button" onClick={stopEditing} className={buttonStyles.secondary}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      ) : (
+        <div className="mt-2 flex flex-wrap items-center gap-1">
+          {hasLink && (
+            <a href={url} target="_blank" rel="noopener noreferrer" className={`${smallButton} underline hover:no-underline`}>
+              <ExternalLink aria-hidden="true" className="h-3.5 w-3.5" />
+              Open<span className="sr-only"> {deliverable.label} (opens in a new tab)</span>
+            </a>
+          )}
+          <button ref={editButtonRef} type="button" onClick={startEditing} className={smallButton}>
+            {hasLink ? (
+              <Pencil aria-hidden="true" className="h-3.5 w-3.5" />
+            ) : (
+              <Plus aria-hidden="true" className="h-3.5 w-3.5" />
+            )}
+            {hasLink ? 'Edit link' : 'Add link'}
+            <span className="sr-only"> for {deliverable.label}</span>
+          </button>
+        </div>
+      )}
+    </li>
+  );
+}

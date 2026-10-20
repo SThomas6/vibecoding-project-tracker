@@ -41,7 +41,17 @@ export const CONTEXT_TEMPLATE = [
 
 export const CONTEXT_MAX_LENGTH = 20000; // PRD DR4
 
+// The project's deliverables, pinned above the board as link cards
+// (M11, PRD FR19).
+export const DELIVERABLES = [
+  { id: 'presentation',  label: 'Presentation' },
+  { id: 'demo',          label: 'Demo' },
+  { id: 'report',        label: 'Report' },
+  { id: 'documentation', label: 'Documentation' },
+];
+
 // Where the app keeps its data in the browser (localStorage).
 export const STORAGE_KEYS = {
   tasks: 'vibetracker.tasks',
+  project: 'vibetracker.project',
 };

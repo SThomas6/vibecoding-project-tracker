@@ -53,3 +53,11 @@ export function createSeedTasks() {
     contextUpdatedAt: null,
   }));
 }
+
+// The demo project (M11, PRD DR8): its name and one link per deliverable.
+export function createSeedProject() {
+  return {
+    name: 'Portfolio site',
+    links: { presentation: '', demo: '', report: '', documentation: '' },
+  };
+}

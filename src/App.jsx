@@ -1,14 +1,16 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Plus } from 'lucide-react';
 import Board from './components/Board.jsx';
 import CopyFallbackDialog from './components/CopyFallbackDialog.jsx';
+import Deliverables from './components/Deliverables.jsx';
 import Header from './components/Header.jsx';
+import RenameProjectDialog from './components/RenameProjectDialog.jsx';
 import TaskModal from './components/TaskModal.jsx';
 import TeamStrip from './components/TeamStrip.jsx';
 import Toast from './components/Toast.jsx';
 import { buttonStyles } from './components/styles.js';
 import { STORAGE_KEYS } from './constants.js';
-import { createSeedTasks } from './data/seed.js';
+import { createSeedProject, createSeedTasks } from './data/seed.js';
 import { useLocalStorage } from './hooks/useLocalStorage.js';
 import { useNow } from './hooks/useNow.js';
 import { buildBriefing } from './lib/briefing.js';
@@ -24,10 +26,11 @@ import { getMember } from './lib/team.js';
  *   - data/seed.js            : demo tasks shown on first load
  *   - hooks/useLocalStorage.js: saves state in the browser across reloads
  *   - lib/                    : small helpers (dates, team members, new tasks)
- *   - components/             : Header, Board (columns), TaskCard, Avatar,
- *                               TaskModal (add / edit / delete) with
- *                               ContextFields, Dialog, Toast, TypeBadge,
- *                               TeamStrip
+ *   - components/             : Header, Deliverables + DeliverableCard, TeamStrip,
+ *                               Board (columns), TaskCard, Avatar, TypeBadge,
+ *                               DueBadge, TaskModal (add / edit / delete) with
+ *                               ContextFields, Dialog (shared shell),
+ *                               CopyFallbackDialog, RenameProjectDialog, Toast
  *
  * Build sequence (Phase 3):
  *   - M4  data-model           : four columns + demo task cards (done)
@@ -37,7 +40,7 @@ import { getMember } from './lib/team.js';
  *   - M8  due-tint             : due-date badge: calm / warning / overdue / done (done)
  *   - M9  task-context         : Context notes, AI tool and "last updated" on the form (done)
  *   - M10 copy-context         : "Copy context" on cards and the form: Markdown briefing (done)
- *   - M11 project-deliverables : the deliverable anchor cards above the board
+ *   - M11 project-deliverables : deliverable link cards above the board + project name (done)
  *   - M12 secret-sauce         : the one thing that makes this tracker ours
  *
  * Search for `TODO M<n>` to find the hook for each remaining milestone.
@@ -81,8 +84,13 @@ export default function App() {
   // The briefing to copy by hand when the browser blocks copying (M10).
   const [fallbackText, setFallbackText] = useState(null);
 
-  // TODO M11 project-deliverables:
-  //   const [anchors, setAnchors] = useLocalStorage('vibetracker.anchors', [...]);
+  // The project's name and deliverable links (M11).
+  const [project, setProject] = useLocalStorage(STORAGE_KEYS.project, createSeedProject);
+  const [renaming, setRenaming] = useState(false);
+
+  useEffect(() => {
+    document.title = `${project.name} · Vibecoding Project Tracker`;
+  }, [project.name]);
 
   function showToast(message) {
     clearTimeout(toastTimer.current);
@@ -116,6 +124,17 @@ export default function App() {
     highlightTimer.current = setTimeout(() => setHighlightedId(null), 2000);
   }
 
+  function saveLink(deliverableId, url) {
+    setProject((prev) => ({ ...prev, links: { ...prev.links, [deliverableId]: url } }));
+    showToast(url ? 'Link saved' : 'Link removed');
+  }
+
+  function renameProject(name) {
+    setProject((prev) => ({ ...prev, name }));
+    setRenaming(false);
+    showToast('Project renamed');
+  }
+
   async function copyContext(task) {
     const text = buildBriefing(task, new Date());
     if (await copyText(text)) showToast('Context copied. Paste it into your AI tool.');
@@ -131,16 +150,15 @@ export default function App() {
         Skip to board
       </a>
 
-      <Header>
+      <Header projectName={project.name} onRename={() => setRenaming(true)}>
         <button type="button" onClick={() => setEditing({ task: null })} className={buttonStyles.primary}>
           <Plus aria-hidden="true" className="h-4 w-4" />
           New task
         </button>
       </Header>
 
-      {/* TODO M11 project-deliverables: render the anchor cards (Presentation / Demo / Report / Documentation) above the board. */}
-
       <main className="mx-auto max-w-screen-2xl px-4 py-6 sm:px-6">
+        <Deliverables links={project.links} onSave={saveLink} />
         <TeamStrip tasks={tasks} />
         <div id="board" tabIndex={-1} className="focus:outline-none">
           <Board
@@ -163,6 +181,10 @@ export default function App() {
           onCopy={copyContext}
           onClose={() => setEditing(null)}
         />
+      )}
+
+      {renaming && (
+        <RenameProjectDialog name={project.name} onSave={renameProject} onClose={() => setRenaming(false)} />
       )}
 
       {/* After the task form, so it opens on top when copying from there. */}
