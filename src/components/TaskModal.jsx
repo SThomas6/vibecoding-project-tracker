@@ -2,7 +2,7 @@ import { useId, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import { STAGES, TASK_TYPES } from '../constants.js';
 import { formatDate } from '../lib/dates.js';
-import { newId } from '../lib/tasks.js';
+import { fieldsFromForm, formFor } from '../lib/taskForm.js';
 import { inputStyles, labelStyles } from './styles.js';
 import BriefingFields from './BriefingFields.jsx';
 import Dialog from './Dialog.jsx';
@@ -12,36 +12,17 @@ import TaskModalFooter from './TaskModalFooter.jsx';
 import Toast from './Toast.jsx';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 
-// New tasks start Unassigned (PRD FR9, DR2).
-const NEW_TASK = {
-  title: '',
-  description: '',
-  type: 'feature',
-  status: 'todo',
-  assignee: '',
-  dueDate: '',
-};
-
-// The form's starting values: a blank new task, or the task being edited.
-function formFor(task) {
-  return {
-    ...NEW_TASK,
-    ...task,
-    dueDate: task?.dueDate ?? '',
-    contextTool: task?.contextTool ?? '',
-    handoffText: task?.handoffText ?? '',
-  };
-}
-
 // The add / edit form, in the shared native <dialog> (Dialog.jsx).
 // `task` is null when adding a new task, or the task being edited.
 // Closing a form that has changes asks first, so a long pasted handoff isn't
 // lost to a stray Escape (PRD NFR7). Escape again leaves without saving.
-export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy, onCopyHandoff, onNotify, onClose }) {
+export default function TaskModal({ task, tasks, team, toast, onSave, onDelete, onCopy, onCopyHandoff, onNotify, onClose }) {
   const isEdit = Boolean(task);
-  const [initialForm] = useState(() => formFor(task));
+  const [initialForm] = useState(() => formFor(task, tasks));
   const [form, setForm] = useState(initialForm);
   const changed = Object.keys(initialForm).some((key) => form[key] !== initialForm[key]);
+  // The other tasks in the chosen column, in board order, for the Position field.
+  const columnTasks = tasks.filter((item) => item.status === form.status && item.id !== task?.id);
   const [titleError, setTitleError] = useState('');
   // The question in the footer: null, 'delete' or 'discard'.
   const [confirming, setConfirming] = useState(null);
@@ -65,7 +46,7 @@ export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy,
       titleRef.current.focus();
       return;
     }
-    onSave(fieldsFromForm(form, task));
+    onSave(fieldsFromForm(form, task), form.beforeId || null);
   }
 
   function ask(question, findReturn) {
@@ -194,10 +175,30 @@ export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy,
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
               <label htmlFor={`${id}-status`} className={labelStyles}>Status</label>
-              <select id={`${id}-status`} value={form.status} onChange={update('status')} className={inputStyles}>
+              <select
+                id={`${id}-status`}
+                value={form.status}
+                onChange={(event) => setForm((prev) => ({ ...prev, status: event.target.value, beforeId: '' }))}
+                className={inputStyles}
+              >
                 {STAGES.map((stage) => (
                   <option key={stage.id} value={stage.id}>{stage.label}</option>
                 ))}
+              </select>
+            </div>
+
+            {/* Where the card sits in its column: the non-drag way to reorder (PRD FR24). */}
+            <div>
+              <label htmlFor={`${id}-position`} className={labelStyles}>Position in column</label>
+              <select id={`${id}-position`} value={form.beforeId} onChange={update('beforeId')} className={inputStyles}>
+                {columnTasks.map((item, index) => (
+                  <option key={item.id} value={item.id}>
+                    {index + 1} of {columnTasks.length + 1}{index === 0 ? ' (top)' : ''}
+                  </option>
+                ))}
+                <option value="">
+                  {columnTasks.length + 1} of {columnTasks.length + 1}{columnTasks.length > 0 ? ' (bottom)' : ''}
+                </option>
               </select>
             </div>
 
@@ -258,28 +259,4 @@ export default function TaskModal({ task, team, toast, onSave, onDelete, onCopy,
       <Toast message={toast} />
     </Dialog>
   );
-}
-
-// The task as it would be saved from the form, used by Save and by Copy
-// context. The handoff's "last updated" time only moves when its text changes.
-function fieldsFromForm(form, task) {
-  const contextTool = form.contextTool || null;
-  const ownerChanged = task && form.assignee !== (task.assignee ?? '');
-  const handoffs = ownerChanged
-    ? [...(task.handoffs ?? []), { id: newId(), from: task.assignee || '', to: form.assignee, note: '', at: new Date().toISOString() }]
-    : (task?.handoffs ?? []);
-  const handoffText = form.handoffText.trim();
-  const handoffChanged = handoffText !== (task?.handoffText ?? '');
-  return {
-    title: form.title.trim(),
-    description: form.description.trim(),
-    type: form.type,
-    status: form.status,
-    assignee: form.assignee,
-    dueDate: form.dueDate || null,
-    contextTool,
-    handoffText,
-    handoffUpdatedAt: handoffChanged ? new Date().toISOString() : (task?.handoffUpdatedAt ?? null),
-    handoffs,
-  };
 }

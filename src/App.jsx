@@ -32,22 +32,6 @@ import { getMember } from './lib/team.js';
  * one piece of UI each. README.md maps every feature to the PRD.
  */
 
-/**
- * @typedef {Object} Task
- * @property {string} id
- * @property {string} title
- * @property {string} description
- * @property {'feature'|'bug'} type
- * @property {'todo'|'in-progress'|'review'|'done'} status
- * @property {string} assignee               id of a TEAM member
- * @property {string|null} dueDate           ISO 'YYYY-MM-DD'
- * @property {string} createdDate            ISO 'YYYY-MM-DD'
- * @property {string|null} contextTool       the AI tool used (PRD FR16, DR4)
- * @property {string} handoffText            pasted handoff for the next developer's AI agent (PRD FR15, DR4)
- * @property {string|null} handoffUpdatedAt  ISO timestamp, set when the handoff text changes (PRD DR5)
- * @property {Array} handoffs                handoff history ({ id, from, to, note, at }) (PRD FR10, DR6)
- */
-
 // Re-exported so anything importing these from App.jsx (as in the starter) still works.
 export { STAGES, TEAM } from './constants.js';
 export { useLocalStorage } from './hooks/useLocalStorage.js';
@@ -105,16 +89,17 @@ export default function App() {
     toastTimer.current = setTimeout(() => setToast(''), 4000);
   }
 
-  // The saved card is highlighted, so it's easy to spot, even in a new column.
-  function saveTask(fields) {
+  // `beforeId` is the form's Position: the task it goes above, or null for the
+  // bottom. The saved card is highlighted, so it's easy to spot.
+  function saveTask(fields, beforeId = null) {
     let id = editing.task?.id;
     if (id) {
-      setTasks((prev) => prev.map((task) => (task.id === id ? { ...task, ...fields } : task)));
+      setTasks((prev) => moveTask(prev.map((task) => (task.id === id ? { ...task, ...fields } : task)), id, fields.status, beforeId));
       showToast('Task updated');
     } else {
       const task = createTask(fields);
       id = task.id;
-      setTasks((prev) => [...prev, task]);
+      setTasks((prev) => moveTask([...prev, task], id, fields.status, beforeId));
       showToast('Task added');
     }
     setEditing(null);
@@ -144,10 +129,15 @@ export default function App() {
     flash(taskId);
   }
 
-  // Dropped on another column (drag and drop on the Board, PRD FR24).
-  function moveTo(taskId, status) {
-    setTasks((prev) => moveTask(prev, taskId, status));
-    showToast(`Moved to ${STAGES.find((stage) => stage.id === status).label}`);
+  // Dropped on the board (PRD FR24): in another column, or at another place in
+  // the same one, just above `beforeId` (null for the bottom).
+  function moveTo(taskId, status, beforeId) {
+    const next = moveTask(tasks, taskId, status, beforeId);
+    if (next === tasks) return;
+    setTasks(next);
+    const column = next.filter((task) => task.status === status);
+    const place = column.findIndex((task) => task.id === taskId) + 1;
+    showToast(`Moved to ${STAGES.find((stage) => stage.id === status).label}, position ${place} of ${column.length}`);
     flash(taskId);
   }
 
@@ -266,6 +256,7 @@ export default function App() {
       {editing && (
         <TaskModal
           task={editing.task}
+          tasks={tasks}
           team={team}
           toast={toast}
           onSave={saveTask}

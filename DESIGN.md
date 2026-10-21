@@ -80,7 +80,7 @@ Sizes (in `rem`, so browser zoom and user font settings still work):
 - **Buttons:** A solid indigo fill for the one main action on screen (New task, Save) and outlined for everything else, at least 44 px tall so they're easy to hit. Small text buttons on cards and section headings are 36 px tall, above the 24 px WCAG minimum, so cards stay compact.
 - **Modal:** Centred, about 36 rem wide, on a dimmed backdrop (a fixed dark tint in both themes). Focus moves into it when it opens and returns to the card when it closes, and Escape closes it. If the form has unsaved changes, Escape, ✕ and Cancel ask "Discard your changes?" first, with "Keep editing" focused.
 - **Empty states:** A dashed border with muted text that says what to do next. Never sad.
-- **Drag affordance:** Cards can be dragged with a mouse or pen. The card follows the pointer, tilted slightly, and the column under it shows a dashed outline and "Drop to move to …". The Status dropdown in the form stays as the keyboard and touch alternative, and the board's hint says which applies.
+- **Drag affordance:** Cards can be dragged with a mouse or pen to any place in any column. The card follows the pointer, tilted slightly; a 4 px line in the focus colour shows the gap it will land in, and another column also gets a dashed outline (an empty one says "Drop to move to …"). The Status and Position fields in the form stay as the keyboard and touch alternative, and the board's hint says which applies.
 
 ## 5. Voice / microcopy
 
@@ -97,7 +97,7 @@ Plain, short and calm: the words a stressed user reads at 11pm.
 | Toasts after add / edit / delete (M5) | "Task added" · "Task updated" · "Task deleted" |
 | Missing title error | "Enter a title for the task." |
 | Closing a changed form | "Discard your changes?" · "Keep editing" · "Discard changes" |
-| Toast after a drag | "Moved to {column}" |
+| Toast after a drag | "Moved to {column}, position {n} of {total}" |
 
 ## 6. Logo / wordmark
 

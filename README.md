@@ -13,7 +13,7 @@ Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10
 | Four-column board (To Do, In Progress, Review, Done) with task counts | FR1, FR2 |
 | Demo project on first load, and Reset demo after confirming | FR3, FR20 |
 | Add, edit and delete tasks in a dialog; closing a form with unsaved changes asks first | FR4–FR6, NFR7 |
-| Drag a card to another column with a mouse or pen, or change its Status in the form | FR5, FR24 |
+| Drag a card to any place in any column with a mouse or pen (a line shows where it lands), or set its Status and Position in the form | FR5, FR24 |
 | A confirmation message after every change | FR7 |
 | Feature or Bug, each with its own colour, icon and label | FR8 |
 | Owner on every card (Unassigned by default); one-step "Hand off" with an optional note, a handoff history and "Previously worked on by…" | FR9, FR10 |

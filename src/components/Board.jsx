@@ -3,9 +3,10 @@ import { useBoardDrag } from '../hooks/useBoardDrag.js';
 import TaskCard from './TaskCard.jsx';
 
 // The Kanban board (PRD FR1, FR2): one column per stage, each showing the
-// tasks whose status matches. Four columns on wide screens, two on tablets,
-// one on phones. Cards can be dragged between columns with a mouse or pen
-// (useBoardDrag, PRD FR24); changing the Status in the task form does the same
+// tasks whose status matches, in list order. Four columns on wide screens, two
+// on tablets, one on phones. Cards can be dragged to any place in any column
+// with a mouse or pen (useBoardDrag, PRD FR24), and a line shows where the card
+// will land. The Status and Position fields in the task form do the same
 // without dragging, and the hint says so on touch screens, where dragging is off.
 export default function Board({ tasks, team, hasFilters, onOpenTask, onHandOff, onCopy, onCopyHandoff, onMove, highlightedId, now }) {
   const { drag, cardProps } = useBoardDrag(onMove);
@@ -14,10 +15,10 @@ export default function Board({ tasks, team, hasFilters, onOpenTask, onHandOff, 
     <>
     <p className="mb-2 px-1 text-sm text-ink-muted">
       <span className="[@media(pointer:coarse)]:hidden">
-        Drag a card to another column to move it, or open the task and change its Status.
+        Drag a card to move it to another column or place, or open the task and change its Status or Position.
       </span>
       <span className="hidden [@media(pointer:coarse)]:inline">
-        To move a task to another column, open it and change its Status.
+        To move a task, open it and change its Status or Position.
       </span>
     </p>
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -45,8 +46,10 @@ export default function Board({ tasks, team, hasFilters, onOpenTask, onHandOff, 
 
 function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy, onCopyHandoff, highlightedId, now, drag, cardProps }) {
   const headingId = `column-${stage.id}`;
-  // The column a card is being dragged over gets a dashed outline and a label.
-  const isTarget = drag?.overStage === stage.id && drag.fromStage !== stage.id;
+  // A card would land in this column: show where with a line between cards.
+  const isOver = Boolean(drag?.lands) && drag.overStage === stage.id;
+  // Moving into another column also outlines the column.
+  const isTarget = isOver && drag.fromStage !== stage.id;
 
   return (
     <section
@@ -65,8 +68,10 @@ function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy,
 
       {tasks.length > 0 ? (
         <ul className="mt-3 flex flex-col gap-2">
-          {tasks.map((task) => (
-            <li key={task.id}>
+          {tasks.map((task, index) => (
+            <li key={task.id} data-card-id={task.id} className="relative">
+              {isOver && drag.beforeId === task.id && <DropLine />}
+              {isOver && drag.beforeId === null && index === tasks.length - 1 && <DropLine below />}
               <TaskCard
                 task={task}
                 team={team}
@@ -88,11 +93,23 @@ function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy,
         </p>
       )}
 
-      {isTarget && (
+      {isTarget && tasks.length === 0 && (
         <p aria-hidden="true" className="mt-2 rounded-lg border-2 border-dashed border-focus p-3 text-center text-sm font-semibold text-brand">
           Drop to move to {stage.label}
         </p>
       )}
     </section>
+  );
+}
+
+// Where the dragged card will land: a line in the gap above (or below) a card.
+// It's drawn above the dragged card, which follows the pointer, so it stays in
+// view. Screen readers hear the result ("Moved to Review, position 2 of 4").
+function DropLine({ below = false }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`pointer-events-none absolute inset-x-1 z-[60] h-1 rounded-full bg-focus ${below ? '-bottom-1.5' : '-top-1.5'}`}
+    />
   );
 }
