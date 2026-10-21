@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { ArrowRightLeft, ClipboardCopy, Copy, History, MessageSquareQuote } from 'lucide-react';
 import { HANDOFF_NOTE_MAX_LENGTH } from '../constants.js';
 import { getPastContributors } from '../lib/tasks.js';
@@ -30,7 +30,14 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
   const [handOffOpen, setHandOffOpen] = useState(false);
   const [note, setNote] = useState('');
   const handOffRef = useRef(null);
+  const noteRef = useRef(null);
   const panelId = useId();
+
+  // Opening the panel moves focus to its first field, so the next key press
+  // types the note rather than landing on "Copy context" (Escape goes back).
+  useEffect(() => {
+    if (handOffOpen) noteRef.current?.focus();
+  }, [handOffOpen]);
 
   function closePanel() {
     setHandOffOpen(false);
@@ -133,6 +140,7 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
       {handOffOpen && (
         <div
           id={panelId}
+          data-no-drag
           onKeyDown={(event) => {
             if (event.key === 'Escape') closePanel();
           }}
@@ -147,6 +155,7 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
             </p>
             <input
               id={`${panelId}-note`}
+              ref={noteRef}
               type="text"
               maxLength={HANDOFF_NOTE_MAX_LENGTH}
               value={note}

@@ -22,8 +22,9 @@ export function useBoardDrag(onMove) {
   function begin(event, task) {
     ignoreClick.current = false;
     if (event.pointerType === 'touch' || event.button !== 0) return;
-    // The card's own buttons (Hand off, Copy…) keep working as buttons.
-    if (event.target.closest('a, input, select, textarea, button:not([data-task-id])')) return;
+    // The card's own buttons (Hand off, Copy…) and the hand-off panel keep
+    // working as they are.
+    if (event.target.closest('a, input, select, textarea, button:not([data-task-id]), [data-no-drag]')) return;
 
     const p = {
       taskId: task.id,

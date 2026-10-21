@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { Filter, GitBranch, UserPlus } from 'lucide-react';
 import { getContributors } from '../lib/tasks.js';
 import Avatar from './Avatar.jsx';
@@ -83,7 +84,10 @@ export default function TeamStrip({ team, tasks, activeMember, onFilterMember, o
                   <>
                     <span className="font-semibold text-ink">Driving:</span>{' '}
                     {driving.map((task, index) => (
-                      <DrivingTask key={task.id} task={task} last={index === driving.length - 1} />
+                      <Fragment key={task.id}>
+                        {index > 0 && ', '}
+                        <DrivingTask task={task} />
+                      </Fragment>
                     ))}
                   </>
                 ) : (
@@ -99,14 +103,13 @@ export default function TeamStrip({ team, tasks, activeMember, onFilterMember, o
 }
 
 // One in-progress task: its type's icon (named for screen readers) and title.
-function DrivingTask({ task, last }) {
+function DrivingTask({ task }) {
   const style = typeStyle(task.type);
   return (
     <span className="inline-flex items-center gap-1">
       <style.Icon aria-hidden="true" className={`h-3.5 w-3.5 shrink-0 ${style.icon}`} />
       <span className="sr-only">{style.label}: </span>
       {task.title}
-      {!last && ','}
     </span>
   );
 }
