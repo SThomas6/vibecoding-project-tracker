@@ -1,38 +1,33 @@
 # Vibecoding Project Tracker — Design
 
-**Status:** Filled in for `design-done`. Direction chosen: **A. Clear desk**, picked for accessibility.
-
-**Why this file exists.** This tracker is your tool. It should look like *your* tool — not a generic Kanban with default Tailwind blue. Twenty minutes of design decisions here will be visible on every screen for the next six weeks of Module 5.
-
-**Who owns this.** Person B, during the same window the rest of the team is reviewing the PRD. By the time the team converges to start M4 (`data-model`), this file should be filled in and the colors should already be in `tailwind.config.js`.
+**Status:** Filled in for `design-done` and kept up to date with the build. Direction chosen: **A. Clear desk**, picked for accessibility. The colour values live in `tailwind.config.js` and `src/index.css`.
 
 ---
 
 ## 1. Mood / vibe
 
-One sentence that captures the feeling the tracker should leave you with.
+Calm, light and focused, like a tidy desk: the tasks and the handoffs behind them stand out, not the tool.
 
-Calm, light and focused, like a tidy desk: the tasks and the prompts behind them stand out, not the tool.
-
-Two or three references that capture the vibe (links to dribbble shots, screenshots of apps you admire, Pinterest boards — anything visual):
+References:
 
 - [Linear](https://linear.app): calm neutral surfaces with a single accent colour.
 - [GitHub Projects](https://github.com/features/issues): a plain, readable board where every label has text.
 - [Notion](https://www.notion.so) light theme: generous white space and quiet typography.
 
-Anti-references — what we are explicitly **not** trying to look like:
+Not like:
 
 - Neon "hacker" dashboards, and rainbow boards where colour is the only signal.
 
 ## 2. Color palette
 
-These are the colors the build milestones will reference. The hex values are in `tailwind.config.js`; the Tailwind class names are in brackets. Contrast ratios are against the background each colour is used on (WCAG 2.2 AA needs 4.5:1 for text and 3:1 for UI parts like borders and focus rings).
+The Light mode values (Dark mode is in §7); the Tailwind class names are in brackets. Contrast ratios are against the background each colour is used on (WCAG 2.2 AA needs 4.5:1 for text and 3:1 for UI parts like borders and focus rings).
 
 ### Brand
 
 | Token | Hex | Where it shows up | Contrast |
 |---|---|---|---|
-| `brand-primary` (`brand`) | `#4338CA` | Logo mark, primary buttons, focus ring | White text on it 7.90:1 · as focus ring on page 7.55:1 |
+| `brand-primary` (`brand`) | `#4338CA` | Logo mark, primary buttons | White text on it 7.90:1 |
+| `focus` (`focus`) | `#4338CA` | Focus rings and state outlines (drop target, hand-off highlight, selected member) | 7.55:1 on the page |
 | `brand-accent` (`brand-accent`) | `#0E7490` | Links and highlights | 5.36:1 on white |
 | `surface-page` (`surface-page`) | `#F8FAFC` | Page background | — |
 | `surface-card` (`surface-card`) | `#FFFFFF` | Card background | — |
@@ -73,7 +68,7 @@ Both fonts are bundled with the app (`@fontsource`), so no requests go to third-
 
 Sizes (in `rem`, so browser zoom and user font settings still work):
 
-- Page title: 24 px / semibold
+- Page title: 24 px / semibold (20 px on phones)
 - Column header: 16 px / semibold, written exactly as "To Do", "In Progress", "Review", "Done" (no all-caps)
 - Card title: 14 px / medium
 - Body: 14–16 px / regular
@@ -81,10 +76,8 @@ Sizes (in `rem`, so browser zoom and user font settings still work):
 
 ## 4. Component principles
 
-One short sentence per element. These set the tone for the build phase — Person A's modal and Person B's anchor board should both feel like they came from this doc.
-
-- **Cards:** White cards on a light grey column with a 1px border and no heavy shadow; the title comes first, with owner and dates in one quiet row underneath.
-- **Buttons:** A solid indigo fill for the one main action on screen (New task, Save) and outlined for everything else, at least 44 px tall so they're easy to hit.
+- **Cards:** White cards on a light grey column with a 1px border, a coloured left stripe for the type and no heavy shadow. The title and type badge come first, then the due date, the start of any handoff and the owner, with the card's actions in one quiet row at the bottom.
+- **Buttons:** A solid indigo fill for the one main action on screen (New task, Save) and outlined for everything else, at least 44 px tall so they're easy to hit. Small text buttons on cards and section headings are 36 px tall, above the 24 px WCAG minimum, so cards stay compact.
 - **Modal:** Centred, about 36 rem wide, on a dimmed backdrop (a fixed dark tint in both themes). Focus moves into it when it opens and returns to the card when it closes, and Escape closes it. If the form has unsaved changes, Escape, ✕ and Cancel ask "Discard your changes?" first, with "Keep editing" focused.
 - **Empty states:** A dashed border with muted text that says what to do next. Never sad.
 - **Drag affordance:** Cards can be dragged with a mouse or pen. The card follows the pointer, tilted slightly, and the column under it shows a dashed outline and "Drop to move to …". The Status dropdown in the form stays as the keyboard and touch alternative, and the board's hint says which applies.
@@ -97,7 +90,8 @@ Plain, short and calm: the words a stressed user reads at 11pm.
 |---|---|
 | "+" button label | "New task" |
 | Empty column placeholder | "No tasks here yet." |
-| Toast after "Copy as Prompt Context" | "Context copied. Paste it into your AI tool." |
+| Toast after "Copy context" | "Context copied. Paste it into your AI tool." |
+| Toast after "Copy handoff" | "Handoff copied. Paste it into your AI agent." |
 | Confirm-delete message | "Delete this task? This can't be undone." |
 | Handoff toast (M7 `task-owner`) | "Handed off to {name}." |
 | Toasts after add / edit / delete (M5) | "Task added" · "Task updated" · "Task deleted" |
@@ -113,7 +107,7 @@ Plain, short and calm: the words a stressed user reads at 11pm.
 ## 7. Theme switching and out of scope
 
 - **Light and Dark mode (FR23):** Light mode ("Clear desk") is the default. A header toggle switches to an accessible Dark mode (`html.dark` CSS variables in `src/index.css`), where every text pair meets WCAG 2.2 AA (`#F8FAFC` ink on `#1E293B` card = 13.98:1; `#CBD5E1` muted on `#1E293B` = 9.85:1; `#94A3B8` control borders on `#1E293B` = 5.71:1; all type and due-state badges between 6.47:1 and 10.62:1). Focus rings and state outlines use the `focus` token: `#4338CA` in Light mode and `#A5B4FC` in Dark mode (7.34:1 on dark cards).
-- **Out of scope:** arbitrary user-picked colour wheels (which could break contrast), animations beyond a 200 ms fade, and custom icon sets (Lucide icons are used throughout).
+- **Out of scope:** arbitrary user-picked colour wheels (which could break contrast), animations beyond short fades of 300 ms or less, and custom icon sets (Lucide icons are used throughout).
 
 ## 8. Accessibility rules
 
@@ -125,8 +119,8 @@ These apply to every milestone. The clients asked for accessibility in both the 
 - **Screen readers:** `header`/`main` landmarks, a heading per column, cards in lists, a label on every form field, and toasts announced through an `aria-live` region.
 - **Zoom and small screens:** text sizes use `rem`, and the board reflows from four columns to two to one, so it still works at 400% zoom or on a phone.
 - **Motion:** honour `prefers-reduced-motion`.
-- **Checking:** run an automated axe-core scan and a keyboard-only pass after each milestone.
+- **Checking:** run an automated axe-core scan in both themes and a keyboard-only pass after each milestone, and check focus and state outlines by hand (axe doesn't measure them).
 
 ---
 
-*DESIGN.md version: hackathon-starter v1*
+*DESIGN.md · updated 21/10/2026*
