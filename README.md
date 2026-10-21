@@ -24,7 +24,7 @@ Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10
 | The AI tool used, and "Copy context": the task as a TACO briefing (Task, Actor, Context, Output format) for one of four prompt goals | FR16, FR18 |
 | A slim row of four deliverable links, and renaming the project | FR19, FR25 |
 | Search and filter the board by who worked on a task, type, due state, and handoff or AI tool | FR21 |
-| Light and Dark mode (WCAG 2.2 AA contrast in both), saved across visits | FR23 |
+| Light and Dark mode (WCAG 2.2 AA contrast in both), starting from the device's setting; a choice is saved across visits | FR23 |
 
 ## Run it
 
@@ -74,7 +74,7 @@ The tracker targets WCAG 2.2 AA:
 - **Dialogs:** they use the native `<dialog>` element, so focus stays inside and returns to where it was.
 - **Confirmations:** they're announced through a live region.
 - **Dark mode:** the same contrast rules apply, including focus outlines and state outlines (3:1 or better).
-- **Phones and touch:** anything you act on is at least 14 px; form fields are 16 px on phones (so iOS doesn't zoom in); compact controls grow to 44 px with 8 px gaps on touch screens; New task floats within thumb reach.
+- **Phones and touch:** anything you act on is at least 14 px; form fields are 16 px on phones (so iOS doesn't zoom in); compact controls grow to 44 px with 8 px gaps on touch screens; below 1024 px the filters and team cards fold behind buttons; New task floats within thumb reach, and neither it nor the column bar ever covers the focused control.
 - **Testing:** every screen and dialog was checked with axe-core in Light and Dark mode (0 violations), by keyboard, and in colour-blindness simulations.
 
 Pasted text is always shown as text and never run. Links only open if they start with http:// or https://.

@@ -36,6 +36,8 @@ The Light mode values (Dark mode is in §7); the Tailwind class names are in bra
 
 Supporting tokens: `surface-sunken` `#F1F5F9` (column background), `line` `#E2E8F0` (decorative borders), `line-control` `#64748B` (form-control borders, 4.76:1 on white).
 
+**Pairs that fail, so they're never used:** `line` on white is 1.23:1, so it's only for decorative borders, never text, control borders or focus. Each mode's colours fail in the other mode: Dark mode's `#94A3B8` borders are 2.56:1 and its `#FCD34D` amber 1.44:1 on white, and Light mode's `#4338CA` focus colour is 1.85:1 on the dark card `#1E293B`. So each mode has its own set (§7).
+
 ### Task type (M6 `tag-style`)
 
 | Token | Hex | When used | Contrast |
@@ -72,9 +74,9 @@ Sizes (in `rem`, so browser zoom and user font settings still work):
 - Column header: 16 px / semibold, written exactly as "To Do", "In Progress", "Review", "Done" (no all-caps)
 - Card title: 14 px / medium
 - Body: 14–16 px / regular
-- Caption: 12 px, only for the type and due badges (bold, each with an icon) and the column counts
+- Caption: 12 px, only for badges (task type, due date and deliverable link; bold, each with an icon), counts and avatar initials
 - Everything else you read or act on: 14 px or more; form fields 16 px on phones, so iOS Safari doesn't zoom in
-- Why 14 px body text rather than 16 px: it keeps a dense board scannable; sizes are in `rem`, so browser text settings and 400% zoom scale everything (WCAG 1.4.4)
+- Why 14 px body text rather than 16 px: it keeps a dense board scannable, like the 14 sp "Body medium" style in Material Design 3's type scale, while text you type is 16 px on phones; sizes are in `rem`, so browser text settings and 400% zoom scale everything (WCAG 1.4.4)
 
 ## 4. Component principles
 
@@ -83,7 +85,7 @@ Sizes (in `rem`, so browser zoom and user font settings still work):
 - **Modal:** Centred, about 36 rem wide, on a dimmed backdrop (a fixed dark tint in both themes). Focus moves into it when it opens and returns to the card when it closes, and Escape closes it. If the form has unsaved changes, Escape, ✕ and Cancel ask "Discard your changes?" first, with "Keep editing" focused.
 - **Empty states:** A dashed border with muted text that says what to do next ("Add one with New task, or move a card here."). Never sad.
 - **Deliverables:** One slim row of four (two by two on tablets), each with its status in words and an icon, so the board starts near the top of the page.
-- **Small screens:** Below 1280 px a bar of column links stays at the top; on phones New task floats at the bottom right, within thumb reach, and on touch screens compact controls grow to 44 px with 8 px gaps.
+- **Small screens:** Below 1280 px a bar of column links stays at the top, and below 1024 px the filters and team cards fold behind buttons, so the board comes up sooner. On phones New task floats at the bottom right, within thumb reach; scroll padding keeps the focused control clear of both (WCAG 2.4.11). On touch screens compact controls grow to 44 px with 8 px gaps.
 - **Drag affordance:** Cards can be dragged with a mouse or pen to any place in any column. The card follows the pointer, tilted slightly; a 4 px line in the focus colour shows the gap it will land in, and another column also gets a dashed outline (an empty one says "Drop to move to …"). The Status and Position fields in the form stay as the keyboard and touch alternative, and the board's hint says which applies.
 
 ## 5. Voice / microcopy
@@ -113,8 +115,8 @@ Plain, short and calm: the words a stressed user reads at 11pm.
 
 ## 7. Theme switching and out of scope
 
-- **Light and Dark mode (FR23):** Light mode ("Clear desk") is the default. A header toggle switches to an accessible Dark mode (`html.dark` CSS variables in `src/index.css`), where every text pair meets WCAG 2.2 AA (`#F8FAFC` ink on `#1E293B` card = 13.98:1; `#CBD5E1` muted on `#1E293B` = 9.85:1; `#94A3B8` control borders on `#1E293B` = 5.71:1; all type and due-state badges between 6.47:1 and 10.62:1). Focus rings and state outlines use the `focus` token: `#4338CA` in Light mode and `#A5B4FC` in Dark mode (7.34:1 on dark cards).
-- **Out of scope:** arbitrary user-picked colour wheels (which could break contrast), animations beyond short fades of 300 ms or less, and custom icon sets (Lucide icons are used throughout).
+- **Light and Dark mode (FR23):** the tracker starts in the device's own setting (`prefers-color-scheme`), so nobody has to find a setting first; Light mode is "Clear desk". A header toggle switches between them, and that choice is saved. Dark mode uses `html.dark` CSS variables in `src/index.css`, and every text pair in it meets WCAG 2.2 AA (`#F8FAFC` ink on `#1E293B` card = 13.98:1; `#CBD5E1` muted on `#1E293B` = 9.85:1; `#94A3B8` control borders on `#1E293B` = 5.71:1; all type and due-state badges between 6.47:1 and 10.62:1). Focus rings and state outlines use the `focus` token: `#4338CA` in Light mode and `#A5B4FC` in Dark mode (7.34:1 on dark cards).
+- **Out of scope:** arbitrary user-picked colour wheels (which could break contrast), extra palettes such as black on yellow (each is more pairs to check), animations beyond short fades of 300 ms or less, and custom icon sets (Lucide icons are used throughout).
 
 ## 8. Accessibility rules
 
