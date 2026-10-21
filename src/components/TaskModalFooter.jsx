@@ -14,6 +14,9 @@ function question(confirming, isEdit) {
     : { text: 'Discard this new task?', keep: 'Keep editing', go: 'Discard task' };
 }
 
+// Less padding on short screens (a phone on its side), so the form has more room.
+const FOOTER = 'flex flex-wrap items-center justify-between gap-3 border-t border-line px-6 py-4 [@media(max-height:500px)]:py-2';
+
 export default function TaskModalFooter({ isEdit, confirming, deleteRef, cancelRef, onAskDelete, onCancel, onKeep, onConfirm }) {
   const keepRef = useRef(null);
 
@@ -24,7 +27,7 @@ export default function TaskModalFooter({ isEdit, confirming, deleteRef, cancelR
   if (confirming) {
     const { text, keep, go } = question(confirming, isEdit);
     return (
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-6 py-4">
+      <div className={FOOTER}>
         <p role="alert" className="text-sm font-medium text-ink">
           {text}
         </p>
@@ -41,7 +44,7 @@ export default function TaskModalFooter({ isEdit, confirming, deleteRef, cancelR
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-6 py-4">
+    <div className={FOOTER}>
       {isEdit ? (
         <button ref={deleteRef} type="button" onClick={onAskDelete} className={buttonStyles.danger}>
           <Trash2 aria-hidden="true" className="h-4 w-4" />

@@ -65,7 +65,7 @@ export default function DeliverableCard({ deliverable, url, onSave }) {
           <Icon aria-hidden="true" className="h-4 w-4 text-brand" />
           {deliverable.label}
         </h3>
-        <div className="flex flex-wrap items-center gap-1">
+        <div className="flex flex-wrap items-center gap-1 [@media(pointer:coarse)]:gap-2">
           {hasLink ? (
             <span className="inline-flex items-center gap-1 rounded-md bg-due-safe-tint px-1.5 py-0.5 text-xs font-semibold text-due-safe">
               <CircleCheck aria-hidden="true" className="h-3.5 w-3.5" />
@@ -130,12 +130,13 @@ export default function DeliverableCard({ deliverable, url, onSave }) {
               Leave it empty to remove the link.
             </p>
           )}
-          <div className="mt-3 flex flex-wrap gap-2">
-            <button type="submit" className={buttonStyles.primary}>
-              Save link
-            </button>
+          {/* Cancel, then the main action on the right, as in every dialog. */}
+          <div className="mt-3 flex flex-wrap justify-end gap-2">
             <button type="button" onClick={stopEditing} className={buttonStyles.secondary}>
               Cancel
+            </button>
+            <button type="submit" className={buttonStyles.primary}>
+              Save link
             </button>
           </div>
         </form>

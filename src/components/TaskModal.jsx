@@ -93,9 +93,9 @@ export default function TaskModal({ task, tasks, team, toast, onSave, onDelete, 
 
   return (
     <Dialog labelledBy={`${id}-heading`} initialFocusRef={titleRef} onClose={handleEscape} onClosed={onClose}>
-      <form onSubmit={handleSubmit} noValidate className="flex max-h-[calc(100dvh-2rem)] flex-col">
+      <form onSubmit={handleSubmit} noValidate className="flex max-h-[calc(100dvh-2rem)] flex-col [@media(max-height:500px)]:max-h-[calc(100dvh-1rem)]">
         <div
-          className={`flex items-start justify-between gap-4 rounded-t-xl border-b border-t-4 border-b-line ${typeStyle(form.type).stripeTop} px-6 py-4`}
+          className={`flex items-start justify-between gap-4 rounded-t-xl border-b border-t-4 border-b-line ${typeStyle(form.type).stripeTop} px-6 py-4 [@media(max-height:500px)]:py-2`}
         >
           <div>
             <div className="flex flex-wrap items-center gap-2">
@@ -118,7 +118,7 @@ export default function TaskModal({ task, tasks, team, toast, onSave, onDelete, 
           </button>
         </div>
 
-        <div className="flex flex-col gap-5 overflow-y-auto px-6 py-5">
+        <div className="flex flex-col gap-5 overflow-y-auto px-6 py-5 [@media(max-height:500px)]:py-3">
           <div>
             <label htmlFor={`${id}-title`} className={labelStyles}>Title</label>
             <input

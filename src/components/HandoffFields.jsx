@@ -80,11 +80,11 @@ export default function HandoffFields({ id, text, updatedAt, handoffs = [], team
       </div>
       {handoffs.length > 0 && (
         <div className="rounded-lg border border-line bg-surface-sunken p-3">
-          <p className="flex items-center gap-1.5 text-xs font-semibold text-ink">
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-ink">
             <MessageSquareQuote aria-hidden="true" className="h-4 w-4 text-brand" />
             Handoff history ({handoffs.length})
           </p>
-          <ol className="mt-2 flex flex-col gap-1.5 text-xs text-ink-muted">
+          <ol className="mt-2 flex flex-col gap-1.5 text-sm text-ink-muted">
             {[...handoffs].reverse().map((item) => (
               <li key={item.id} className="rounded bg-surface-card px-2.5 py-1.5 text-ink">
                 <span className="font-semibold">

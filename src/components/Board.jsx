@@ -59,7 +59,7 @@ function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy,
       aria-labelledby={headingId}
       className={`flex min-h-48 flex-col rounded-xl p-3 ${isTarget ? 'bg-brand-tint outline-dashed outline-2 outline-offset-2 outline-focus' : 'bg-surface-sunken'}`}
     >
-      <h2 id={headingId} className="flex scroll-mt-16 items-center justify-between px-1 text-base font-semibold text-ink xl:scroll-mt-0">
+      <h2 id={headingId} className="flex items-center justify-between px-1 text-base font-semibold text-ink">
         {stage.label}
         <span className="rounded-full bg-surface-card px-2 py-0.5 text-xs font-medium text-ink-muted">
           <span className="sr-only">, </span>
@@ -124,16 +124,18 @@ function DropLine({ below = false }) {
 }
 
 // Below 1280px the columns stack, so a bar that stays at the top of the screen
-// jumps to each one, with its count (PRD NFR5).
+// jumps to each one, with its count (PRD NFR5). index.css keeps focused
+// controls clear of it. The list is `relative` so its hidden screen-reader
+// text scrolls with it instead of widening the page at 320px.
 function ColumnLinks({ tasks }) {
   return (
-    <nav aria-label="Columns" className="sticky top-0 z-30 -mx-4 mb-3 border-b border-line bg-surface-page px-3 py-2 sm:-mx-6 sm:px-6 xl:hidden">
-      <ul className="flex gap-1 overflow-x-auto">
+    <nav aria-label="Columns" className="sticky top-0 z-30 -mx-4 mb-3 border-b border-line bg-surface-page px-2 py-2 sm:-mx-6 sm:px-6 xl:hidden">
+      <ul className="relative flex gap-1 overflow-x-auto [@media(pointer:coarse)]:gap-2">
         {STAGES.map((stage) => {
           const count = tasks.filter((task) => task.status === stage.id).length;
           return (
             <li key={stage.id} className="shrink-0">
-              <a href={`#column-${stage.id}`} className={`${smallButtonStyles.outlined} whitespace-nowrap !px-1.5`}>
+              <a href={`#column-${stage.id}`} className={`${smallButtonStyles.outlined} whitespace-nowrap !px-1.5 [@media(pointer:coarse)]:!px-1`}>
                 {stage.label}
                 <span className="rounded-full bg-surface-sunken px-1 text-xs text-ink-muted">
                   <span className="sr-only">, </span>

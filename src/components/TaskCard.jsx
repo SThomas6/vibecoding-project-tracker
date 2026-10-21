@@ -150,7 +150,7 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
             <label htmlFor={`${panelId}-note`} className="block text-sm font-medium text-ink">
               Handoff note <span className="font-normal text-ink-muted">(optional)</span>
             </label>
-            <p id={`${panelId}-note-hint`} className="text-xs text-ink-muted">
+            <p id={`${panelId}-note-hint`} className="text-sm text-ink-muted">
               What is done or what the next person should try
             </p>
             <input

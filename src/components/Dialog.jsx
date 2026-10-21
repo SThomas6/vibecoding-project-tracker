@@ -1,5 +1,8 @@
 import { useEffect, useRef } from 'react';
 
+// On short screens (a phone on its side) dialogs may use almost the full height.
+const SHORT_SCREEN = '[@media(max-height:500px)]:max-h-[calc(100dvh-1rem)]';
+
 // Shared shell for every dialog. It uses the browser's native <dialog>, which
 // handles the hard accessibility parts for us: focus stays inside the dialog,
 // the page behind it can't be reached, and Escape closes it.
@@ -38,7 +41,7 @@ export default function Dialog({ labelledBy, initialFocusRef, onClose, onClosed 
         // development mode opens it, closes it and opens it again).
         if (!dialogRef.current?.open) onClosed();
       }}
-      className={`w-[calc(100%-2rem)] ${width} rounded-xl bg-surface-card p-0 text-ink shadow-xl backdrop:bg-[rgb(15_23_42/0.6)]`}
+      className={`w-[calc(100%-2rem)] ${width} rounded-xl bg-surface-card p-0 text-ink shadow-xl backdrop:bg-[rgb(15_23_42/0.6)] ${SHORT_SCREEN}`}
     >
       {children}
     </dialog>
@@ -47,13 +50,13 @@ export default function Dialog({ labelledBy, initialFocusRef, onClose, onClosed 
 
 // Put focus back where it was (a card, or the button that opened the dialog).
 // If the card moved to another column it's a new element, so find it by task
-// id; if the task was deleted, fall back to the board.
+// id; if the task was deleted, fall back to the board. A card can be half
+// under the bar of column links, so it's brought fully into view (WCAG 2.4.11).
 function restoreFocus(element) {
-  if (element?.isConnected) {
-    element.focus();
-    return;
-  }
   const taskId = element?.dataset?.taskId;
-  const movedCard = taskId && document.querySelector(`[data-task-id="${CSS.escape(taskId)}"]`);
-  (movedCard || document.getElementById('board'))?.focus();
+  const target = element?.isConnected
+    ? element
+    : (taskId && document.querySelector(`[data-task-id="${CSS.escape(taskId)}"]`)) || document.getElementById('board');
+  target?.focus();
+  if (taskId) target?.scrollIntoView({ block: 'nearest' });
 }

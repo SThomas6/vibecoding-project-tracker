@@ -89,10 +89,12 @@ export default function App() {
     showToast(next === 'dark' ? 'Dark mode enabled' : 'Light mode enabled');
   }
 
+  // Messages stay long enough to read slowly: at least 6 seconds, and a tenth
+  // of a second per character for longer ones.
   function showToast(message) {
     clearTimeout(toastTimer.current);
     setToast(message);
-    toastTimer.current = setTimeout(() => setToast(''), 4000);
+    toastTimer.current = setTimeout(() => setToast(''), Math.max(6000, message.length * 100));
   }
 
   // `beforeId` is the form's Position: the task it goes above, or null for the
