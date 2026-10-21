@@ -28,7 +28,7 @@ The Light mode values (Dark mode is in §7); the Tailwind class names are in bra
 |---|---|---|---|
 | `brand-primary` (`brand`) | `#4338CA` | Logo mark, primary buttons | White text on it 7.90:1 |
 | `focus` (`focus`) | `#4338CA` | Focus rings and state outlines (drop target, hand-off highlight, selected member) | 7.55:1 on the page |
-| `brand-accent` (`brand-accent`) | `#0E7490` | Links and highlights | 5.36:1 on white |
+| `brand-accent` (`brand-accent`) | `#0E7490` | Every link (emails, deliverable "Open" links, the footer), so links look alike | 5.36:1 on white |
 | `surface-page` (`surface-page`) | `#F8FAFC` | Page background | — |
 | `surface-card` (`surface-card`) | `#FFFFFF` | Card background | — |
 | `text-primary` (`ink`) | `#0F172A` | Body text | 17.85:1 on cards · 16.30:1 on columns |
@@ -72,8 +72,9 @@ Sizes (in `rem`, so browser zoom and user font settings still work):
 - Column header: 16 px / semibold, written exactly as "To Do", "In Progress", "Review", "Done" (no all-caps)
 - Card title: 14 px / medium
 - Body: 14–16 px / regular
-- Caption: 12 px / regular muted (badges and secondary details only, never anything you act on)
-- Anything you act on: 14 px or more; form fields 16 px on phones, so iOS Safari doesn't zoom in
+- Caption: 12 px, only for the type and due badges (bold, each with an icon) and the column counts
+- Everything else you read or act on: 14 px or more; form fields 16 px on phones, so iOS Safari doesn't zoom in
+- Why 14 px body text rather than 16 px: it keeps a dense board scannable; sizes are in `rem`, so browser text settings and 400% zoom scale everything (WCAG 1.4.4)
 
 ## 4. Component principles
 
@@ -103,6 +104,7 @@ Plain, short and calm: the words a stressed user reads at 11pm.
 | Toast after a drag | "Moved to {column}, position {n} of {total}" |
 | Header line | "Plan tasks, hand them off and brief your AI tool. Saved only in this browser: to pass work on, use Copy handoff." |
 | Saving fails | "Couldn't save: this browser's storage is full or blocked, so changes will be lost on reload." |
+| Footer | "Vibecoding Project Tracker · Data stays in this browser · Source code on GitHub" |
 
 ## 6. Logo / wordmark
 

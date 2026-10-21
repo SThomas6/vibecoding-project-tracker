@@ -2,7 +2,7 @@
 
 A Kanban board for vibecoding projects that keeps a handoff with each task (what's done, what's left, logs and next steps), so anyone can pick a task up and paste its briefing straight into an AI tool.
 
-Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10/2026. Clients: Prof. Dr. Ignacio Alvarez and Nathan. Requirements are in [`PRD.md`](PRD.md) and the design system in [`DESIGN.md`](DESIGN.md).
+Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10/2026, starting from Prof. Dr. Ignacio Alvarez's hackathon starter repo (github.com/ignacioalvmar/vibecoding-project-tracker). Clients: Prof. Dr. Ignacio Alvarez and Nathan. Requirements are in [`PRD.md`](PRD.md) and the design system in [`DESIGN.md`](DESIGN.md).
 
 **Live demo:** <https://vibecoding-project-tracker-tau.vercel.app/>. It opens without login; all data stays in your browser.
 
@@ -19,7 +19,7 @@ Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10
 | Owner on every card (Unassigned by default); one-step "Hand off" with an optional note, a handoff history and "Previously worked on by…" | FR9, FR10 |
 | Team strip: email, GitHub handle, what each person is driving, a one-click work filter and "Add member" | FR11, FR12 |
 | Due-date badge: calm, warning (under 24 hours), overdue or done | FR13, FR14 |
-| Handoff for the next developer (what's done, what's left, the prompts that worked): paste or write it, Paste from clipboard, a secrets reminder, "Last updated" and a preview on the card | FR15, FR17 |
+| Handoff for the next developer (what's done, what's left, the prompts that worked): paste or write it, Insert template, Paste from clipboard, a secrets reminder, "Last updated" and a preview on the card | FR15, FR17 |
 | "Copy handoff" on cards and in the form (the secret sauce) | FR22 |
 | The AI tool used, and "Copy context": the task as a TACO briefing (Task, Actor, Context, Output format) for one of four prompt goals | FR16, FR18 |
 | A slim row of four deliverable links, and renaming the project | FR19, FR25 |
