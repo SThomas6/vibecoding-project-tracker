@@ -58,7 +58,8 @@ export default function TeamStrip({ team, tasks, activeMember, onFilterMember, o
                 isSelected ? 'border-focus bg-brand-tint/40' : 'border-line bg-surface-card'
               }`}
             >
-              <div className="flex items-start justify-between gap-2">
+              {/* The Work button drops below the details when they need the room. */}
+              <div className="flex flex-wrap items-start justify-between gap-2">
                 <div className="flex min-w-0 items-center gap-3">
                   <Avatar member={member} size="lg" />
                   <div className="min-w-0 [overflow-wrap:anywhere]">
