@@ -2,6 +2,7 @@ import { Fragment } from 'react';
 import { Filter, GitBranch, UserPlus } from 'lucide-react';
 import { getContributors } from '../lib/tasks.js';
 import Avatar from './Avatar.jsx';
+import { smallButtonStyles } from './styles.js';
 import { typeStyle } from './TypeBadge.jsx';
 
 // "Who is driving what" (PRD FR11): one card per team member with their
@@ -21,7 +22,7 @@ export default function TeamStrip({ team, tasks, activeMember, onFilterMember, o
         <button
           type="button"
           onClick={onAddMember}
-          className="inline-flex min-h-9 items-center gap-1 rounded-md px-2 text-xs font-semibold text-brand hover:bg-surface-sunken"
+          className={smallButtonStyles.plain}
         >
           <UserPlus aria-hidden="true" className="h-3.5 w-3.5" />
           Add member
@@ -67,11 +68,7 @@ export default function TeamStrip({ team, tasks, activeMember, onFilterMember, o
                     type="button"
                     aria-pressed={isSelected}
                     onClick={() => onFilterMember(isSelected ? 'all' : member.id)}
-                    className={`inline-flex min-h-9 shrink-0 items-center gap-1 rounded-md px-2 text-xs font-semibold ${
-                      isSelected
-                        ? 'bg-brand text-white hover:bg-brand-hover'
-                        : 'text-brand hover:bg-surface-sunken'
-                    }`}
+                    className={`shrink-0 ${isSelected ? smallButtonStyles.selected : smallButtonStyles.plain}`}
                   >
                     <Filter aria-hidden="true" className="h-3.5 w-3.5" />
                     {isSelected ? 'Showing work' : `Work (${workedOnCount})`}

@@ -28,7 +28,8 @@ export function useLocalStorage(key, initialValue, clean = (value) => value) {
     try {
       window.localStorage.setItem(key, JSON.stringify(value));
     } catch {
-      /* quota or private-mode error — silently ignore for hackathon */
+      // Storage is full or blocked: tell the app, so it can say so (App.jsx).
+      window.dispatchEvent(new CustomEvent('vibetracker:save-failed'));
     }
   }, [key, value]);
 

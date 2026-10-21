@@ -34,6 +34,7 @@ const SEED_TASKS = [
     handoffText: [
       'Done: found the cause. A click listener is added on every render, so fast clicks fire twice.',
       'Left: move the listener into useEffect with a cleanup, then remove the debounce workaround.',
+      'Prompt that worked: "Find why the Next button fires twice on fast clicks" (Claude found the listener added on every render).',
       'Watch out: autoplay and the dots share the same index state, so test both after the change.',
       'Start with: "Move the Next button listener into useEffect with a cleanup, keeping autoplay and the dots working."',
     ].join('\n'),

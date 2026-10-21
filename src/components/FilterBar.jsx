@@ -2,7 +2,7 @@ import { useId, useRef, useState } from 'react';
 import { ChevronDown, RotateCcw, Search, SlidersHorizontal } from 'lucide-react';
 import { AI_TOOLS, TASK_TYPES } from '../constants.js';
 import { DEFAULT_FILTERS, hasActiveFilters } from '../lib/filters.js';
-import { buttonStyles, inputStyles, labelStyles } from './styles.js';
+import { buttonStyles, inputStyles, labelStyles, smallButtonStyles } from './styles.js';
 
 // The four filters that sit behind the "Filters" button on small screens.
 const FILTER_KEYS = ['member', 'type', 'due', 'context'];
@@ -40,7 +40,7 @@ export default function FilterBar({ filters, team, totalCount, shownCount, onCha
       <div className="grid gap-3 lg:grid-cols-[minmax(0,1.4fr)_repeat(4,minmax(0,1fr))]">
         <div>
           <label htmlFor={`${id}-query`} className={labelStyles}>
-            Search tasks
+            Search tasks <span className="font-normal text-ink-muted">(titles, descriptions, handoffs)</span>
           </label>
           <div className="relative mt-1.5">
             <Search
@@ -53,13 +53,9 @@ export default function FilterBar({ filters, team, totalCount, shownCount, onCha
               type="search"
               value={filters.query}
               onChange={update('query')}
-              aria-describedby={`${id}-query-hint`}
-              className="min-h-11 w-full rounded-lg border border-line-control bg-surface-card pl-9 pr-3 text-sm text-ink"
+              className="min-h-11 w-full rounded-lg border border-line-control bg-surface-card pl-9 pr-3 text-base text-ink sm:text-sm"
             />
           </div>
-          <p id={`${id}-query-hint`} className="sr-only">
-            Searches titles, descriptions and handoffs.
-          </p>
         </div>
 
         <button
@@ -165,7 +161,7 @@ export default function FilterBar({ filters, team, totalCount, shownCount, onCha
           <button
             type="button"
             onClick={clear}
-            className="inline-flex min-h-9 items-center gap-1 rounded-md border border-line-control bg-surface-card px-2.5 text-xs font-semibold text-brand hover:bg-surface-sunken"
+            className={smallButtonStyles.outlined}
           >
             <RotateCcw aria-hidden="true" className="h-3.5 w-3.5" />
             Clear filters

@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
-import { Moon, Plus, RotateCcw, Sun } from 'lucide-react';
 import AddMemberDialog from './components/AddMemberDialog.jsx';
 import Board from './components/Board.jsx';
 import CopyFallbackDialog from './components/CopyFallbackDialog.jsx';
 import Deliverables from './components/Deliverables.jsx';
 import FilterBar from './components/FilterBar.jsx';
 import Header from './components/Header.jsx';
+import HeaderActions from './components/HeaderActions.jsx';
 import RenameProjectDialog from './components/RenameProjectDialog.jsx';
 import ResetDemoDialog from './components/ResetDemoDialog.jsx';
 import TaskModal from './components/TaskModal.jsx';
 import TeamStrip from './components/TeamStrip.jsx';
 import Toast from './components/Toast.jsx';
-import { buttonStyles } from './components/styles.js';
 import { STAGES, STORAGE_KEYS, TEAM } from './constants.js';
 import { createSeedProject, createSeedTasks } from './data/seed.js';
 import { useLocalStorage } from './hooks/useLocalStorage.js';
@@ -76,6 +75,13 @@ export default function App() {
   useEffect(() => {
     document.title = `${project.name} · Vibecoding Project Tracker`;
   }, [project.name]);
+
+  // Saving fails if the browser's storage is full or blocked (useLocalStorage).
+  useEffect(() => {
+    const warn = () => showToast("Couldn't save: this browser's storage is full or blocked, so changes will be lost on reload.");
+    window.addEventListener('vibetracker:save-failed', warn);
+    return () => window.removeEventListener('vibetracker:save-failed', warn);
+  }, []);
 
   function toggleTheme() {
     const next = theme === 'dark' ? 'light' : 'dark';
@@ -196,32 +202,15 @@ export default function App() {
       </a>
 
       <Header projectName={project.name} onRename={() => setRenaming(true)}>
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            aria-pressed={theme === 'dark'}
-            onClick={toggleTheme}
-            className={buttonStyles.secondary}
-          >
-            {theme === 'dark' ? (
-              <Sun aria-hidden="true" className="h-4 w-4" />
-            ) : (
-              <Moon aria-hidden="true" className="h-4 w-4" />
-            )}
-            {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-          </button>
-          <button type="button" onClick={() => setResetting(true)} className={buttonStyles.secondary}>
-            <RotateCcw aria-hidden="true" className="h-4 w-4" />
-            Reset demo
-          </button>
-          <button type="button" onClick={() => setEditing({ task: null })} className={buttonStyles.primary}>
-            <Plus aria-hidden="true" className="h-4 w-4" />
-            New task
-          </button>
-        </div>
+        <HeaderActions
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          onReset={() => setResetting(true)}
+          onNewTask={() => setEditing({ task: null })}
+        />
       </Header>
 
-      <main className="mx-auto max-w-screen-2xl px-4 py-6 sm:px-6">
+      <main className="mx-auto max-w-screen-2xl px-4 pb-24 pt-6 sm:px-6 sm:pb-6">
         <Deliverables links={project.links} onSave={saveLink} />
         <TeamStrip
           team={team}
@@ -263,7 +252,6 @@ export default function App() {
           onDelete={deleteTask}
           onCopy={copyContext}
           onCopyHandoff={copyHandoff}
-          onNotify={showToast}
           onClose={() => setEditing(null)}
         />
       )}

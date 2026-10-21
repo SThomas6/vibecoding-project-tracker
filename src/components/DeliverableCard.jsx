@@ -11,16 +11,16 @@ import {
   Presentation,
 } from 'lucide-react';
 import { isWebLink } from '../lib/links.js';
-import { buttonStyles, inputStyles, labelStyles } from './styles.js';
+import { buttonStyles, inputStyles, labelStyles, smallButtonStyles } from './styles.js';
 
 const ICONS = { presentation: Presentation, demo: MonitorPlay, report: FileText, documentation: BookOpen };
 
-const smallButton =
-  'inline-flex min-h-9 items-center gap-1 rounded-md px-2 text-xs font-semibold text-brand hover:bg-surface-sunken';
+const smallButton = smallButtonStyles.plain;
 
-// One deliverable card (M11, PRD FR19, DR8): its link, whether one has been
-// added (shown with an icon and words, not just colour), and an inline form
-// to add, change or remove the link. Only http(s) links are saved or opened.
+// One deliverable (PRD FR19, DR8), kept to a single slim row so the board
+// stays near the top of the page: its name, whether a link has been added
+// (an icon and words, not just colour), and Open / Add / Edit. Editing opens
+// an inline form across the full width. Only http(s) links are saved or opened.
 export default function DeliverableCard({ deliverable, url, onSave }) {
   const Icon = ICONS[deliverable.id];
   const hasLink = isWebLink(url);
@@ -57,34 +57,51 @@ export default function DeliverableCard({ deliverable, url, onSave }) {
   }
 
   return (
-    <li className="rounded-lg border border-line bg-surface-card p-3 shadow-sm">
-      <div className="flex flex-wrap items-start justify-between gap-2">
+    <li
+      className={`rounded-lg border border-line bg-surface-card px-3 py-1.5 shadow-sm ${editing ? 'sm:col-span-2 xl:col-span-4' : ''}`}
+    >
+      <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
         <h3 className="flex items-center gap-2 text-sm font-semibold text-ink">
           <Icon aria-hidden="true" className="h-4 w-4 text-brand" />
           {deliverable.label}
         </h3>
-        {hasLink ? (
-          <span className="inline-flex items-center gap-1 rounded-md bg-due-safe-tint px-1.5 py-0.5 text-xs font-semibold text-due-safe">
-            <CircleCheck aria-hidden="true" className="h-3.5 w-3.5" />
-            Link added
-          </span>
-        ) : (
-          <span className="inline-flex items-center gap-1 rounded-md bg-due-neutral-tint px-1.5 py-0.5 text-xs font-semibold text-due-neutral">
-            <CircleDashed aria-hidden="true" className="h-3.5 w-3.5" />
-            No link yet
-          </span>
-        )}
+        <div className="flex flex-wrap items-center gap-1">
+          {hasLink ? (
+            <span className="inline-flex items-center gap-1 rounded-md bg-due-safe-tint px-1.5 py-0.5 text-xs font-semibold text-due-safe">
+              <CircleCheck aria-hidden="true" className="h-3.5 w-3.5" />
+              Link added
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 rounded-md bg-due-neutral-tint px-1.5 py-0.5 text-xs font-semibold text-due-neutral">
+              <CircleDashed aria-hidden="true" className="h-3.5 w-3.5" />
+              No link yet
+            </span>
+          )}
+          {!editing && hasLink && (
+            // The address shows as a tooltip, and in the browser's status bar on hover.
+            <a href={url} title={url} target="_blank" rel="noopener noreferrer" className={`${smallButton} underline hover:no-underline`}>
+              <ExternalLink aria-hidden="true" className="h-3.5 w-3.5" />
+              Open<span className="sr-only"> {deliverable.label}, {new URL(url).host} (opens in a new tab)</span>
+            </a>
+          )}
+          {!editing && (
+            <button ref={editButtonRef} type="button" onClick={startEditing} className={smallButton}>
+              {hasLink ? <Pencil aria-hidden="true" className="h-3.5 w-3.5" /> : <Plus aria-hidden="true" className="h-3.5 w-3.5" />}
+              {hasLink ? 'Edit' : 'Add link'}
+              <span className="sr-only">{hasLink ? ' link' : ''} for {deliverable.label}</span>
+            </button>
+          )}
+        </div>
       </div>
-      {hasLink && !editing && <p className="mt-1 truncate text-xs text-ink-muted">{new URL(url).host}</p>}
 
-      {editing ? (
+      {editing && (
         <form
           noValidate
           onSubmit={handleSubmit}
           onKeyDown={(event) => {
             if (event.key === 'Escape') stopEditing();
           }}
-          className="mt-3"
+          className="mt-2 pb-1.5"
         >
           <label htmlFor={`${id}-url`} className={labelStyles}>
             {deliverable.label} link
@@ -109,7 +126,7 @@ export default function DeliverableCard({ deliverable, url, onSave }) {
               {error}
             </p>
           ) : (
-            <p id={`${id}-hint`} className="mt-1.5 text-xs text-ink-muted">
+            <p id={`${id}-hint`} className="mt-1.5 text-sm text-ink-muted">
               Leave it empty to remove the link.
             </p>
           )}
@@ -122,24 +139,6 @@ export default function DeliverableCard({ deliverable, url, onSave }) {
             </button>
           </div>
         </form>
-      ) : (
-        <div className="mt-2 flex flex-wrap items-center gap-1">
-          {hasLink && (
-            <a href={url} target="_blank" rel="noopener noreferrer" className={`${smallButton} underline hover:no-underline`}>
-              <ExternalLink aria-hidden="true" className="h-3.5 w-3.5" />
-              Open<span className="sr-only"> {deliverable.label} (opens in a new tab)</span>
-            </a>
-          )}
-          <button ref={editButtonRef} type="button" onClick={startEditing} className={smallButton}>
-            {hasLink ? (
-              <Pencil aria-hidden="true" className="h-3.5 w-3.5" />
-            ) : (
-              <Plus aria-hidden="true" className="h-3.5 w-3.5" />
-            )}
-            {hasLink ? 'Edit link' : 'Add link'}
-            <span className="sr-only"> for {deliverable.label}</span>
-          </button>
-        </div>
       )}
     </li>
   );

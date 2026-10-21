@@ -1,4 +1,4 @@
-import { Bug, Sparkles } from 'lucide-react';
+import { Bug, Lightbulb } from 'lucide-react';
 
 // How each task type looks everywhere it appears (M6): the card stripe, the
 // corner badge and the form. Colour is always paired with an icon and a word,
@@ -6,7 +6,7 @@ import { Bug, Sparkles } from 'lucide-react';
 export const TYPE_STYLES = {
   feature: {
     label: 'Feature',
-    Icon: Sparkles,
+    Icon: Lightbulb,
     badge: 'bg-feature-tint text-feature',
     icon: 'text-feature',
     stripeLeft: 'border-l-feature',

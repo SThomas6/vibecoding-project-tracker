@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import { STAGES, TASK_TYPES } from '../constants.js';
 import { formatDate } from '../lib/dates.js';
@@ -16,11 +16,22 @@ import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 // `task` is null when adding a new task, or the task being edited.
 // Closing a form that has changes asks first, so a long pasted handoff isn't
 // lost to a stray Escape (PRD NFR7). Escape again leaves without saving.
-export default function TaskModal({ task, tasks, team, toast, onSave, onDelete, onCopy, onCopyHandoff, onNotify, onClose }) {
+export default function TaskModal({ task, tasks, team, toast, onSave, onDelete, onCopy, onCopyHandoff, onClose }) {
   const isEdit = Boolean(task);
   const [initialForm] = useState(() => formFor(task, tasks));
   const [form, setForm] = useState(initialForm);
   const changed = Object.keys(initialForm).some((key) => form[key] !== initialForm[key]);
+  // Leaving the page (Back, refresh, closing the tab) with changes asks too.
+  useEffect(() => {
+    if (!changed) return undefined;
+    const warn = (event) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [changed]);
+
   // The other tasks in the chosen column, in board order, for the Position field.
   const columnTasks = tasks.filter((item) => item.status === form.status && item.id !== task?.id);
   const [titleError, setTitleError] = useState('');
@@ -234,7 +245,6 @@ export default function TaskModal({ task, tasks, team, toast, onSave, onDelete, 
             team={team}
             onSetText={(handoffText) => setForm((prev) => ({ ...prev, handoffText }))}
             onCopy={() => onCopyHandoff({ ...task, ...fieldsFromForm(form, task) })}
-            onNotify={onNotify}
           />
 
           <BriefingFields

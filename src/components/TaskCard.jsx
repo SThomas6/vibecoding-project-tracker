@@ -5,6 +5,7 @@ import { getPastContributors } from '../lib/tasks.js';
 import { getMember } from '../lib/team.js';
 import Avatar from './Avatar.jsx';
 import DueBadge from './DueBadge.jsx';
+import { smallButtonStyles } from './styles.js';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 
 // One task on the board: the title with its type badge in the corner, its due
@@ -15,8 +16,7 @@ import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 // the whole card, so the full card is clickable but is only one tab stop.
 // The action buttons sit above that layer (relative z-10) so they get their
 // own clicks.
-const actionStyles =
-  'relative z-10 inline-flex min-h-9 shrink-0 items-center gap-1 rounded-md px-2 text-xs font-semibold text-brand hover:bg-surface-sunken';
+const actionStyles = `relative z-10 shrink-0 ${smallButtonStyles.plain}`;
 
 export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopyHandoff, highlighted, now, dragProps, dragOffset }) {
   const member = getMember(team, task.assignee);
@@ -110,7 +110,7 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
         </p>
       )}
 
-      <div className="mt-2 flex flex-wrap gap-1 border-t border-line pt-2">
+      <div className="mt-2 flex flex-wrap gap-1 border-t border-line pt-2 [@media(pointer:coarse)]:gap-2">
         <button
           ref={handOffRef}
           type="button"
@@ -125,12 +125,12 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
           <ArrowRightLeft aria-hidden="true" className="h-3.5 w-3.5" />
           Hand off<span className="sr-only"> "{task.title}"</span>
         </button>
-        <button type="button" onClick={() => onCopy(task)} className={actionStyles}>
+        <button type="button" onClick={() => onCopy(task)} title="Copy the whole task as a briefing for your AI tool" className={actionStyles}>
           <Copy aria-hidden="true" className="h-3.5 w-3.5" />
           Copy context<span className="sr-only"> for "{task.title}"</span>
         </button>
         {task.handoffText && (
-          <button type="button" onClick={() => onCopyHandoff(task)} className={actionStyles}>
+          <button type="button" onClick={() => onCopyHandoff(task)} title="Copy just the handoff text" className={actionStyles}>
             <ClipboardCopy aria-hidden="true" className="h-3.5 w-3.5" />
             Copy handoff<span className="sr-only"> for "{task.title}"</span>
           </button>
@@ -147,7 +147,7 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
           className="relative z-10 mt-2 rounded-md border border-line bg-surface-sunken p-2"
         >
           <div className="mb-2">
-            <label htmlFor={`${panelId}-note`} className="block text-xs font-medium text-ink">
+            <label htmlFor={`${panelId}-note`} className="block text-sm font-medium text-ink">
               Handoff note <span className="font-normal text-ink-muted">(optional)</span>
             </label>
             <p id={`${panelId}-note-hint`} className="text-xs text-ink-muted">
@@ -161,17 +161,17 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
               value={note}
               onChange={(event) => setNote(event.target.value)}
               aria-describedby={`${panelId}-note-hint`}
-              className="mt-1 min-h-9 w-full rounded-md border border-line-control bg-surface-card px-2 text-xs text-ink"
+              className="mt-1 min-h-9 w-full rounded-md border border-line-control bg-surface-card px-2 text-base text-ink sm:text-sm [@media(pointer:coarse)]:min-h-11"
             />
           </div>
-          <p className="px-1 text-xs font-medium text-ink-muted">Hand off to…</p>
-          <ul className="mt-1 flex flex-col gap-1">
+          <p className="px-1 text-sm font-medium text-ink-muted">Hand off to…</p>
+          <ul className="mt-1 flex flex-col gap-1 [@media(pointer:coarse)]:gap-2">
             {others.map((m) => (
               <li key={m.id}>
                 <button
                   type="button"
                   onClick={() => handOffTo(m.id)}
-                  className="flex min-h-9 w-full items-center gap-2 rounded-md px-2 text-left text-sm text-ink hover:bg-surface-card"
+                  className="flex min-h-9 w-full items-center gap-2 rounded-md px-2 text-left text-sm text-ink hover:bg-surface-card [@media(pointer:coarse)]:min-h-11"
                 >
                   <Avatar member={m} />
                   <span>

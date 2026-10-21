@@ -39,28 +39,28 @@ export const PROMPT_MODES = [
     label: 'Continue building',
     task: 'Continue building this task from where the handoff stops.',
     actor: 'Act as a senior pair-programming developer picking up an in-progress vibecoding task.',
-    output: 'Give the smallest working code change for the next step, then end with a short "## Handoff update" (Done, Left, Start with) that I can paste back into the tracker.',
+    output: 'Give the smallest working code change for the next step, then end with a short "## Handoff update" (Done, Left, Prompts that worked, Start with) that I can paste back into the tracker.',
   },
   {
     id: 'debug',
     label: 'Debug and fix',
     task: 'Find the root cause of the problem described below and fix it.',
     actor: 'Act as a debugging specialist investigating the root cause of this issue.',
-    output: 'Explain the root cause in two sentences, give the exact fix without breaking existing behaviour, then end with a short "## Handoff update" (Done, Left, Start with).',
+    output: 'Explain the root cause in two sentences, give the exact fix without breaking existing behaviour, then end with a short "## Handoff update" (Done, Left, Prompts that worked, Start with).',
   },
   {
     id: 'review',
     label: 'Accessibility & code review',
     task: 'Review the work on this task for bugs, accessibility gaps and edge cases.',
     actor: 'Act as a WCAG 2.2 AA accessibility and code-quality reviewer.',
-    output: 'List the problems in priority order, each with a concrete fix, then end with a short "## Handoff update" (Done, Left, Start with).',
+    output: 'List the problems in priority order, each with a concrete fix, then end with a short "## Handoff update" (Done, Left, Prompts that worked, Start with).',
   },
   {
     id: 'handoff',
     label: 'Write handoff summary',
     task: 'Write the handoff for the next developer who picks up this task.',
     actor: 'Act as a technical lead summarising this AI session for the next teammate.',
-    output: 'A short Markdown handoff with "Done", "Left", "Watch out" and "Start with" lines, ready to paste into the tracker\'s handoff box.',
+    output: 'A short Markdown handoff with "Done", "Left", "Prompts that worked" (each with its result), "Watch out" and "Start with" lines, ready to paste into the tracker\'s handoff box.',
   },
 ];
 

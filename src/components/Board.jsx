@@ -1,5 +1,6 @@
 import { STAGES } from '../constants.js';
 import { useBoardDrag } from '../hooks/useBoardDrag.js';
+import { smallButtonStyles } from './styles.js';
 import TaskCard from './TaskCard.jsx';
 
 // The Kanban board (PRD FR1, FR2): one column per stage, each showing the
@@ -21,6 +22,7 @@ export default function Board({ tasks, team, hasFilters, onOpenTask, onHandOff, 
         To move a task, open it and change its Status or Position.
       </span>
     </p>
+    <ColumnLinks tasks={tasks} />
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {STAGES.map((stage) => (
         <Column
@@ -57,7 +59,7 @@ function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy,
       aria-labelledby={headingId}
       className={`flex min-h-48 flex-col rounded-xl p-3 ${isTarget ? 'bg-brand-tint outline-dashed outline-2 outline-offset-2 outline-focus' : 'bg-surface-sunken'}`}
     >
-      <h2 id={headingId} className="flex items-center justify-between px-1 text-base font-semibold text-ink">
+      <h2 id={headingId} className="flex scroll-mt-16 items-center justify-between px-1 text-base font-semibold text-ink xl:scroll-mt-0">
         {stage.label}
         <span className="rounded-full bg-surface-card px-2 py-0.5 text-xs font-medium text-ink-muted">
           <span className="sr-only">, </span>
@@ -89,7 +91,14 @@ function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy,
         </ul>
       ) : (
         <p className="mt-3 rounded-lg border border-dashed border-line-control p-4 text-center text-sm text-ink-muted">
-          {hasFilters ? 'No matching tasks in this column.' : 'No tasks here yet.'}
+          {hasFilters ? (
+            'No matching tasks in this column.'
+          ) : (
+            <>
+              No tasks here yet.
+              <span className="mt-1 block">Add one with New task, or move a card here.</span>
+            </>
+          )}
         </p>
       )}
 
@@ -111,5 +120,31 @@ function DropLine({ below = false }) {
       aria-hidden="true"
       className={`pointer-events-none absolute inset-x-1 z-[60] h-1 rounded-full bg-focus ${below ? '-bottom-1.5' : '-top-1.5'}`}
     />
+  );
+}
+
+// Below 1280px the columns stack, so a bar that stays at the top of the screen
+// jumps to each one, with its count (PRD NFR5).
+function ColumnLinks({ tasks }) {
+  return (
+    <nav aria-label="Columns" className="sticky top-0 z-30 -mx-4 mb-3 border-b border-line bg-surface-page px-3 py-2 sm:-mx-6 sm:px-6 xl:hidden">
+      <ul className="flex gap-1 overflow-x-auto">
+        {STAGES.map((stage) => {
+          const count = tasks.filter((task) => task.status === stage.id).length;
+          return (
+            <li key={stage.id} className="shrink-0">
+              <a href={`#column-${stage.id}`} className={`${smallButtonStyles.outlined} whitespace-nowrap !px-1.5`}>
+                {stage.label}
+                <span className="rounded-full bg-surface-sunken px-1 text-xs text-ink-muted">
+                  <span className="sr-only">, </span>
+                  {count}
+                  <span className="sr-only"> {count === 1 ? 'task' : 'tasks'}</span>
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
   );
 }

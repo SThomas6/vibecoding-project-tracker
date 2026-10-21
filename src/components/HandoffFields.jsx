@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { ClipboardPaste, Copy, KeyRound, MessageSquareQuote } from 'lucide-react';
 import { HANDOFF_TEXT_MAX_LENGTH } from '../constants.js';
 import { readClipboardText } from '../lib/clipboard.js';
@@ -17,33 +17,36 @@ import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 const LIMIT = HANDOFF_TEXT_MAX_LENGTH.toLocaleString('en-GB');
 const CUT_MESSAGE = `Only the first ${LIMIT} characters fit, so the end of what you pasted was left out.`;
 
-export default function HandoffFields({ id, text, updatedAt, handoffs = [], team = [], onSetText, onCopy, onNotify }) {
+export default function HandoffFields({ id, text, updatedAt, handoffs = [], team = [], onSetText, onCopy }) {
   const textRef = useRef(null);
   const nearLimit = text.length >= HANDOFF_TEXT_MAX_LENGTH * 0.9;
+  // Instructions and warnings about the box stay beside it (and are read out)
+  // until the next edit, rather than vanishing with a toast.
+  const [notice, setNotice] = useState('');
 
   async function paste() {
     const clipboard = await readClipboardText();
+    textRef.current?.focus();
     if (!clipboard) {
-      textRef.current?.focus();
-      onNotify('Press Ctrl+V (⌘V on a Mac) in the handoff box to paste.');
+      setNotice('Your browser didn\'t allow pasting from here. Press Ctrl+V (⌘V on a Mac) in the box instead.');
       return;
     }
     onSetText(clipboard.slice(0, HANDOFF_TEXT_MAX_LENGTH));
-    textRef.current?.focus();
-    onNotify(clipboard.length > HANDOFF_TEXT_MAX_LENGTH ? CUT_MESSAGE : 'Handoff pasted. Save changes to keep it.');
+    setNotice(clipboard.length > HANDOFF_TEXT_MAX_LENGTH ? CUT_MESSAGE : 'Handoff pasted. Save changes to keep it.');
   }
 
-  // Pasting with Ctrl+V: the browser cuts the text to fit, so warn if it will.
+  // Pasting with Ctrl+V: the browser cuts the text to fit, so warn if it will
+  // (after the paste's own change has cleared any older message).
   function checkPaste(event) {
     const box = event.currentTarget;
     const room = HANDOFF_TEXT_MAX_LENGTH - text.length + (box.selectionEnd - box.selectionStart);
-    if (event.clipboardData.getData('text').length > room) onNotify(CUT_MESSAGE);
+    if (event.clipboardData.getData('text').length > room) setTimeout(() => setNotice(CUT_MESSAGE), 0);
   }
 
   function copy() {
     if (!text.trim()) {
       textRef.current?.focus();
-      onNotify('Paste or write a handoff first.');
+      setNotice('Paste or write a handoff first.');
       return;
     }
     onCopy();
@@ -92,8 +95,8 @@ export default function HandoffFields({ id, text, updatedAt, handoffs = [], team
           Handoff text
         </label>
         <p id={`${id}-handoff-hint`} className="mt-1 text-sm text-ink-muted">
-          Paste the handoff your AI agent wrote, or write what's done, what's left and any blockers, plus any logs
-          or traces. The next developer copies it into their own AI agent.
+          Paste the handoff your AI agent wrote, or write what's done, what's left, the prompts that worked and any
+          logs or traces. The next developer copies it into their own AI agent.
         </p>
         <textarea
           id={`${id}-handoff`}
@@ -101,11 +104,17 @@ export default function HandoffFields({ id, text, updatedAt, handoffs = [], team
           rows={8}
           maxLength={HANDOFF_TEXT_MAX_LENGTH}
           value={text}
-          onChange={(event) => onSetText(event.target.value)}
+          onChange={(event) => {
+            onSetText(event.target.value);
+            setNotice('');
+          }}
           onPaste={checkPaste}
           aria-describedby={`${id}-handoff-hint ${id}-handoff-secrets${nearLimit ? ` ${id}-handoff-count` : ''}`}
           className={`${inputStyles} py-2 font-mono leading-relaxed`}
         />
+        <p role="status" className={notice ? 'mt-1.5 text-sm font-medium text-ink' : 'sr-only'}>
+          {notice}
+        </p>
         {nearLimit && (
           <p id={`${id}-handoff-count`} className="mt-1.5 text-sm font-medium text-ink">
             {text.length.toLocaleString('en-GB')} of {LIMIT} characters used
