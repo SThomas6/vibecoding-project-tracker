@@ -40,7 +40,7 @@ Supporting tokens: `surface-sunken` `#F1F5F9` (column background), `line` `#E2E8
 
 | Token | Hex | When used | Contrast |
 |---|---|---|---|
-| `type-feature` (`feature`) | `#1D4ED8` on tint `#DBEAFE` | Cards tagged `feature` (accent stripe + sparkles icon + the word "Feature") | 5.49:1 |
+| `type-feature` (`feature`) | `#1D4ED8` on tint `#DBEAFE` | Cards tagged `feature` (accent stripe + lightbulb icon + the word "Feature"; not sparkles, which reads as "AI" in a vibecoding tool) | 5.49:1 |
 | `type-bug` (`bug`) | `#9D174D` on tint `#FCE7F3` | Cards tagged `bug` (accent stripe + bug icon + the word "Bug") | 6.71:1 |
 
 Blue and magenta were picked over the usual green and red because red/green is the hardest pair to tell apart for the most common types of colour blindness. Red is kept for "overdue" only.
@@ -72,14 +72,17 @@ Sizes (in `rem`, so browser zoom and user font settings still work):
 - Column header: 16 px / semibold, written exactly as "To Do", "In Progress", "Review", "Done" (no all-caps)
 - Card title: 14 px / medium
 - Body: 14–16 px / regular
-- Caption: 12 px / regular muted (only for secondary details, never for anything you need to act on)
+- Caption: 12 px / regular muted (badges and secondary details only, never anything you act on)
+- Anything you act on: 14 px or more; form fields 16 px on phones, so iOS Safari doesn't zoom in
 
 ## 4. Component principles
 
 - **Cards:** White cards on a light grey column with a 1px border, a coloured left stripe for the type and no heavy shadow. The title and type badge come first, then the due date, the start of any handoff and the owner, with the card's actions in one quiet row at the bottom.
 - **Buttons:** A solid indigo fill for the one main action on screen (New task, Save) and outlined for everything else, at least 44 px tall so they're easy to hit. Small text buttons on cards and section headings are 36 px tall, above the 24 px WCAG minimum, so cards stay compact.
 - **Modal:** Centred, about 36 rem wide, on a dimmed backdrop (a fixed dark tint in both themes). Focus moves into it when it opens and returns to the card when it closes, and Escape closes it. If the form has unsaved changes, Escape, ✕ and Cancel ask "Discard your changes?" first, with "Keep editing" focused.
-- **Empty states:** A dashed border with muted text that says what to do next. Never sad.
+- **Empty states:** A dashed border with muted text that says what to do next ("Add one with New task, or move a card here."). Never sad.
+- **Deliverables:** One slim row of four (two by two on tablets), each with its status in words and an icon, so the board starts near the top of the page.
+- **Small screens:** Below 1280 px a bar of column links stays at the top; on phones New task floats at the bottom right, within thumb reach, and on touch screens compact controls grow to 44 px with 8 px gaps.
 - **Drag affordance:** Cards can be dragged with a mouse or pen to any place in any column. The card follows the pointer, tilted slightly; a 4 px line in the focus colour shows the gap it will land in, and another column also gets a dashed outline (an empty one says "Drop to move to …"). The Status and Position fields in the form stay as the keyboard and touch alternative, and the board's hint says which applies.
 
 ## 5. Voice / microcopy
@@ -98,6 +101,8 @@ Plain, short and calm: the words a stressed user reads at 11pm.
 | Missing title error | "Enter a title for the task." |
 | Closing a changed form | "Discard your changes?" · "Keep editing" · "Discard changes" |
 | Toast after a drag | "Moved to {column}, position {n} of {total}" |
+| Header line | "Plan tasks, hand them off and brief your AI tool. Saved only in this browser: to pass work on, use Copy handoff." |
+| Saving fails | "Couldn't save: this browser's storage is full or blocked, so changes will be lost on reload." |
 
 ## 6. Logo / wordmark
 
