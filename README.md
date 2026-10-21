@@ -1,6 +1,6 @@
 # Vibecoding Project Tracker
 
-A Kanban board for vibecoding projects that also keeps the AI context behind each task: the prompts, replies, logs and next steps, so anyone can pick a task up and paste its briefing straight into an AI tool.
+A Kanban board for vibecoding projects that keeps a handoff with each task (what's done, what's left, logs and next steps), so anyone can pick a task up and paste its briefing straight into an AI tool.
 
 Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10/2026. Clients: Prof. Dr. Ignacio Alvarez and Nathan. Requirements are in [`PRD.md`](PRD.md) and the design system in [`DESIGN.md`](DESIGN.md).
 
@@ -11,18 +11,20 @@ Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10
 | Feature | PRD |
 |---|---|
 | Four-column board (To Do, In Progress, Review, Done) with task counts | FR1, FR2 |
-| Add, edit and delete tasks in a dialog; drag a card to another column with the mouse, or change its status in the form | FR4–FR6 |
+| Demo project on first load, and Reset demo after confirming | FR3, FR20 |
+| Add, edit and delete tasks in a dialog; closing a form with unsaved changes asks first | FR4–FR6, NFR7 |
+| Drag a card to another column with a mouse or pen, or change its Status in the form | FR5, FR24 |
+| A confirmation message after every change | FR7 |
 | Feature or Bug, each with its own colour, icon and label | FR8 |
-| Owner on every card, Unassigned by default, one-step "Hand off" with optional handoff note and contributor trail ("Previously worked on by…") | FR9, FR10 |
-| Team strip: email, GitHub handle, what each person is driving, one-click work filter and "Add member" | FR11, FR12 |
+| Owner on every card (Unassigned by default); one-step "Hand off" with an optional note, a handoff history and "Previously worked on by…" | FR9, FR10 |
+| Team strip: email, GitHub handle, what each person is driving, a one-click work filter and "Add member" | FR11, FR12 |
 | Due-date badge: calm, warning (under 24 hours), overdue or done | FR13, FR14 |
-| The AI tool used, and a prompt goal (TACO structure) for the copied briefing | FR16 |
-| "Copy context": the task as a TACO-structured Markdown briefing for an AI tool | FR18 |
-| Four deliverable link cards and an editable project name | FR19 |
-| Reset to the demo project, after confirming | FR20 |
-| Search issues and filter the board by who has worked on or owns a task, task type, due state and AI context or tool | FR21 |
-| Handoff box: paste in the handoff text; the next developer reads it on the card and copies it into their AI agent | FR22 |
-| Light and Dark mode toggle (WCAG 2.2 AA contrast in both palettes), saved across visits | FR23 |
+| Handoff for the next developer: paste or write it, Paste from clipboard, a secrets reminder, "Last updated" and a preview on the card | FR15, FR17 |
+| "Copy handoff" on cards and in the form (the secret sauce) | FR22 |
+| The AI tool used, and "Copy context": the task as a TACO briefing (Task, Actor, Context, Output format) for one of four prompt goals | FR16, FR18 |
+| Four deliverable link cards, and renaming the project | FR19, FR25 |
+| Search and filter the board by who worked on a task, type, due state, and handoff or AI tool | FR21 |
+| Light and Dark mode (WCAG 2.2 AA contrast in both), saved across visits | FR23 |
 
 ## Run it
 
@@ -71,6 +73,7 @@ The tracker targets WCAG 2.2 AA:
 - **Keyboard:** everything works with a keyboard, with a visible focus outline and a "Skip to board" link. Dragging cards is a mouse shortcut; the Status field in the task form does the same without dragging (WCAG 2.5.7).
 - **Dialogs:** they use the native `<dialog>` element, so focus stays inside and returns to where it was.
 - **Confirmations:** they're announced through a live region.
-- **Testing:** every screen and dialog was checked with axe-core (0 violations), by keyboard, and in colour-blindness simulations.
+- **Dark mode:** the same contrast rules apply, including focus outlines and state outlines (3:1 or better).
+- **Testing:** every screen and dialog was checked with axe-core in Light and Dark mode (0 violations), by keyboard, and in colour-blindness simulations.
 
 Pasted text is always shown as text and never run. Links only open if they start with http:// or https://.
