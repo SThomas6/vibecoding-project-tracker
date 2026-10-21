@@ -18,6 +18,7 @@ import { useLocalStorage } from './hooks/useLocalStorage.js';
 import { useNow } from './hooks/useNow.js';
 import { useTheme } from './hooks/useTheme.js';
 import { buildBriefing, buildHandoff } from './lib/briefing.js';
+import { cleanProject, cleanTasks, cleanTeam } from './lib/storage.js';
 import { copyText } from './lib/clipboard.js';
 import { DEFAULT_FILTERS, filterTasks, hasActiveFilters } from './lib/filters.js';
 import { createTask, moveTask, newId } from './lib/tasks.js';
@@ -52,7 +53,7 @@ export { STAGES, TEAM } from './constants.js';
 export { useLocalStorage } from './hooks/useLocalStorage.js';
 
 export default function App() {
-  const [tasks, setTasks] = useLocalStorage(STORAGE_KEYS.tasks, createSeedTasks);
+  const [tasks, setTasks] = useLocalStorage(STORAGE_KEYS.tasks, createSeedTasks, cleanTasks);
 
   // Refreshed every minute so due-date colours update by themselves (M8).
   const now = useNow(60_000);
@@ -71,11 +72,11 @@ export default function App() {
   const [fallbackText, setFallbackText] = useState(null);
 
   // The team, which can grow (PRD FR12). Starts with the demo team.
-  const [team, setTeam] = useLocalStorage(STORAGE_KEYS.team, TEAM);
+  const [team, setTeam] = useLocalStorage(STORAGE_KEYS.team, TEAM, cleanTeam);
   const [addingMember, setAddingMember] = useState(false);
 
   // The project's name and deliverable links (PRD FR19, FR25, DR8).
-  const [project, setProject] = useLocalStorage(STORAGE_KEYS.project, createSeedProject);
+  const [project, setProject] = useLocalStorage(STORAGE_KEYS.project, createSeedProject, cleanProject);
   const [renaming, setRenaming] = useState(false);
 
   // "Reset demo" confirmation (PRD FR20).

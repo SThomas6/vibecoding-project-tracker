@@ -85,8 +85,14 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
       <p className="mt-3 flex min-w-0 items-center gap-2 text-xs text-ink-muted">
         <Avatar member={member} />
         <span className="truncate">
-          <span className="sr-only">Assigned to </span>
-          {member ? member.name : 'Unassigned'}
+          {member ? (
+            <>
+              <span className="sr-only">Assigned to </span>
+              {member.name}
+            </>
+          ) : (
+            'Unassigned'
+          )}
         </span>
       </p>
 
