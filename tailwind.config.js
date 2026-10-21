@@ -12,6 +12,9 @@ export default {
           accent: 'rgb(var(--brand-accent) / <alpha-value>)', // #0E7490 brand-accent: links and highlights
           tint: 'rgb(var(--brand-tint) / <alpha-value>)', // #EEF2FF brief highlight after a hand-off (M7)
         },
+        // Focus rings and other state outlines (drop target, highlight, selected
+        // member): #4338CA in Light mode, #A5B4FC in Dark mode, so they keep 3:1.
+        focus: 'rgb(var(--focus) / <alpha-value>)',
         surface: {
           page: 'rgb(var(--surface-page) / <alpha-value>)', // #F8FAFC
           card: 'rgb(var(--surface-card) / <alpha-value>)', // #FFFFFF

@@ -2,17 +2,23 @@ import { STAGES } from '../constants.js';
 import { useBoardDrag } from '../hooks/useBoardDrag.js';
 import TaskCard from './TaskCard.jsx';
 
-// The Kanban board: one column per stage, each showing the tasks whose status
-// matches. Four columns on wide screens, two on tablets, one on phones.
-// Cards can be dragged between columns (useBoardDrag); changing the Status in
-// the task form does the same without dragging.
+// The Kanban board (PRD FR1, FR2): one column per stage, each showing the
+// tasks whose status matches. Four columns on wide screens, two on tablets,
+// one on phones. Cards can be dragged between columns with a mouse or pen
+// (useBoardDrag, PRD FR24); changing the Status in the task form does the same
+// without dragging, and the hint says so on touch screens, where dragging is off.
 export default function Board({ tasks, team, hasFilters, onOpenTask, onHandOff, onCopy, onCopyHandoff, onMove, highlightedId, now }) {
   const { drag, cardProps } = useBoardDrag(onMove);
 
   return (
     <>
     <p className="mb-2 px-1 text-sm text-ink-muted">
-      Drag a card to another column to move it, or open the task and change its Status.
+      <span className="[@media(pointer:coarse)]:hidden">
+        Drag a card to another column to move it, or open the task and change its Status.
+      </span>
+      <span className="hidden [@media(pointer:coarse)]:inline">
+        To move a task to another column, open it and change its Status.
+      </span>
     </p>
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {STAGES.map((stage) => (
@@ -46,7 +52,7 @@ function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy,
     <section
       data-stage={stage.id}
       aria-labelledby={headingId}
-      className={`flex min-h-48 flex-col rounded-xl p-3 ${isTarget ? 'bg-brand-tint outline-dashed outline-2 outline-offset-2 outline-brand' : 'bg-surface-sunken'}`}
+      className={`flex min-h-48 flex-col rounded-xl p-3 ${isTarget ? 'bg-brand-tint outline-dashed outline-2 outline-offset-2 outline-focus' : 'bg-surface-sunken'}`}
     >
       <h2 id={headingId} className="flex items-center justify-between px-1 text-base font-semibold text-ink">
         {stage.label}
@@ -83,7 +89,7 @@ function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy,
       )}
 
       {isTarget && (
-        <p aria-hidden="true" className="mt-2 rounded-lg border-2 border-dashed border-brand p-3 text-center text-sm font-semibold text-brand">
+        <p aria-hidden="true" className="mt-2 rounded-lg border-2 border-dashed border-focus p-3 text-center text-sm font-semibold text-brand">
           Drop to move to {stage.label}
         </p>
       )}

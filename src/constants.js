@@ -30,36 +30,41 @@ export const AI_TOOLS = ['Claude', 'ChatGPT', 'Cursor', 'Lovable', 'Replit', 'Ot
 // The longest handoff text that can be saved.
 export const HANDOFF_TEXT_MAX_LENGTH = 20000;
 
-// TACO prompt modes for "Copy context" (PRD FR18, DR9): tailors the Actor and
-// Output format sections of the copied briefing without manual typing.
+// Prompt goals for "Copy context" (PRD FR18, DR15), in Ignacio's TACO
+// structure: the Task (what the AI should do), the Actor (the persona it
+// takes) and the Output format. briefing.js fills in the Context.
 export const PROMPT_MODES = [
   {
     id: 'continue',
     label: 'Continue building',
+    task: 'Continue building this task from where the handoff stops.',
     actor: 'Act as a senior pair-programming developer picking up an in-progress vibecoding task.',
-    output: 'Provide the minimal, working code changes needed for the next step, then end with a short "## Handoff update" block (Tried so far / Pick up from here) I can paste back into the tracker.',
+    output: 'Give the smallest working code change for the next step, then end with a short "## Handoff update" (Done, Left, Start with) that I can paste back into the tracker.',
   },
   {
     id: 'debug',
     label: 'Debug and fix',
+    task: 'Find the root cause of the problem described below and fix it.',
     actor: 'Act as a debugging specialist investigating the root cause of this issue.',
-    output: 'Explain the root cause in two sentences, give the exact fix without breaking existing behaviour, and end with a short "## Handoff update" block I can paste back into the tracker.',
+    output: 'Explain the root cause in two sentences, give the exact fix without breaking existing behaviour, then end with a short "## Handoff update" (Done, Left, Start with).',
   },
   {
     id: 'review',
     label: 'Accessibility & code review',
+    task: 'Review the work on this task for bugs, accessibility gaps and edge cases.',
     actor: 'Act as a WCAG 2.2 AA accessibility and code-quality reviewer.',
-    output: 'List any bugs, accessibility gaps or edge cases in priority order with concrete fixes, then end with a short "## Handoff update" block.',
+    output: 'List the problems in priority order, each with a concrete fix, then end with a short "## Handoff update" (Done, Left, Start with).',
   },
   {
     id: 'handoff',
     label: 'Write handoff summary',
-    actor: 'Act as a technical lead summarising our current AI session for the next teammate.',
-    output: 'Write a concise Markdown update with "## Background", "## Constraints", "## Tried so far" and "## Pick up from here", plus a one-line handoff note.',
+    task: 'Write the handoff for the next developer who picks up this task.',
+    actor: 'Act as a technical lead summarising this AI session for the next teammate.',
+    output: 'A short Markdown handoff with "Done", "Left", "Watch out" and "Start with" lines, ready to paste into the tracker\'s handoff box.',
   },
 ];
 
-export const HANDOFF_NOTE_MAX_LENGTH = 280; // PRD DR2
+export const HANDOFF_NOTE_MAX_LENGTH = 280; // PRD DR6
 
 // The project's deliverables, pinned above the board as link cards
 // (M11, PRD FR19).

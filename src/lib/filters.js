@@ -1,7 +1,7 @@
 import { dueState } from './due.js';
 import { getContributors } from './tasks.js';
 
-// Default state for the search and advanced board filters (PRD FR23).
+// Default state for the search and board filters (PRD FR21, DR13).
 export const DEFAULT_FILTERS = {
   query: '',
   member: 'all',
@@ -21,7 +21,7 @@ export function hasActiveFilters(filters) {
 }
 
 // Filters tasks on the Kanban board by search text, who worked on or owns the
-// task, task type, due-date state and AI context / handoff state (PRD FR23).
+// task, task type, due-date state and handoff or AI tool (PRD FR21).
 export function filterTasks(tasks, filters, now = new Date()) {
   const query = filters.query.trim().toLowerCase();
 

@@ -1,54 +1,46 @@
-import { useId } from 'react';
-import { RotateCcw, Search, SlidersHorizontal } from 'lucide-react';
+import { useId, useRef, useState } from 'react';
+import { ChevronDown, RotateCcw, Search, SlidersHorizontal } from 'lucide-react';
 import { AI_TOOLS, TASK_TYPES } from '../constants.js';
 import { DEFAULT_FILTERS, hasActiveFilters } from '../lib/filters.js';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 
-// Search and advanced filters for the Kanban board (PRD FR23): lets the team
-// search issues and filter by who has worked on or owns a task, task type,
-// due-date state and AI context or tool. Every control has a visible label and
-// no placeholder text (NFR1, NFR3, NFR4).
+// The four filters that sit behind the "Filters" button on small screens.
+const FILTER_KEYS = ['member', 'type', 'due', 'context'];
+
+// Search and filters for the board (PRD FR21): search tasks, and filter by who
+// has worked on or owns a task, task type, due-date state and handoff or AI
+// tool. On wide screens they sit in one row; on small screens the four filters
+// fold behind a "Filters" button, so the board isn't pushed far down the page
+// (NFR5). Every control has a visible label and no placeholder (NFR1, NFR3).
 export default function FilterBar({ filters, team, totalCount, shownCount, onChange }) {
   const id = useId();
+  const [open, setOpen] = useState(false);
+  const searchRef = useRef(null);
   const active = hasActiveFilters(filters);
+  const chosen = FILTER_KEYS.filter((key) => filters[key] !== 'all').length;
+  const tasks = totalCount === 1 ? 'task' : 'tasks';
 
   function update(field) {
     return (event) => onChange({ ...filters, [field]: event.target.value });
   }
 
-  return (
-    <section
-      aria-labelledby={`${id}-heading`}
-      className="mb-6 rounded-xl border border-line bg-surface-card p-4 shadow-sm"
-    >
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 id={`${id}-heading`} className="flex items-center gap-2 text-base font-semibold text-ink">
-          <SlidersHorizontal aria-hidden="true" className="h-4 w-4 text-brand" />
-          Search and filter board
-        </h2>
-        <div className="flex flex-wrap items-center gap-3">
-          <p role="status" className="text-xs font-medium text-ink-muted">
-            {active
-              ? `Showing ${shownCount} of ${totalCount} ${totalCount === 1 ? 'task' : 'tasks'}`
-              : `${totalCount} ${totalCount === 1 ? 'task' : 'tasks'} on the board`}
-          </p>
-          {active && (
-            <button
-              type="button"
-              onClick={() => onChange(DEFAULT_FILTERS)}
-              className="inline-flex min-h-9 items-center gap-1 rounded-md border border-line-control bg-surface-card px-2.5 text-xs font-semibold text-brand hover:bg-surface-sunken"
-            >
-              <RotateCcw aria-hidden="true" className="h-3.5 w-3.5" />
-              Clear filters
-            </button>
-          )}
-        </div>
-      </div>
+  // The Clear button disappears once nothing is filtered, so focus moves to
+  // the search box rather than being lost.
+  function clear() {
+    onChange(DEFAULT_FILTERS);
+    searchRef.current.focus();
+  }
 
-      <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+  return (
+    <section aria-labelledby={`${id}-heading`} className="mb-6 rounded-xl border border-line bg-surface-card p-4 shadow-sm">
+      <h2 id={`${id}-heading`} className="sr-only">
+        Search and filter the board
+      </h2>
+
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1.4fr)_repeat(4,minmax(0,1fr))]">
         <div>
           <label htmlFor={`${id}-query`} className={labelStyles}>
-            Search issues
+            Search tasks
           </label>
           <div className="relative mt-1.5">
             <Search
@@ -57,6 +49,7 @@ export default function FilterBar({ filters, team, totalCount, shownCount, onCha
             />
             <input
               id={`${id}-query`}
+              ref={searchRef}
               type="search"
               value={filters.query}
               onChange={update('query')}
@@ -64,79 +57,120 @@ export default function FilterBar({ filters, team, totalCount, shownCount, onCha
               className="min-h-11 w-full rounded-lg border border-line-control bg-surface-card pl-9 pr-3 text-sm text-ink"
             />
           </div>
-          <p id={`${id}-query-hint`} className="mt-1 text-xs text-ink-muted">
-            Title, description or handoff
+          <p id={`${id}-query-hint`} className="sr-only">
+            Searches titles, descriptions and handoffs.
           </p>
         </div>
 
-        <div>
-          <label htmlFor={`${id}-member`} className={labelStyles}>
-            Worked on by
-          </label>
-          <select id={`${id}-member`} value={filters.member} onChange={update('member')} className={inputStyles}>
-            <option value="all">All team members</option>
-            <option value="unassigned">Unassigned only</option>
-            <optgroup label="Worked on or owned by">
-              {team.map((member) => (
-                <option key={member.id} value={member.id}>
-                  {member.name} (all work)
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={`${id}-filters`}
+          onClick={() => setOpen((value) => !value)}
+          className={`${buttonStyles.secondary} justify-self-start lg:hidden`}
+        >
+          <SlidersHorizontal aria-hidden="true" className="h-4 w-4" />
+          Filters
+          {chosen > 0 && (
+            <span className="rounded-full bg-brand px-1.5 text-xs text-white">
+              <span className="sr-only">, </span>
+              {chosen}
+              <span className="sr-only"> on</span>
+            </span>
+          )}
+          <ChevronDown aria-hidden="true" className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+        </button>
+
+        <div
+          id={`${id}-filters`}
+          className={`${open ? 'grid' : 'hidden'} gap-3 sm:grid-cols-2 lg:col-span-4 lg:grid lg:grid-cols-4`}
+        >
+          <div>
+            <label htmlFor={`${id}-member`} className={labelStyles}>
+              Worked on by
+            </label>
+            <select id={`${id}-member`} value={filters.member} onChange={update('member')} className={inputStyles}>
+              <option value="all">All team members</option>
+              <option value="unassigned">Unassigned only</option>
+              <optgroup label="Worked on or owned by">
+                {team.map((member) => (
+                  <option key={member.id} value={member.id}>
+                    {member.name} (all work)
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label="Currently assigned to">
+                {team.map((member) => (
+                  <option key={`owned:${member.id}`} value={`owned:${member.id}`}>
+                    {member.name} (current owner)
+                  </option>
+                ))}
+              </optgroup>
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor={`${id}-type`} className={labelStyles}>
+              Type
+            </label>
+            <select id={`${id}-type`} value={filters.type} onChange={update('type')} className={inputStyles}>
+              <option value="all">All types</option>
+              {TASK_TYPES.map((type) => (
+                <option key={type.id} value={type.id}>
+                  {type.label}
                 </option>
               ))}
-            </optgroup>
-            <optgroup label="Currently assigned to">
-              {team.map((member) => (
-                <option key={`owned:${member.id}`} value={`owned:${member.id}`}>
-                  {member.name} (current owner)
-                </option>
-              ))}
-            </optgroup>
-          </select>
-        </div>
+            </select>
+          </div>
 
-        <div>
-          <label htmlFor={`${id}-type`} className={labelStyles}>
-            Type
-          </label>
-          <select id={`${id}-type`} value={filters.type} onChange={update('type')} className={inputStyles}>
-            <option value="all">All types</option>
-            {TASK_TYPES.map((type) => (
-              <option key={type.id} value={type.id}>
-                {type.label}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div>
+            <label htmlFor={`${id}-due`} className={labelStyles}>
+              Due state
+            </label>
+            <select id={`${id}-due`} value={filters.due} onChange={update('due')} className={inputStyles}>
+              <option value="all">All due states</option>
+              <option value="overdue">Overdue</option>
+              <option value="warning">Due soon (under 24h)</option>
+              <option value="safe">Calm (24h or more)</option>
+              <option value="none">No due date</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
 
-        <div>
-          <label htmlFor={`${id}-due`} className={labelStyles}>
-            Due state
-          </label>
-          <select id={`${id}-due`} value={filters.due} onChange={update('due')} className={inputStyles}>
-            <option value="all">All due states</option>
-            <option value="overdue">Overdue</option>
-            <option value="warning">Due soon (under 24h)</option>
-            <option value="safe">Calm (24h or more)</option>
-            <option value="none">No due date</option>
-            <option value="done">Done</option>
-          </select>
+          <div>
+            <label htmlFor={`${id}-context`} className={labelStyles}>
+              Handoff &amp; AI tool
+            </label>
+            <select id={`${id}-context`} value={filters.context} onChange={update('context')} className={inputStyles}>
+              <option value="all">All tasks</option>
+              <option value="has-handoff">Has a handoff</option>
+              <optgroup label="By AI tool used">
+                {AI_TOOLS.map((tool) => (
+                  <option key={tool} value={`tool:${tool}`}>
+                    {tool}
+                  </option>
+                ))}
+              </optgroup>
+            </select>
+          </div>
         </div>
+      </div>
 
-        <div>
-          <label htmlFor={`${id}-context`} className={labelStyles}>
-            Handoff &amp; AI tool
-          </label>
-          <select id={`${id}-context`} value={filters.context} onChange={update('context')} className={inputStyles}>
-            <option value="all">All tasks</option>
-            <option value="has-handoff">Has a handoff</option>
-            <optgroup label="By AI tool used">
-              {AI_TOOLS.map((tool) => (
-                <option key={tool} value={`tool:${tool}`}>
-                  {tool}
-                </option>
-              ))}
-            </optgroup>
-          </select>
-        </div>
+      {/* The count is read out whenever it changes; it's only shown while filtering. */}
+      <div className={`flex flex-wrap items-center gap-3 ${active ? 'mt-3' : ''}`}>
+        <p role="status" className={active ? 'text-sm font-medium text-ink-muted' : 'sr-only'}>
+          {active ? `Showing ${shownCount} of ${totalCount} ${tasks}` : `Showing all ${totalCount} ${tasks}`}
+        </p>
+        {active && (
+          <button
+            type="button"
+            onClick={clear}
+            className="inline-flex min-h-9 items-center gap-1 rounded-md border border-line-control bg-surface-card px-2.5 text-xs font-semibold text-brand hover:bg-surface-sunken"
+          >
+            <RotateCcw aria-hidden="true" className="h-3.5 w-3.5" />
+            Clear filters
+          </button>
+        )}
       </div>
     </section>
   );

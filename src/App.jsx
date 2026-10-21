@@ -16,6 +16,7 @@ import { STAGES, STORAGE_KEYS, TEAM } from './constants.js';
 import { createSeedProject, createSeedTasks } from './data/seed.js';
 import { useLocalStorage } from './hooks/useLocalStorage.js';
 import { useNow } from './hooks/useNow.js';
+import { useTheme } from './hooks/useTheme.js';
 import { buildBriefing, buildHandoff } from './lib/briefing.js';
 import { copyText } from './lib/clipboard.js';
 import { DEFAULT_FILTERS, filterTasks, hasActiveFilters } from './lib/filters.js';
@@ -40,10 +41,10 @@ import { getMember } from './lib/team.js';
  * @property {string} assignee               id of a TEAM member
  * @property {string|null} dueDate           ISO 'YYYY-MM-DD'
  * @property {string} createdDate            ISO 'YYYY-MM-DD'
- * @property {string|null} contextTool       'Claude' | 'ChatGPT' | 'Cursor' | 'Lovable' | 'Replit' | 'Other'
- * @property {string} handoffText            M12: pasted handoff for the next developer's AI agent
- * @property {string|null} handoffUpdatedAt  M12: ISO timestamp, set when the handoff text changes
- * @property {Array} handoffs                M7/M12: handoff trail ({ id, from, to, note, at })
+ * @property {string|null} contextTool       the AI tool used (PRD FR16, DR4)
+ * @property {string} handoffText            pasted handoff for the next developer's AI agent (PRD FR15, DR4)
+ * @property {string|null} handoffUpdatedAt  ISO timestamp, set when the handoff text changes (PRD DR5)
+ * @property {Array} handoffs                handoff history ({ id, from, to, note, at }) (PRD FR10, DR6)
  */
 
 // Re-exported so anything importing these from App.jsx (as in the starter) still works.
@@ -73,15 +74,15 @@ export default function App() {
   const [team, setTeam] = useLocalStorage(STORAGE_KEYS.team, TEAM);
   const [addingMember, setAddingMember] = useState(false);
 
-  // The project's name and deliverable links (M11).
+  // The project's name and deliverable links (PRD FR19, FR25, DR8).
   const [project, setProject] = useLocalStorage(STORAGE_KEYS.project, createSeedProject);
   const [renaming, setRenaming] = useState(false);
 
   // "Reset demo" confirmation (PRD FR20).
   const [resetting, setResetting] = useState(false);
 
-  // Light / Dark theme preference (PRD FR23, DR14), saved across visits.
-  const [theme, setTheme] = useLocalStorage(STORAGE_KEYS.theme, 'light');
+  // Light / Dark theme preference (PRD FR23, DR13), saved across visits.
+  const [theme, setTheme] = useTheme();
 
   // Search and advanced board filters (PRD FR21).
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
@@ -90,10 +91,6 @@ export default function App() {
   useEffect(() => {
     document.title = `${project.name} · Vibecoding Project Tracker`;
   }, [project.name]);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-  }, [theme]);
 
   function toggleTheme() {
     const next = theme === 'dark' ? 'light' : 'dark';
@@ -142,7 +139,7 @@ export default function App() {
     flash(taskId);
   }
 
-  // Dropped on another column (drag and drop on the Board).
+  // Dropped on another column (drag and drop on the Board, PRD FR24).
   function moveTo(taskId, status) {
     setTasks((prev) => moveTask(prev, taskId, status));
     showToast(`Moved to ${STAGES.find((stage) => stage.id === status).label}`);

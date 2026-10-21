@@ -1,7 +1,7 @@
 import { Pencil, SquareKanban } from 'lucide-react';
 
-// Logo, product name and the project's name (with "Rename", M11), top left on
-// every page. `children` is a slot for header actions (e.g. "New task").
+// Logo, product name and the project's name (with "Rename", PRD FR25), top
+// left on every page. `children` is a slot for header actions (e.g. "New task").
 export default function Header({ projectName, onRename, children }) {
   return (
     <header className="border-b border-line bg-surface-card">

@@ -4,7 +4,8 @@ import { daysFromToday } from '../lib/dates.js';
 // building a personal portfolio site, with three tasks per column. `due` and
 // `created` are days relative to today and `ago` is hours before now, so every
 // due-date state (calm, warning, overdue, done, none) shows whenever the
-// prototype is opened. Two tasks carry a pasted handoff and a handoff history.
+// prototype is opened. Two tasks carry a pasted handoff (one with a log line)
+// and a handoff history; a third has a handoff note only.
 const SEED_TASKS = [
   // To Do
   {
@@ -31,7 +32,6 @@ const SEED_TASKS = [
     contextTool: 'Claude',
     handoffAgo: 1,
     handoffText: [
-      '## Handoff: carousel skips slides',
       'Done: found the cause. A click listener is added on every render, so fast clicks fire twice.',
       'Left: move the listener into useEffect with a cleanup, then remove the debounce workaround.',
       'Watch out: autoplay and the dots share the same index state, so test both after the change.',
@@ -70,9 +70,9 @@ const SEED_TASKS = [
     contextTool: 'Cursor',
     handoffAgo: 25,
     handoffText: [
-      '## Handoff: footer links 404 on Vercel',
       'Done: relative paths break on nested routes; a vercel.json rewrite only fixed /about.',
       'Left: switch the footer links to root-relative paths ("/about", "/cv", "/contact") and remove the rewrite.',
+      'Log: GET /projects/about 404 (clicked from the footer on /projects/carousel)',
       'Check: every footer link on the preview deploy, including from /projects pages.',
     ].join('\n'),
     handoffs: [

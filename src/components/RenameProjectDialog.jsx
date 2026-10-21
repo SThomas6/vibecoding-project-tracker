@@ -2,7 +2,7 @@ import { useId, useRef, useState } from 'react';
 import Dialog from './Dialog.jsx';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 
-// Renames the project shown in the header (M11, PRD DR8: "the name is typed in").
+// Renames the project shown in the header and the browser tab (PRD FR25, DR8).
 export default function RenameProjectDialog({ name, onSave, onClose }) {
   const id = useId();
   const inputRef = useRef(null);

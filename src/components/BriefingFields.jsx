@@ -3,9 +3,9 @@ import { Copy } from 'lucide-react';
 import { AI_TOOLS, PROMPT_MODES } from '../constants.js';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 
-// "Copy for your AI agent" (M10, PRD FR16, FR18): the AI tool used and a
-// prompt goal in Ignacio's TACO structure (Task, Actor, Context, Output
-// format), then one button that copies the whole task as a Markdown briefing.
+// "Copy for your AI agent" (PRD FR16, FR18): the AI tool used and a prompt
+// goal, then one button that copies the whole task as a Markdown briefing in
+// Ignacio's TACO structure (Task, Actor, Context, Output format).
 export default function BriefingFields({ id, tool, onChange, onCopy }) {
   const [modeId, setModeId] = useState('continue');
 
@@ -16,7 +16,8 @@ export default function BriefingFields({ id, tool, onChange, onCopy }) {
           Copy for your AI agent
         </h3>
         <p className="mt-1 text-sm text-ink-muted">
-          Copies the task, its handoff and its history as a briefing to paste into your AI tool.
+          Copies the task, its handoff and its history as a briefing for your AI tool, set out as Task, Actor,
+          Context and Output format for the goal you choose.
         </p>
       </div>
 
@@ -39,7 +40,7 @@ export default function BriefingFields({ id, tool, onChange, onCopy }) {
             Prompt goal (TACO structure)
           </label>
           <select id={`${id}-mode`} value={modeId} onChange={(event) => setModeId(event.target.value)} className={inputStyles}>
-            <option value="">Plain briefing (no TACO wrapper)</option>
+            <option value="">Plain briefing (no TACO sections)</option>
             {PROMPT_MODES.map((mode) => (
               <option key={mode.id} value={mode.id}>
                 {mode.label}

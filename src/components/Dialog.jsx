@@ -3,8 +3,13 @@ import { useEffect, useRef } from 'react';
 // Shared shell for every dialog. It uses the browser's native <dialog>, which
 // handles the hard accessibility parts for us: focus stays inside the dialog,
 // the page behind it can't be reached, and Escape closes it.
-// `initialFocusRef` is the control to focus when it opens.
-export default function Dialog({ labelledBy, initialFocusRef, onClose, width = 'max-w-xl', children }) {
+// `initialFocusRef` is the control to focus when it opens. `onClose` runs
+// when Escape is pressed; `onClosed` (default `onClose`) runs if the browser
+// closes the dialog by itself, which Chrome does on a repeated Escape, so the
+// app's state never says a dialog is open when it isn't.
+// The backdrop is a fixed dark tint rather than the ink token, which turns
+// near-white in Dark mode and would wash the page out instead of dimming it.
+export default function Dialog({ labelledBy, initialFocusRef, onClose, onClosed = onClose, width = 'max-w-xl', children }) {
   const dialogRef = useRef(null);
 
   useEffect(() => {
@@ -28,7 +33,12 @@ export default function Dialog({ labelledBy, initialFocusRef, onClose, width = '
         event.preventDefault();
         onClose();
       }}
-      className={`w-[calc(100%-2rem)] ${width} rounded-xl bg-surface-card p-0 text-ink shadow-xl backdrop:bg-ink/60`}
+      onClose={() => {
+        // Ignore a late close event if the dialog is open again (React's
+        // development mode opens it, closes it and opens it again).
+        if (!dialogRef.current?.open) onClosed();
+      }}
+      className={`w-[calc(100%-2rem)] ${width} rounded-xl bg-surface-card p-0 text-ink shadow-xl backdrop:bg-[rgb(15_23_42/0.6)]`}
     >
       {children}
     </dialog>

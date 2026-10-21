@@ -19,7 +19,7 @@ export function newId() {
 }
 
 // Every team member ID who currently owns or has previously worked on / handed
-// off this task (PRD FR10, FR23).
+// off this task (PRD FR10, FR21).
 export function getContributors(task) {
   const ids = new Set();
   if (task.assignee) ids.add(task.assignee);

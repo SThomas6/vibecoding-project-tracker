@@ -8,6 +8,7 @@
   --brand-hover: 55 48 163;
   --brand-accent: 14 116 144;
   --brand-tint: 238 242 255;
+  --focus: 67 56 202;
   --surface-page: 248 250 252;
   --surface-card: 255 255 255;
   --surface-sunken: 241 245 249;
@@ -31,14 +32,16 @@
   --due-neutral-tint: 241 245 249;
 }
 
-/* Accessible dark palette (PRD FR24, NFR2): every text pair meets WCAG 2.2 AA
-   (6.47:1 to 16.96:1), and form borders exceed 3:1 (5.71:1). */
+/* Accessible dark palette (PRD FR23, NFR2): every text pair meets WCAG 2.2 AA
+   (6.47:1 to 16.96:1), form borders exceed 3:1 (5.71:1), and focus rings and
+   state outlines use a lighter indigo (#A5B4FC, 7.34:1 on cards). */
 html.dark {
   color-scheme: dark;
   --brand: 67 56 202;
   --brand-hover: 79 70 229;
   --brand-accent: 56 189 248;
   --brand-tint: 30 27 75;
+  --focus: 165 180 252;
   --surface-page: 11 15 25;
   --surface-card: 30 41 59;
   --surface-sunken: 17 24 39;
@@ -73,12 +76,8 @@ html, body, #root {
 
   /* One visible focus style everywhere, so keyboard users always see where they are. */
   :focus-visible {
-    outline: 2px solid theme('colors.brand.DEFAULT');
+    outline: 2px solid rgb(var(--focus));
     outline-offset: 2px;
-  }
-
-  html.dark :focus-visible {
-    outline-color: #A5B4FC;
   }
 }
 
@@ -92,6 +91,14 @@ html.dark .text-danger {
 }
 html.dark .border-danger {
   border-color: #FCA5A5;
+}
+
+/* Paused for a moment while the theme changes, so every colour switches at
+   once (hooks/useTheme.js). */
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: none !important;
 }
 
 /* Respect users who ask their OS for less motion. */

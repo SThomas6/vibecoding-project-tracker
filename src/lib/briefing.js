@@ -4,11 +4,39 @@ import { dueState } from './due.js';
 import { getPastContributors } from './tasks.js';
 import { getMember } from './team.js';
 
-// Turns a task into a Markdown briefing to paste into an AI tool (M10, PRD
-// FR18, DR9): the title as a heading, the key facts, then the description,
-// pasted handoff, handoff trail, and optional TACO Actor / Output
-// format instructions. Empty fields are left out.
+// Turns a task into a Markdown briefing to paste into an AI tool (PRD FR18,
+// DR9). With a prompt goal it follows Ignacio's TACO structure: Task, Actor,
+// Context (the key facts, description, pasted handoff and handoff notes) and
+// Output format. Without one it's a plain briefing of the same facts. Empty
+// fields are left out.
 export function buildBriefing(task, team, now = new Date(), modeId = null) {
+  const mode = PROMPT_MODES.find((item) => item.id === modeId) ?? null;
+  const sections = [`# ${task.title || 'Untitled task'}`];
+
+  if (mode) {
+    const context = contextSections(task, team, now, '###');
+    sections.push(
+      `## Task\n\n${mode.task}`,
+      `## Actor\n\n${mode.actor}`,
+      `## Context\n\n${context.join('\n\n')}`,
+      `## Output format\n\n${mode.output}`
+    );
+  } else {
+    sections.push(...contextSections(task, team, now, '##'));
+  }
+
+  const footer = [
+    task.contextTool && `AI tool: ${task.contextTool}`,
+    task.handoffUpdatedAt && `Handoff last updated ${formatDateTime(task.handoffUpdatedAt)}`,
+  ].filter(Boolean);
+  if (footer.length > 0) sections.push(`---\n\n${footer.join(' · ')}`);
+
+  return `${sections.join('\n\n')}\n`;
+}
+
+// The facts about the task, then its description, pasted handoff and handoff
+// notes, each under a heading at the given level.
+function contextSections(task, team, now, heading) {
   const pastNames = getPastContributors(task)
     .map((id) => getMember(team, id)?.name)
     .filter(Boolean);
@@ -23,30 +51,16 @@ export function buildBriefing(task, team, now = new Date(), modeId = null) {
     .filter(([, value]) => value)
     .map(([name, value]) => `- **${name}:** ${value}`);
 
-  const sections = [`# ${task.title || 'Untitled task'}`, facts.join('\n')];
-  const mode = modeId ? PROMPT_MODES.find((item) => item.id === modeId) : null;
-
-  if (mode) sections.push(`## Actor\n\n${mode.actor}`);
-  if (task.description) sections.push(`## Description\n\n${task.description}`);
-  if (task.handoffText) sections.push(`## Handoff\n\n${task.handoffText}`);
+  const parts = [facts.join('\n')];
+  if (task.description) parts.push(`${heading} Description\n\n${task.description}`);
+  if (task.handoffText) parts.push(`${heading} Handoff\n\n${task.handoffText}`);
 
   const handoffs = task.handoffs ?? [];
   if (handoffs.length > 0) {
     const lines = handoffs.map((item) => formatHandoff(item, team));
-    sections.push(`## Handoff notes\n\n${lines.join('\n')}`);
+    parts.push(`${heading} Handoff notes\n\n${lines.join('\n')}`);
   }
-
-
-
-  if (mode) sections.push(`## Output format\n\n${mode.output}`);
-
-  const footer = [
-    task.contextTool && `AI tool: ${task.contextTool}`,
-    task.handoffUpdatedAt && `Handoff last updated ${formatDateTime(task.handoffUpdatedAt)}`,
-  ].filter(Boolean);
-  if (footer.length > 0) sections.push(`---\n\n${footer.join(' · ')}`);
-
-  return `${sections.join('\n\n')}\n`;
+  return parts;
 }
 
 function formatHandoff(item, team) {
@@ -56,7 +70,7 @@ function formatHandoff(item, team) {
   return `- **${formatDateTime(item.at)} (${from} → ${to})**${note}`;
 }
 
-// Just the pasted handoff, with the task title, for "Copy handoff" (M12).
+// Just the pasted handoff, with the task title, for "Copy handoff" (PRD FR22).
 export function buildHandoff(task) {
   return `# Handoff: ${task.title || 'Untitled task'}\n\n${task.handoffText}\n`;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-// Drag a card to another column with a mouse or pen. It uses pointer events
+// Drag a card to another column with a mouse or pen (PRD FR24). It uses pointer events
 // rather than native drag and drop, which can't start from a <button> in
 // Firefox (and each card is mostly its title button). Touch and keyboard users
 // change the task's Status in the form instead, so nothing depends on dragging

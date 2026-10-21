@@ -6,11 +6,12 @@ import { formatDateTime, timeAgo } from '../lib/dates.js';
 import { getMember } from '../lib/team.js';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 
-// The handoff for the next developer (M12 secret sauce). Instead of logging
-// every prompt by hand, the outgoing developer pastes in one handoff text, such
-// as the summary their AI agent wrote at the end of a session. Whoever picks
-// the task up reads it here (and on the card) and copies it straight into their
-// own AI agent. It's a plain textarea, so pasted code is never run (NFR12).
+// The handoff for the next developer (PRD FR15, FR17, FR22: the secret sauce).
+// Instead of logging every prompt by hand, the outgoing developer pastes in one
+// handoff text, such as the summary their AI agent wrote at the end of a
+// session, with any logs or traces. Whoever picks the task up reads it here
+// (and on the card) and copies it straight into their own AI agent. It's a
+// plain textarea, so pasted code is never run (NFR12).
 export default function HandoffFields({ id, text, updatedAt, handoffs = [], team = [], onSetText, onCopy, onNotify }) {
   const textRef = useRef(null);
 
@@ -78,8 +79,8 @@ export default function HandoffFields({ id, text, updatedAt, handoffs = [], team
           Handoff text
         </label>
         <p id={`${id}-handoff-hint`} className="mt-1 text-sm text-ink-muted">
-          Paste the handoff your AI agent wrote, or write what's done, what's left and any blockers. The next
-          developer copies it into their own AI agent.
+          Paste the handoff your AI agent wrote, or write what's done, what's left and any blockers, plus any logs
+          or traces. The next developer copies it into their own AI agent.
         </p>
         <textarea
           id={`${id}-handoff`}

@@ -85,9 +85,9 @@ One short sentence per element. These set the tone for the build phase — Perso
 
 - **Cards:** White cards on a light grey column with a 1px border and no heavy shadow; the title comes first, with owner and dates in one quiet row underneath.
 - **Buttons:** A solid indigo fill for the one main action on screen (New task, Save) and outlined for everything else, at least 44 px tall so they're easy to hit.
-- **Modal:** Centred, about 36 rem wide, on a dimmed backdrop. Focus moves into it when it opens and returns to the card when it closes, and Escape closes it.
+- **Modal:** Centred, about 36 rem wide, on a dimmed backdrop (a fixed dark tint in both themes). Focus moves into it when it opens and returns to the card when it closes, and Escape closes it. If the form has unsaved changes, Escape, ✕ and Cancel ask "Discard your changes?" first, with "Keep editing" focused.
 - **Empty states:** A dashed border with muted text that says what to do next. Never sad.
-- **Drag affordance (if used):** None in the core build, which uses a status dropdown. If drag-and-drop is added later, the dropdown stays as the keyboard alternative.
+- **Drag affordance:** Cards can be dragged with a mouse or pen. The card follows the pointer, tilted slightly, and the column under it shows a dashed outline and "Drop to move to …". The Status dropdown in the form stays as the keyboard and touch alternative, and the board's hint says which applies.
 
 ## 5. Voice / microcopy
 
@@ -102,6 +102,8 @@ Plain, short and calm: the words a stressed user reads at 11pm.
 | Handoff toast (M7 `task-owner`) | "Handed off to {name}." |
 | Toasts after add / edit / delete (M5) | "Task added" · "Task updated" · "Task deleted" |
 | Missing title error | "Enter a title for the task." |
+| Closing a changed form | "Discard your changes?" · "Keep editing" · "Discard changes" |
+| Toast after a drag | "Moved to {column}" |
 
 ## 6. Logo / wordmark
 
@@ -110,7 +112,7 @@ Plain, short and calm: the words a stressed user reads at 11pm.
 
 ## 7. Theme switching and out of scope
 
-- **Light and Dark mode (FR23):** Light mode ("Clear desk") is the default. A header toggle switches to an accessible Dark mode (`html.dark` CSS variables in `src/index.css`), where every text pair meets WCAG 2.2 AA (`#F8FAFC` ink on `#1E293B` card = 13.98:1; `#CBD5E1` muted on `#1E293B` = 9.85:1; `#94A3B8` control borders on `#1E293B` = 5.71:1; all type and due-state badges between 6.47:1 and 10.62:1).
+- **Light and Dark mode (FR23):** Light mode ("Clear desk") is the default. A header toggle switches to an accessible Dark mode (`html.dark` CSS variables in `src/index.css`), where every text pair meets WCAG 2.2 AA (`#F8FAFC` ink on `#1E293B` card = 13.98:1; `#CBD5E1` muted on `#1E293B` = 9.85:1; `#94A3B8` control borders on `#1E293B` = 5.71:1; all type and due-state badges between 6.47:1 and 10.62:1). Focus rings and state outlines use the `focus` token: `#4338CA` in Light mode and `#A5B4FC` in Dark mode (7.34:1 on dark cards).
 - **Out of scope:** arbitrary user-picked colour wheels (which could break contrast), animations beyond a 200 ms fade, and custom icon sets (Lucide icons are used throughout).
 
 ## 8. Accessibility rules

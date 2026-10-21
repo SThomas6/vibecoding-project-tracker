@@ -2,9 +2,9 @@ import { Filter, GitBranch, UserPlus } from 'lucide-react';
 import { getContributors } from '../lib/tasks.js';
 import Avatar from './Avatar.jsx';
 
-// "Who is driving what" (M7, optional on the slide): one card per team member
-// with their contact details, the tasks they have in progress, and a quick
-// filter button to show everything they have worked on (PRD FR11, FR23).
+// "Who is driving what" (PRD FR11): one card per team member with their
+// contact details, the tasks they have in progress, and a quick filter button
+// to show everything they have worked on (PRD FR21).
 // GitHub handles are shown as text, not links, because the demo handles are
 // made up and could belong to real people.
 export default function TeamStrip({ team, tasks, activeMember, onFilterMember, onAddMember }) {
@@ -36,7 +36,7 @@ export default function TeamStrip({ team, tasks, activeMember, onFilterMember, o
             <li
               key={member.id}
               className={`rounded-lg border p-3 shadow-sm ${
-                isSelected ? 'border-brand bg-brand-tint/40' : 'border-line bg-surface-card'
+                isSelected ? 'border-focus bg-brand-tint/40' : 'border-line bg-surface-card'
               }`}
             >
               <div className="flex items-start justify-between gap-2">

@@ -8,8 +8,9 @@ import DueBadge from './DueBadge.jsx';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 
 // One task on the board: the title with its type badge in the corner, its due
-// state, any handoff note and past contributors, who it's assigned to, and a
-// row of actions: "Hand off" (M7, PRD FR10) and "Copy context" (M10, PRD FR18).
+// state, the start of its handoff (PRD FR17) and past contributors, who it's
+// assigned to, and a row of actions: "Hand off" (PRD FR10), "Copy context"
+// (PRD FR18) and, when there's a handoff, "Copy handoff" (PRD FR22).
 // The title is a button that opens the task. Its ::after layer stretches over
 // the whole card, so the full card is clickable but is only one tab stop.
 // The action buttons sit above that layer (relative z-10) so they get their
@@ -47,7 +48,7 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
       {...dragProps}
       // While dragging, the card follows the pointer, tilted slightly, above the other columns.
       style={dragOffset ? { transform: `translate(${dragOffset.dx}px, ${dragOffset.dy}px) rotate(1.5deg)`, zIndex: 50 } : undefined}
-      className={`relative rounded-lg border border-l-4 border-line ${typeStyle(task.type).stripeLeft} p-3 hover:border-y-line-control hover:border-r-line-control ${dragOffset ? 'shadow-xl' : 'shadow-sm transition duration-300'} ${highlighted ? 'bg-brand-tint ring-2 ring-brand ring-offset-2 ring-offset-surface-sunken' : 'bg-surface-card'}`}
+      className={`relative rounded-lg border border-l-4 border-line ${typeStyle(task.type).stripeLeft} p-3 hover:border-y-line-control hover:border-r-line-control ${dragOffset ? 'shadow-xl' : 'shadow-sm transition duration-300'} ${highlighted ? 'bg-brand-tint ring-2 ring-focus ring-offset-2 ring-offset-surface-sunken' : 'bg-surface-card'}`}
     >
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-sm font-medium leading-snug text-ink">
@@ -55,7 +56,7 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
             type="button"
             data-task-id={task.id}
             onClick={() => onOpen(task)}
-            className="text-left after:absolute after:inset-0 after:rounded-lg focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-brand"
+            className="text-left after:absolute after:inset-0 after:rounded-lg focus-visible:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-focus"
           >
             {task.title}
           </button>
@@ -68,7 +69,7 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
         <DueBadge task={task} now={now} />
       </div>
 
-      {/* The pasted handoff (M12) comes first; otherwise the last hand-off note. */}
+      {/* The pasted handoff comes first; otherwise the last hand-off note. */}
       {(task.handoffText || latestHandoff?.note) && (
         <p className="mt-2 rounded-md bg-surface-sunken px-2 py-1.5 text-xs text-ink">
           <span className="flex items-center gap-1 font-semibold text-ink-muted">
