@@ -12,31 +12,22 @@ import TaskModal from './components/TaskModal.jsx';
 import TeamStrip from './components/TeamStrip.jsx';
 import Toast from './components/Toast.jsx';
 import { buttonStyles } from './components/styles.js';
-import { STORAGE_KEYS, TEAM } from './constants.js';
+import { STAGES, STORAGE_KEYS, TEAM } from './constants.js';
 import { createSeedProject, createSeedTasks } from './data/seed.js';
 import { useLocalStorage } from './hooks/useLocalStorage.js';
 import { useNow } from './hooks/useNow.js';
 import { buildBriefing, buildHandoff } from './lib/briefing.js';
 import { copyText } from './lib/clipboard.js';
 import { DEFAULT_FILTERS, filterTasks, hasActiveFilters } from './lib/filters.js';
-import { createTask, newId } from './lib/tasks.js';
+import { createTask, moveTask, newId } from './lib/tasks.js';
 import { getMember } from './lib/team.js';
 
 /**
  * Vibecoding Project Tracker.
  *
- * Where things live:
- *   - constants.js            : STAGES (board columns), TEAM, PROMPT_MODES, storage keys
- *   - data/seed.js            : demo project and tasks shown on first load
- *   - hooks/useLocalStorage.js: saves state in the browser across reloads
- *   - lib/                    : small helpers (dates, due states, filters, briefing, tasks)
- *   - components/             : Header, Deliverables + DeliverableCard, TeamStrip,
- *                               FilterBar, Board (columns), TaskCard, Avatar,
- *                               TypeBadge, DueBadge, TaskModal with BriefingFields
- *                               and HandoffFields, Dialog, CopyFallbackDialog,
- *                               RenameProjectDialog, AddMemberDialog, ResetDemoDialog, Toast
- *
- * Milestones M4–M13 are all built; README.md maps each feature to the PRD.
+ * All state lives here; constants.js holds the columns, team and storage keys,
+ * data/seed.js the demo project, hooks/ and lib/ small helpers, and components/
+ * one piece of UI each. README.md maps every feature to the PRD.
  */
 
 /**
@@ -148,6 +139,18 @@ export default function App() {
       })
     );
     showToast(`Handed off to ${getMember(team, memberId).name}.`);
+    flash(taskId);
+  }
+
+  // Dropped on another column (drag and drop on the Board).
+  function moveTo(taskId, status) {
+    setTasks((prev) => moveTask(prev, taskId, status));
+    showToast(`Moved to ${STAGES.find((stage) => stage.id === status).label}`);
+    flash(taskId);
+  }
+
+  // Briefly highlights a card that just moved or changed owner.
+  function flash(taskId) {
     clearTimeout(highlightTimer.current);
     setHighlightedId(taskId);
     highlightTimer.current = setTimeout(() => setHighlightedId(null), 2000);
@@ -249,6 +252,7 @@ export default function App() {
             hasFilters={hasActiveFilters(filters)}
             onOpenTask={(task) => setEditing({ task })}
             onHandOff={handOff}
+            onMove={moveTo}
             onCopy={copyContext}
             onCopyHandoff={copyHandoff}
             highlightedId={highlightedId}

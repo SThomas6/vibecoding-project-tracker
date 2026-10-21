@@ -34,3 +34,10 @@ export function getContributors(task) {
 export function getPastContributors(task) {
   return getContributors(task).filter((id) => id !== task.assignee);
 }
+
+// Moves a task to another column, at the bottom of it (drag and drop).
+export function moveTask(tasks, taskId, status) {
+  const task = tasks.find((item) => item.id === taskId);
+  if (!task || task.status === status) return tasks;
+  return [...tasks.filter((item) => item.id !== taskId), { ...task, status }];
+}

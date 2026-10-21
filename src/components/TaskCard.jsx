@@ -17,7 +17,7 @@ import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 const actionStyles =
   'relative z-10 inline-flex min-h-9 shrink-0 items-center gap-1 rounded-md px-2 text-xs font-semibold text-brand hover:bg-surface-sunken';
 
-export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopyHandoff, highlighted, now }) {
+export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopyHandoff, highlighted, now, dragProps, dragOffset }) {
   const member = getMember(team, task.assignee);
   const others = team.filter((m) => m.id !== task.assignee);
   const pastNames = getPastContributors(task)
@@ -44,7 +44,10 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
 
   return (
     <article
-      className={`relative rounded-lg border border-l-4 border-line ${typeStyle(task.type).stripeLeft} p-3 shadow-sm transition duration-300 hover:border-y-line-control hover:border-r-line-control ${highlighted ? 'bg-brand-tint ring-2 ring-brand ring-offset-2 ring-offset-surface-sunken' : 'bg-surface-card'}`}
+      {...dragProps}
+      // While dragging, the card follows the pointer, tilted slightly, above the other columns.
+      style={dragOffset ? { transform: `translate(${dragOffset.dx}px, ${dragOffset.dy}px) rotate(1.5deg)`, zIndex: 50 } : undefined}
+      className={`relative rounded-lg border border-l-4 border-line ${typeStyle(task.type).stripeLeft} p-3 hover:border-y-line-control hover:border-r-line-control ${dragOffset ? 'shadow-xl' : 'shadow-sm transition duration-300'} ${highlighted ? 'bg-brand-tint ring-2 ring-brand ring-offset-2 ring-offset-surface-sunken' : 'bg-surface-card'}`}
     >
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-sm font-medium leading-snug text-ink">

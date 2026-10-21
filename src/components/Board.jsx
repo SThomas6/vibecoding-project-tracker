@@ -1,10 +1,19 @@
 import { STAGES } from '../constants.js';
+import { useBoardDrag } from '../hooks/useBoardDrag.js';
 import TaskCard from './TaskCard.jsx';
 
 // The Kanban board: one column per stage, each showing the tasks whose status
 // matches. Four columns on wide screens, two on tablets, one on phones.
-export default function Board({ tasks, team, hasFilters, onOpenTask, onHandOff, onCopy, onCopyHandoff, highlightedId, now }) {
+// Cards can be dragged between columns (useBoardDrag); changing the Status in
+// the task form does the same without dragging.
+export default function Board({ tasks, team, hasFilters, onOpenTask, onHandOff, onCopy, onCopyHandoff, onMove, highlightedId, now }) {
+  const { drag, cardProps } = useBoardDrag(onMove);
+
   return (
+    <>
+    <p className="mb-2 px-1 text-sm text-ink-muted">
+      Drag a card to another column to move it, or open the task and change its Status.
+    </p>
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {STAGES.map((stage) => (
         <Column
@@ -19,19 +28,25 @@ export default function Board({ tasks, team, hasFilters, onOpenTask, onHandOff, 
           onCopyHandoff={onCopyHandoff}
           highlightedId={highlightedId}
           now={now}
+          drag={drag}
+          cardProps={cardProps}
         />
       ))}
     </div>
+    </>
   );
 }
 
-function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy, onCopyHandoff, highlightedId, now }) {
+function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy, onCopyHandoff, highlightedId, now, drag, cardProps }) {
   const headingId = `column-${stage.id}`;
+  // The column a card is being dragged over gets a dashed outline and a label.
+  const isTarget = drag?.overStage === stage.id && drag.fromStage !== stage.id;
 
   return (
     <section
+      data-stage={stage.id}
       aria-labelledby={headingId}
-      className="flex min-h-48 flex-col rounded-xl bg-surface-sunken p-3"
+      className={`flex min-h-48 flex-col rounded-xl p-3 ${isTarget ? 'bg-brand-tint outline-dashed outline-2 outline-offset-2 outline-brand' : 'bg-surface-sunken'}`}
     >
       <h2 id={headingId} className="flex items-center justify-between px-1 text-base font-semibold text-ink">
         {stage.label}
@@ -55,6 +70,8 @@ function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy,
                 onCopyHandoff={onCopyHandoff}
                 highlighted={task.id === highlightedId}
                 now={now}
+                dragProps={cardProps(task)}
+                dragOffset={drag?.taskId === task.id ? drag : null}
               />
             </li>
           ))}
@@ -62,6 +79,12 @@ function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy,
       ) : (
         <p className="mt-3 rounded-lg border border-dashed border-line-control p-4 text-center text-sm text-ink-muted">
           {hasFilters ? 'No matching tasks in this column.' : 'No tasks here yet.'}
+        </p>
+      )}
+
+      {isTarget && (
+        <p aria-hidden="true" className="mt-2 rounded-lg border-2 border-dashed border-brand p-3 text-center text-sm font-semibold text-brand">
+          Drop to move to {stage.label}
         </p>
       )}
     </section>

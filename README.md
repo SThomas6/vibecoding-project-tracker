@@ -11,7 +11,7 @@ Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10
 | Feature | PRD |
 |---|---|
 | Four-column board (To Do, In Progress, Review, Done) with task counts | FR1, FR2 |
-| Add, edit and delete tasks in a dialog; change status to move a card | FR4–FR6 |
+| Add, edit and delete tasks in a dialog; drag a card to another column with the mouse, or change its status in the form | FR4–FR6 |
 | Feature or Bug, each with its own colour, icon and label | FR8 |
 | Owner on every card, Unassigned by default, one-step "Hand off" with optional handoff note and contributor trail ("Previously worked on by…") | FR9, FR10 |
 | Team strip: email, GitHub handle, what each person is driving, one-click work filter and "Add member" | FR11, FR12 |
@@ -68,7 +68,7 @@ The first visit loads the demo project. **Reset demo** in the header (or clearin
 The tracker targets WCAG 2.2 AA:
 
 - **Colour:** colour is never the only signal; every state also has an icon and words.
-- **Keyboard:** everything works with a keyboard, with a visible focus outline and a "Skip to board" link.
+- **Keyboard:** everything works with a keyboard, with a visible focus outline and a "Skip to board" link. Dragging cards is a mouse shortcut; the Status field in the task form does the same without dragging (WCAG 2.5.7).
 - **Dialogs:** they use the native `<dialog>` element, so focus stays inside and returns to where it was.
 - **Confirmations:** they're announced through a live region.
 - **Testing:** every screen and dialog was checked with axe-core (0 violations), by keyboard, and in colour-blindness simulations.
