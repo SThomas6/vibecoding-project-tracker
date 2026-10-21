@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { ClipboardPaste, Copy, KeyRound, MessageSquareQuote } from 'lucide-react';
+import { ClipboardPaste, Copy, KeyRound, ListPlus, MessageSquareQuote } from 'lucide-react';
 import { HANDOFF_TEXT_MAX_LENGTH } from '../constants.js';
 import { readClipboardText } from '../lib/clipboard.js';
 import { formatDateTime, timeAgo } from '../lib/dates.js';
@@ -16,6 +16,9 @@ import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 // and show the count once the box is nearly full (PRD DR4, NFR7).
 const LIMIT = HANDOFF_TEXT_MAX_LENGTH.toLocaleString('en-GB');
 const CUT_MESSAGE = `Only the first ${LIMIT} characters fit, so the end of what you pasted was left out.`;
+
+// Headings for writing a handoff by hand, the same ones the AI is asked for.
+const TEMPLATE = ['Done: ', 'Left: ', 'Prompts that worked: ', 'Watch out: ', 'Start with: '].join('\n');
 
 export default function HandoffFields({ id, text, updatedAt, handoffs = [], team = [], onSetText, onCopy }) {
   const textRef = useRef(null);
@@ -41,6 +44,13 @@ export default function HandoffFields({ id, text, updatedAt, handoffs = [], team
     const box = event.currentTarget;
     const room = HANDOFF_TEXT_MAX_LENGTH - text.length + (box.selectionEnd - box.selectionStart);
     if (event.clipboardData.getData('text').length > room) setTimeout(() => setNotice(CUT_MESSAGE), 0);
+  }
+
+  // Adds the headings to an empty box, or below what's there already.
+  function insertTemplate() {
+    onSetText(text.trim() ? `${text.trimEnd()}\n\n${TEMPLATE}` : TEMPLATE);
+    setNotice('Template added. Fill in each line.');
+    textRef.current?.focus();
   }
 
   function copy() {
@@ -126,6 +136,10 @@ export default function HandoffFields({ id, text, updatedAt, handoffs = [], team
         </p>
       </div>
       <div className="flex flex-wrap justify-end gap-3">
+        <button type="button" onClick={insertTemplate} className={buttonStyles.secondary}>
+          <ListPlus aria-hidden="true" className="h-4 w-4" />
+          Insert template
+        </button>
         <button type="button" onClick={paste} className={buttonStyles.secondary}>
           <ClipboardPaste aria-hidden="true" className="h-4 w-4" />
           Paste from clipboard

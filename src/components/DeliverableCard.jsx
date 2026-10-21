@@ -79,7 +79,7 @@ export default function DeliverableCard({ deliverable, url, onSave }) {
           )}
           {!editing && hasLink && (
             // The address shows as a tooltip, and in the browser's status bar on hover.
-            <a href={url} title={url} target="_blank" rel="noopener noreferrer" className={`${smallButton} underline hover:no-underline`}>
+            <a href={url} title={url} target="_blank" rel="noopener noreferrer" className={`${smallButton} !text-brand-accent underline hover:no-underline`}>
               <ExternalLink aria-hidden="true" className="h-3.5 w-3.5" />
               Open<span className="sr-only"> {deliverable.label}, {new URL(url).host} (opens in a new tab)</span>
             </a>

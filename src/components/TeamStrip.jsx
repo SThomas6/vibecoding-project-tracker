@@ -49,14 +49,14 @@ export default function TeamStrip({ team, tasks, activeMember, onFilterMember, o
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-ink">{member.name}</p>
                     {member.email && (
-                      <p className="truncate text-xs">
+                      <p className="truncate text-sm">
                         <a href={`mailto:${member.email}`} className="text-brand-accent underline hover:no-underline">
                           {member.email}
                         </a>
                       </p>
                     )}
                     {member.github && (
-                      <p className="flex items-center gap-1 text-xs text-ink-muted">
+                      <p className="flex items-center gap-1 text-sm text-ink-muted">
                         <GitBranch aria-hidden="true" className="h-3.5 w-3.5" />
                         GitHub @{member.github}
                       </p>
@@ -76,7 +76,7 @@ export default function TeamStrip({ team, tasks, activeMember, onFilterMember, o
                   </button>
                 )}
               </div>
-              <p className="mt-2 text-xs text-ink-muted">
+              <p className="mt-2 text-sm text-ink-muted">
                 {driving.length > 0 ? (
                   <>
                     <span className="font-semibold text-ink">Driving:</span>{' '}

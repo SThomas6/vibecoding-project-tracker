@@ -210,7 +210,7 @@ export default function App() {
         />
       </Header>
 
-      <main className="mx-auto max-w-screen-2xl px-4 pb-24 pt-6 sm:px-6 sm:pb-6">
+      <main className="mx-auto max-w-screen-2xl px-4 py-6 sm:px-6">
         <Deliverables links={project.links} onSave={saveLink} />
         <TeamStrip
           team={team}
@@ -241,6 +241,13 @@ export default function App() {
           />
         </div>
       </main>
+
+      <footer className="mx-auto max-w-screen-2xl border-t border-line px-4 pb-24 pt-4 text-sm text-ink-muted sm:px-6 sm:pb-6">
+        Vibecoding Project Tracker · Data stays in this browser ·{' '}
+        <a href="https://github.com/SThomas6/vibecoding-project-tracker" className="text-brand-accent underline hover:no-underline">
+          Source code on GitHub
+        </a>
+      </footer>
 
       {editing && (
         <TaskModal

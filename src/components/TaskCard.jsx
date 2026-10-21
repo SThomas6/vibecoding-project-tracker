@@ -78,7 +78,7 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
 
       {/* The pasted handoff comes first; otherwise the last hand-off note. */}
       {(task.handoffText || latestHandoff?.note) && (
-        <p className="mt-2 rounded-md bg-surface-sunken px-2 py-1.5 text-xs text-ink">
+        <p className="mt-2 rounded-md bg-surface-sunken px-2 py-1.5 text-sm text-ink">
           <span className="flex items-center gap-1 font-semibold text-ink-muted">
             <MessageSquareQuote aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-brand" />
             {handoffFrom ? `Handoff from ${handoffFrom}:` : 'Handoff:'}
@@ -89,7 +89,7 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
         </p>
       )}
 
-      <p className="mt-3 flex min-w-0 items-center gap-2 text-xs text-ink-muted">
+      <p className="mt-3 flex min-w-0 items-center gap-2 text-sm text-ink-muted">
         <Avatar member={member} />
         <span className="truncate">
           {member ? (
@@ -104,7 +104,7 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
       </p>
 
       {pastNames.length > 0 && (
-        <p className="mt-1 flex items-center gap-1 text-xs text-ink-muted">
+        <p className="mt-1 flex items-center gap-1 text-sm text-ink-muted">
           <History aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
           <span>Previously worked on by {pastNames.join(', ')}</span>
         </p>
