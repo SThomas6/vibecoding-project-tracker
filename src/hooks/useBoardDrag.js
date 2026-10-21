@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 // depends on dragging (WCAG 2.2 SC 2.5.7). A drag only starts once the pointer
 // has moved 6px, so a plain click still opens the task. Escape cancels it.
 const THRESHOLD = 6;
-const EDGE = 48; // px from the top or bottom of the window that scrolls the page
+const EDGE = 48; // px from the top or bottom of the window where dragging scrolls the page
 
 export function useBoardDrag(onMove) {
   // { taskId, fromStage, overStage, beforeId, lands, dx, dy }; `lands` is false
@@ -60,8 +60,7 @@ export function useBoardDrag(onMove) {
         window.getSelection()?.removeAllRanges();
         document.body.classList.add('select-none');
       }
-      if (e.clientY < EDGE) window.scrollBy(0, -16);
-      else if (e.clientY > window.innerHeight - EDGE) window.scrollBy(0, 16);
+      autoScroll(e.clientY, p.y);
       p.target = dropTarget(e.clientX, e.clientY, p.taskId);
       setDrag({
         taskId: p.taskId,
@@ -125,6 +124,15 @@ export function useBoardDrag(onMove) {
   }
 
   return { drag, cardProps };
+}
+
+// Scrolls the page while a card is dragged towards the top or bottom edge of
+// the window, faster the closer it gets (up to 16px a move). Only towards an
+// edge, so grabbing a card that sits near the edge doesn't scroll the page.
+function autoScroll(y, startY) {
+  const bottom = window.innerHeight - EDGE;
+  if (y > bottom && y > startY) window.scrollBy(0, Math.ceil((16 * (y - bottom)) / EDGE));
+  else if (y < EDGE && y < startY) window.scrollBy(0, -Math.ceil((16 * (EDGE - y)) / EDGE));
 }
 
 // Where a card dropped here would land: the column under the pointer, and the
