@@ -64,7 +64,7 @@ export default function App() {
   const [toast, setToast] = useState('');
   const toastTimer = useRef(null);
 
-  // The card that was just handed off gets a brief highlight (M7).
+  // The card that was just saved, moved or handed off gets a brief highlight.
   const [highlightedId, setHighlightedId] = useState(null);
   const highlightTimer = useRef(null);
 
@@ -105,16 +105,20 @@ export default function App() {
     toastTimer.current = setTimeout(() => setToast(''), 4000);
   }
 
+  // The saved card is highlighted, so it's easy to spot, even in a new column.
   function saveTask(fields) {
-    if (editing.task) {
-      const id = editing.task.id;
+    let id = editing.task?.id;
+    if (id) {
       setTasks((prev) => prev.map((task) => (task.id === id ? { ...task, ...fields } : task)));
       showToast('Task updated');
     } else {
-      setTasks((prev) => [...prev, createTask(fields)]);
+      const task = createTask(fields);
+      id = task.id;
+      setTasks((prev) => [...prev, task]);
       showToast('Task added');
     }
     setEditing(null);
+    flash(id);
   }
 
   function deleteTask(id) {
@@ -147,7 +151,7 @@ export default function App() {
     flash(taskId);
   }
 
-  // Briefly highlights a card that just moved or changed owner.
+  // Briefly highlights a card that was just saved, moved or handed off.
   function flash(taskId) {
     clearTimeout(highlightTimer.current);
     setHighlightedId(taskId);

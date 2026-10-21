@@ -1,10 +1,12 @@
 import { Filter, GitBranch, UserPlus } from 'lucide-react';
 import { getContributors } from '../lib/tasks.js';
 import Avatar from './Avatar.jsx';
+import { typeStyle } from './TypeBadge.jsx';
 
 // "Who is driving what" (PRD FR11): one card per team member with their
-// contact details, the tasks they have in progress, and a quick filter button
-// to show everything they have worked on (PRD FR21).
+// contact details, the tasks they have in progress (each with its type's icon
+// and colour, as everywhere else a task appears, PRD FR8), and a quick filter
+// button to show everything they have worked on (PRD FR21).
 // GitHub handles are shown as text, not links, because the demo handles are
 // made up and could belong to real people.
 export default function TeamStrip({ team, tasks, activeMember, onFilterMember, onAddMember }) {
@@ -80,7 +82,9 @@ export default function TeamStrip({ team, tasks, activeMember, onFilterMember, o
                 {driving.length > 0 ? (
                   <>
                     <span className="font-semibold text-ink">Driving:</span>{' '}
-                    {driving.map((task) => task.title).join(', ')}
+                    {driving.map((task, index) => (
+                      <DrivingTask key={task.id} task={task} last={index === driving.length - 1} />
+                    ))}
                   </>
                 ) : (
                   'Nothing in progress'
@@ -91,5 +95,18 @@ export default function TeamStrip({ team, tasks, activeMember, onFilterMember, o
         })}
       </ul>
     </section>
+  );
+}
+
+// One in-progress task: its type's icon (named for screen readers) and title.
+function DrivingTask({ task, last }) {
+  const style = typeStyle(task.type);
+  return (
+    <span className="inline-flex items-center gap-1">
+      <style.Icon aria-hidden="true" className={`h-3.5 w-3.5 shrink-0 ${style.icon}`} />
+      <span className="sr-only">{style.label}: </span>
+      {task.title}
+      {!last && ','}
+    </span>
   );
 }
