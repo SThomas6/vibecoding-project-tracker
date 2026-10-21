@@ -12,8 +12,14 @@ import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 // session, with any logs or traces. Whoever picks the task up reads it here
 // (and on the card) and copies it straight into their own AI agent. It's a
 // plain textarea, so pasted code is never run (NFR12).
+// Text past the limit is cut off, so say so rather than lose it silently,
+// and show the count once the box is nearly full (PRD DR4, NFR7).
+const LIMIT = HANDOFF_TEXT_MAX_LENGTH.toLocaleString('en-GB');
+const CUT_MESSAGE = `Only the first ${LIMIT} characters fit, so the end of what you pasted was left out.`;
+
 export default function HandoffFields({ id, text, updatedAt, handoffs = [], team = [], onSetText, onCopy, onNotify }) {
   const textRef = useRef(null);
+  const nearLimit = text.length >= HANDOFF_TEXT_MAX_LENGTH * 0.9;
 
   async function paste() {
     const clipboard = await readClipboardText();
@@ -24,7 +30,14 @@ export default function HandoffFields({ id, text, updatedAt, handoffs = [], team
     }
     onSetText(clipboard.slice(0, HANDOFF_TEXT_MAX_LENGTH));
     textRef.current?.focus();
-    onNotify('Handoff pasted. Save changes to keep it.');
+    onNotify(clipboard.length > HANDOFF_TEXT_MAX_LENGTH ? CUT_MESSAGE : 'Handoff pasted. Save changes to keep it.');
+  }
+
+  // Pasting with Ctrl+V: the browser cuts the text to fit, so warn if it will.
+  function checkPaste(event) {
+    const box = event.currentTarget;
+    const room = HANDOFF_TEXT_MAX_LENGTH - text.length + (box.selectionEnd - box.selectionStart);
+    if (event.clipboardData.getData('text').length > room) onNotify(CUT_MESSAGE);
   }
 
   function copy() {
@@ -89,9 +102,15 @@ export default function HandoffFields({ id, text, updatedAt, handoffs = [], team
           maxLength={HANDOFF_TEXT_MAX_LENGTH}
           value={text}
           onChange={(event) => onSetText(event.target.value)}
-          aria-describedby={`${id}-handoff-hint ${id}-handoff-secrets`}
+          onPaste={checkPaste}
+          aria-describedby={`${id}-handoff-hint ${id}-handoff-secrets${nearLimit ? ` ${id}-handoff-count` : ''}`}
           className={`${inputStyles} py-2 font-mono leading-relaxed`}
         />
+        {nearLimit && (
+          <p id={`${id}-handoff-count`} className="mt-1.5 text-sm font-medium text-ink">
+            {text.length.toLocaleString('en-GB')} of {LIMIT} characters used
+          </p>
+        )}
         <p id={`${id}-handoff-secrets`} className="mt-1.5 flex items-start gap-1.5 text-sm text-ink-muted">
           <KeyRound aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
           Never paste passwords, API keys or tokens. The handoff is saved in this browser and copied into AI chats.
