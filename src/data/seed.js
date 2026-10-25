@@ -5,15 +5,17 @@ import { daysFromToday } from '../lib/dates.js';
 // `created` are days relative to today and `ago` is hours before now, so every
 // due-date state (calm, warning, overdue, done, none) shows whenever the
 // prototype is opened. Two tasks carry a pasted handoff (one with a log line)
-// and a handoff history; a third has a handoff note only.
+// and a handoff history; a third has a handoff note only. Seven tasks deliver
+// one of the four demo user stories (PRD FR27); set-up tasks such as the PRD
+// deliver none, so "No user story" has something to show.
 const SEED_TASKS = [
   // To Do
   {
-    id: 't1', title: 'Write hero section copy', type: 'feature', status: 'todo', assignee: 'alex', due: 5, created: -1,
+    id: 't1', title: 'Write hero section copy', type: 'feature', status: 'todo', assignee: 'alex', due: 5, created: -1, storyId: 's1',
     description: 'Two-line intro for the landing page hero, in a friendly first-person voice.',
   },
   {
-    id: 't3', title: 'Fix mobile nav overlapping the logo', type: 'bug', status: 'todo', assignee: 'jordan', due: -1, created: -3,
+    id: 't3', title: 'Fix mobile nav overlapping the logo', type: 'bug', status: 'todo', assignee: 'jordan', due: -1, created: -3, storyId: 's3',
     description: 'On screens under 400px wide the menu button sits on top of the logo.',
   },
   {
@@ -23,11 +25,11 @@ const SEED_TASKS = [
 
   // In Progress
   {
-    id: 't4', title: 'Build About page', type: 'feature', status: 'in-progress', assignee: 'priya', due: 0, created: -4,
+    id: 't4', title: 'Build About page', type: 'feature', status: 'in-progress', assignee: 'priya', due: 0, created: -4, storyId: 's2',
     description: 'Bio, photo and a short timeline of past projects.',
   },
   {
-    id: 't5', title: 'Project carousel skips slides', type: 'bug', status: 'in-progress', assignee: 'alex', due: 2, created: -2,
+    id: 't5', title: 'Project carousel skips slides', type: 'bug', status: 'in-progress', assignee: 'alex', due: 2, created: -2, storyId: 's1',
     description: 'Clicking "next" quickly jumps two slides. Probably a duplicate event listener.',
     contextTool: 'Claude',
     handoffAgo: 1,
@@ -48,13 +50,13 @@ const SEED_TASKS = [
     ],
   },
   {
-    id: 't2', title: 'Set up contact form', type: 'feature', status: 'in-progress', assignee: 'jordan', due: 1, created: -2,
+    id: 't2', title: 'Set up contact form', type: 'feature', status: 'in-progress', assignee: 'jordan', due: 1, created: -2, storyId: 's4',
     description: 'Name, email and message fields that send to my inbox, with validation.',
   },
 
   // Review
   {
-    id: 't6', title: 'CV layout and download button', type: 'feature', status: 'review', assignee: 'jordan', due: 3, created: -5,
+    id: 't6', title: 'CV layout and download button', type: 'feature', status: 'review', assignee: 'jordan', due: 3, created: -5, storyId: 's2',
     description: 'One-page CV section with a PDF download link.',
     handoffs: [
       {
@@ -66,7 +68,7 @@ const SEED_TASKS = [
     ],
   },
   {
-    id: 't7', title: 'Footer links 404 after deploy', type: 'bug', status: 'review', assignee: 'priya', due: -2, created: -3,
+    id: 't7', title: 'Footer links 404 after deploy', type: 'bug', status: 'review', assignee: 'priya', due: -2, created: -3, storyId: 's2',
     description: 'Links work locally but break on Vercel. Likely relative paths.',
     contextTool: 'Cursor',
     handoffAgo: 25,
@@ -108,6 +110,7 @@ const SEED_TASKS = [
 export function createSeedTasks() {
   return SEED_TASKS.map(({ due, created, handoffAgo, handoffText, handoffs = [], ...task }) => ({
     contextTool: null,
+    storyId: null,
     ...task,
     dueDate: due == null ? null : daysFromToday(due),
     createdDate: daysFromToday(created),
@@ -121,12 +124,13 @@ export function createSeedTasks() {
   }));
 }
 
-// The demo project (M11, PRD DR8): its name and one link per deliverable.
-// Demo and Documentation point at the live site and the repo; the rest are left
-// for the team to add, so both card states show.
+// The demo project (M11, PRD DR8, DR16): its name, one link per deliverable,
+// and four user stories. Demo and Documentation point at the live site and the
+// repo; the rest are left for the team to add, so both card states show.
 export function createSeedProject() {
   return {
     name: 'Portfolio site',
+    stories: SEED_STORIES.map((story) => ({ ...story })),
     links: {
       presentation: '',
       demo: 'https://vibecoding-project-tracker-tau.vercel.app/',
@@ -135,6 +139,30 @@ export function createSeedProject() {
     },
   };
 }
+
+// Fixed ids, so the demo tasks above can link to them.
+const SEED_STORIES = [
+  {
+    id: 's1', number: 1, role: 'recruiter',
+    want: "to see the developer's best projects on the home page",
+    benefit: 'I can judge their skills quickly',
+  },
+  {
+    id: 's2', number: 2, role: 'recruiter',
+    want: 'to read about the developer and download their CV',
+    benefit: 'I can decide whether to interview them',
+  },
+  {
+    id: 's3', number: 3, role: 'visitor on a phone',
+    want: 'every page to work on a small screen',
+    benefit: 'I can browse the site anywhere',
+  },
+  {
+    id: 's4', number: 4, role: 'potential client',
+    want: 'to send a message through a contact form',
+    benefit: 'I can ask about work',
+  },
+];
 
 function hoursAgo(hours) {
   return new Date(Date.now() - hours * 3_600_000).toISOString();

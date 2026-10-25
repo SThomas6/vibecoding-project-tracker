@@ -14,6 +14,7 @@ import { todayISO } from './dates.js';
  * @property {string} handoffText            pasted handoff for the next developer's AI agent (PRD FR15, DR4)
  * @property {string|null} handoffUpdatedAt  ISO timestamp, set when the handoff text changes (PRD DR5)
  * @property {Array} handoffs                handoff history ({ id, from, to, note, at }) (PRD FR10, DR6)
+ * @property {string|null} storyId           the user story it delivers, or null (PRD FR27, DR1)
  */
 
 // Builds a complete new task from the form fields. The id and created date
@@ -26,6 +27,7 @@ export function createTask(fields) {
     handoffText: '',
     handoffUpdatedAt: null,
     handoffs: [],
+    storyId: null,
     ...fields,
   };
 }

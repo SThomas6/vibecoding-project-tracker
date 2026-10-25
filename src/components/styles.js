@@ -20,6 +20,7 @@ export const smallButtonStyles = {
   plain: `${smallButton} text-brand hover:bg-surface-sunken`,
   selected: `${smallButton} bg-brand text-white hover:bg-brand-hover`,
   outlined: `${smallButton} border border-line-control bg-surface-card text-brand hover:bg-surface-sunken`,
+  danger: `${smallButton} text-danger hover:bg-danger-tint`,
 };
 
 export const labelStyles = 'block text-sm font-medium text-ink';

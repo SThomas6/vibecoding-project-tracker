@@ -2,17 +2,20 @@ import { useId, useRef, useState } from 'react';
 import { ChevronDown, RotateCcw, Search, SlidersHorizontal } from 'lucide-react';
 import { AI_TOOLS, TASK_TYPES } from '../constants.js';
 import { DEFAULT_FILTERS, hasActiveFilters } from '../lib/filters.js';
+import { storyLabel } from '../lib/stories.js';
 import { buttonStyles, inputStyles, labelStyles, smallButtonStyles } from './styles.js';
 
-// The four filters that sit behind the "Filters" button on small screens.
-const FILTER_KEYS = ['member', 'type', 'due', 'context'];
+// The five filters that sit behind the "Filters" button on small screens.
+const FILTER_KEYS = ['member', 'type', 'due', 'context', 'story'];
 
 // Search and filters for the board (PRD FR21): search tasks, and filter by who
-// has worked on or owns a task, task type, due-date state and handoff or AI
-// tool. On wide screens they sit in one row; on small screens the four filters
-// fold behind a "Filters" button, so the board isn't pushed far down the page
-// (NFR5). Every control has a visible label and no placeholder (NFR1, NFR3).
-export default function FilterBar({ filters, team, totalCount, shownCount, onChange }) {
+// has worked on or owns a task, task type, due-date state, handoff or AI tool,
+// and user story (PRD FR28). From 1280px everything sits in one row; from
+// 1024px the filters have a row of their own under the search, so each select
+// is wide enough to read; on small screens the five filters fold behind a
+// "Filters" button, so the board isn't pushed far down the page (NFR5). Every
+// control has a visible label and no placeholder (NFR1, NFR3).
+export default function FilterBar({ filters, team, stories = [], totalCount, shownCount, onChange }) {
   const id = useId();
   const [open, setOpen] = useState(false);
   const searchRef = useRef(null);
@@ -37,7 +40,10 @@ export default function FilterBar({ filters, team, totalCount, shownCount, onCha
         Search and filter the board
       </h2>
 
-      <div className="grid gap-3 lg:grid-cols-[minmax(0,1.4fr)_repeat(4,minmax(0,1fr))]">
+      {/* grid-cols-1 keeps long story names in a select from widening a phone
+          screen. In the one-row layout the boxes line up along their bottom
+          edge, even when the search label wraps onto two lines. */}
+      <div className="grid grid-cols-1 gap-3 xl:grid-cols-[minmax(0,1.4fr)_repeat(5,minmax(0,1fr))] xl:items-end">
         <div>
           <label htmlFor={`${id}-query`} className={labelStyles}>
             Search tasks <span className="font-normal text-ink-muted">(titles, descriptions, handoffs)</span>
@@ -79,7 +85,7 @@ export default function FilterBar({ filters, team, totalCount, shownCount, onCha
 
         <div
           id={`${id}-filters`}
-          className={`${open ? 'grid' : 'hidden'} gap-3 sm:grid-cols-2 lg:col-span-4 lg:grid lg:grid-cols-4`}
+          className={`${open ? 'grid' : 'hidden'} grid-cols-1 gap-3 sm:grid-cols-2 lg:grid lg:grid-cols-5 xl:col-span-5`}
         >
           <div>
             <label htmlFor={`${id}-member`} className={labelStyles}>
@@ -147,6 +153,25 @@ export default function FilterBar({ filters, team, totalCount, shownCount, onCha
                   </option>
                 ))}
               </optgroup>
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor={`${id}-story`} className={labelStyles}>
+              User story
+            </label>
+            <select id={`${id}-story`} value={filters.story} onChange={update('story')} className={inputStyles}>
+              <option value="all">All user stories</option>
+              <option value="none">No user story</option>
+              {stories.length > 0 && (
+                <optgroup label="Linked to">
+                  {stories.map((story) => (
+                    <option key={story.id} value={story.id}>
+                      {storyLabel(story, 48)}
+                    </option>
+                  ))}
+                </optgroup>
+              )}
             </select>
           </div>
         </div>

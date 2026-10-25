@@ -1,20 +1,21 @@
 import { PROMPT_MODES, STAGES, TASK_TYPES } from '../constants.js';
 import { formatDate, formatDateTime } from './dates.js';
 import { dueState } from './due.js';
+import { findStory, storyCode, storySentence } from './stories.js';
 import { getPastContributors } from './tasks.js';
 import { getMember } from './team.js';
 
 // Turns a task into a Markdown briefing to paste into an AI tool (PRD FR18,
 // DR9). With a prompt goal it follows Ignacio's TACO structure: Task, Actor,
-// Context (the key facts, description, pasted handoff and handoff notes) and
-// Output format. Without one it's a plain briefing of the same facts. Empty
-// fields are left out.
-export function buildBriefing(task, team, now = new Date(), modeId = null) {
+// Context (the key facts, including the user story, then the description,
+// pasted handoff and handoff notes) and Output format. Without one it's a
+// plain briefing of the same facts. Empty fields are left out.
+export function buildBriefing(task, team, now = new Date(), modeId = null, stories = []) {
   const mode = PROMPT_MODES.find((item) => item.id === modeId) ?? null;
   const sections = [`# ${task.title || 'Untitled task'}`];
 
   if (mode) {
-    const context = contextSections(task, team, now, '###');
+    const context = contextSections(task, team, now, '###', stories);
     sections.push(
       `## Task\n\n${mode.task}`,
       `## Actor\n\n${mode.actor}`,
@@ -22,7 +23,7 @@ export function buildBriefing(task, team, now = new Date(), modeId = null) {
       `## Output format\n\n${mode.output}`
     );
   } else {
-    sections.push(...contextSections(task, team, now, '##'));
+    sections.push(...contextSections(task, team, now, '##', stories));
   }
 
   const footer = [
@@ -36,10 +37,11 @@ export function buildBriefing(task, team, now = new Date(), modeId = null) {
 
 // The facts about the task, then its description, pasted handoff and handoff
 // notes, each under a heading at the given level.
-function contextSections(task, team, now, heading) {
+function contextSections(task, team, now, heading, stories) {
   const pastNames = getPastContributors(task)
     .map((id) => getMember(team, id)?.name)
     .filter(Boolean);
+  const story = findStory(stories, task.storyId);
 
   const facts = [
     ['Type', labelOf(TASK_TYPES, task.type)],
@@ -47,6 +49,7 @@ function contextSections(task, team, now, heading) {
     ['Owner', getMember(team, task.assignee)?.name ?? 'Unassigned'],
     ['Previously worked on by', pastNames.length > 0 ? pastNames.join(', ') : null],
     ['Due', task.dueDate && `${formatDate(task.dueDate)} (${dueState(task, now).label})`],
+    ['User story', story && `${storyCode(story)}. ${storySentence(story)}`],
   ]
     .filter(([, value]) => value)
     .map(([name, value]) => `- **${name}:** ${value}`);

@@ -23,7 +23,10 @@ Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10
 | "Copy handoff" on cards and in the form (the secret sauce) | FR22 |
 | The AI tool used, and "Copy context": the task as a TACO briefing (Task, Actor, Context, Output format) for one of four prompt goals | FR16, FR18 |
 | A slim row of four deliverable links, and renaming the project | FR19, FR25 |
-| Search and filter the board by who worked on a task, type, due state, and handoff or AI tool | FR21 |
+| User stories ("As a…, I want…, so that…"), each with a code such as US2: add, edit and delete them (deleting asks first and unlinks their tasks), in a section that folds away | FR26 |
+| Link a task to one user story (or none) in the form; the card shows the story, and Copy context includes it | FR27 |
+| Each story shows how many of its linked tasks are done, and its Tasks button filters the board to them | FR28 |
+| Search and filter the board by who worked on a task, type, due state, handoff or AI tool, and user story | FR21, FR28 |
 | Light and Dark mode (WCAG 2.2 AA contrast in both), starting from the device's setting; a choice is saved across visits | FR23 |
 
 ## Run it
@@ -46,10 +49,11 @@ src/
   constants.js     columns, task types, team, AI tools, deliverables, storage keys
   data/seed.js     the demo project (dates are relative to today)
   hooks/           useLocalStorage (saves state), useNow (refreshes due dates)
-  lib/             small pure helpers: dates, due states, team, tasks,
+  lib/             small pure helpers: dates, due states, team, tasks, stories,
                    briefing (Markdown for "Copy context"), clipboard, links
   components/      one component per file, e.g. Board, TaskCard, TaskModal,
-                   HandoffFields, BriefingFields, Deliverables, Dialog (shared shell)
+                   HandoffFields, BriefingFields, UserStories, StoryDialog,
+                   Deliverables, Dialog (shared shell)
 ```
 
 Shared button and field styles are in `components/styles.js`, and colour tokens in `tailwind.config.js`. Keep every file under 300 lines.
@@ -59,7 +63,7 @@ Shared button and field styles are in `components/styles.js`, and colour tokens 
 There's no server or database. Everything is saved as JSON in the browser's localStorage (the header says so), checked when it's loaded, and a reset screen appears instead of a blank page if it's ever damaged:
 
 - `vibetracker.tasks`: the tasks, including context, the pasted handoff and the handoff history
-- `vibetracker.project`: the project name and deliverable links
+- `vibetracker.project`: the project name, deliverable links and user stories
 - `vibetracker.team`: the team members (starts with the demo team)
 - `vibetracker.theme`: `'light'` or `'dark'` theme preference
 

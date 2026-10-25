@@ -9,7 +9,7 @@ import TaskCard from './TaskCard.jsx';
 // with a mouse or pen (useBoardDrag, PRD FR24), and a line shows where the card
 // will land. The Status and Position fields in the task form do the same
 // without dragging, and the hint says so on touch screens, where dragging is off.
-export default function Board({ tasks, team, hasFilters, onOpenTask, onHandOff, onCopy, onCopyHandoff, onMove, highlightedId, now }) {
+export default function Board({ tasks, team, stories, hasFilters, onOpenTask, onHandOff, onCopy, onCopyHandoff, onMove, highlightedId, now }) {
   const { drag, cardProps } = useBoardDrag(onMove);
 
   return (
@@ -23,13 +23,14 @@ export default function Board({ tasks, team, hasFilters, onOpenTask, onHandOff, 
       </span>
     </p>
     <ColumnLinks tasks={tasks} />
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {STAGES.map((stage) => (
         <Column
           key={stage.id}
           stage={stage}
           tasks={tasks.filter((task) => task.status === stage.id)}
           team={team}
+          stories={stories}
           hasFilters={hasFilters}
           onOpenTask={onOpenTask}
           onHandOff={onHandOff}
@@ -46,7 +47,7 @@ export default function Board({ tasks, team, hasFilters, onOpenTask, onHandOff, 
   );
 }
 
-function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy, onCopyHandoff, highlightedId, now, drag, cardProps }) {
+function Column({ stage, tasks, team, stories, hasFilters, onOpenTask, onHandOff, onCopy, onCopyHandoff, highlightedId, now, drag, cardProps }) {
   const headingId = `column-${stage.id}`;
   // A card would land in this column: show where with a line between cards.
   const isOver = Boolean(drag?.lands) && drag.overStage === stage.id;
@@ -77,6 +78,7 @@ function Column({ stage, tasks, team, hasFilters, onOpenTask, onHandOff, onCopy,
               <TaskCard
                 task={task}
                 team={team}
+                stories={stories}
                 onOpen={onOpenTask}
                 onHandOff={onHandOff}
                 onCopy={onCopy}

@@ -4,6 +4,7 @@ import Board from './components/Board.jsx';
 import CopyFallbackDialog from './components/CopyFallbackDialog.jsx';
 import Deliverables from './components/Deliverables.jsx';
 import FilterBar from './components/FilterBar.jsx';
+import Footer from './components/Footer.jsx';
 import Header from './components/Header.jsx';
 import HeaderActions from './components/HeaderActions.jsx';
 import RenameProjectDialog from './components/RenameProjectDialog.jsx';
@@ -11,10 +12,12 @@ import ResetDemoDialog from './components/ResetDemoDialog.jsx';
 import TaskModal from './components/TaskModal.jsx';
 import TeamStrip from './components/TeamStrip.jsx';
 import Toast from './components/Toast.jsx';
+import UserStories from './components/UserStories.jsx';
 import { STAGES, STORAGE_KEYS, TEAM } from './constants.js';
 import { createSeedProject, createSeedTasks } from './data/seed.js';
 import { useLocalStorage } from './hooks/useLocalStorage.js';
 import { useNow } from './hooks/useNow.js';
+import { useStoryActions } from './hooks/useStoryActions.js';
 import { useTheme } from './hooks/useTheme.js';
 import { buildBriefing, buildHandoff } from './lib/briefing.js';
 import { cleanProject, cleanTasks, cleanTeam } from './lib/storage.js';
@@ -68,9 +71,12 @@ export default function App() {
   // Light / Dark theme preference (PRD FR23, DR13), saved across visits.
   const [theme, setTheme] = useTheme();
 
-  // Search and advanced board filters (PRD FR21).
+  // Search and advanced board filters (PRD FR21, FR28).
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
-  const filteredTasks = filterTasks(tasks, filters, now);
+
+  // User stories (PRD FR26–FR28), kept in the project object (DR16).
+  const { stories, ...storyActions } = useStoryActions({ project, setProject, tasks, setTasks, setFilters, showToast });
+  const filteredTasks = filterTasks(tasks, filters, now, stories);
 
   useEffect(() => {
     document.title = `${project.name} · Vibecoding Project Tracker`;
@@ -189,7 +195,7 @@ export default function App() {
   }
 
   async function copyContext(task, modeId = 'continue') {
-    const text = buildBriefing(task, team, new Date(), modeId);
+    const text = buildBriefing(task, team, new Date(), modeId, stories);
     if (await copyText(text)) showToast('Context copied. Paste it into your AI tool.');
     else setFallbackText(text);
   }
@@ -221,9 +227,19 @@ export default function App() {
           onFilterMember={(member) => setFilters((prev) => ({ ...prev, member }))}
           onAddMember={() => setAddingMember(true)}
         />
+        <UserStories
+          stories={stories}
+          tasks={tasks}
+          activeStory={filters.story}
+          onFilterStory={(story) => setFilters((prev) => ({ ...prev, story }))}
+          onAdd={storyActions.addStory}
+          onUpdate={storyActions.updateStory}
+          onDelete={storyActions.deleteStory}
+        />
         <FilterBar
           filters={filters}
           team={team}
+          stories={stories}
           totalCount={tasks.length}
           shownCount={filteredTasks.length}
           onChange={setFilters}
@@ -232,6 +248,7 @@ export default function App() {
           <Board
             tasks={filteredTasks}
             team={team}
+            stories={stories}
             hasFilters={hasActiveFilters(filters)}
             onOpenTask={(task) => setEditing({ task })}
             onHandOff={handOff}
@@ -244,18 +261,14 @@ export default function App() {
         </div>
       </main>
 
-      <footer className="mx-auto max-w-screen-2xl border-t border-line px-4 pb-24 pt-4 text-sm text-ink-muted sm:px-6 sm:pb-6">
-        Vibecoding Project Tracker · Data stays in this browser ·{' '}
-        <a href="https://github.com/SThomas6/vibecoding-project-tracker" className="text-brand-accent underline hover:no-underline">
-          Source code on GitHub
-        </a>
-      </footer>
+      <Footer />
 
       {editing && (
         <TaskModal
           task={editing.task}
           tasks={tasks}
           team={team}
+          stories={stories}
           toast={toast}
           onSave={saveTask}
           onDelete={deleteTask}

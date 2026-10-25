@@ -8,6 +8,7 @@ import BriefingFields from './BriefingFields.jsx';
 import Dialog from './Dialog.jsx';
 import DueBadge from './DueBadge.jsx';
 import HandoffFields from './HandoffFields.jsx';
+import StoryField from './StoryField.jsx';
 import TaskModalFooter from './TaskModalFooter.jsx';
 import Toast from './Toast.jsx';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
@@ -16,9 +17,9 @@ import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 // `task` is null when adding a new task, or the task being edited.
 // Closing a form that has changes asks first, so a long pasted handoff isn't
 // lost to a stray Escape (PRD NFR7). Escape again leaves without saving.
-export default function TaskModal({ task, tasks, team, toast, onSave, onDelete, onCopy, onCopyHandoff, onClose }) {
+export default function TaskModal({ task, tasks, team, stories, toast, onSave, onDelete, onCopy, onCopyHandoff, onClose }) {
   const isEdit = Boolean(task);
-  const [initialForm] = useState(() => formFor(task, tasks));
+  const [initialForm] = useState(() => formFor(task, tasks, stories));
   const [form, setForm] = useState(initialForm);
   const changed = Object.keys(initialForm).some((key) => form[key] !== initialForm[key]);
   // Leaving the page (Back, refresh, closing the tab) with changes asks too.
@@ -183,7 +184,7 @@ export default function TaskModal({ task, tasks, team, toast, onSave, onDelete, 
             </div>
           </fieldset>
 
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
               <label htmlFor={`${id}-status`} className={labelStyles}>Status</label>
               <select
@@ -235,6 +236,8 @@ export default function TaskModal({ task, tasks, team, toast, onSave, onDelete, 
                 className={inputStyles}
               />
             </div>
+
+            <StoryField id={id} stories={stories} value={form.storyId} onChange={update('storyId')} />
           </div>
 
           <HandoffFields

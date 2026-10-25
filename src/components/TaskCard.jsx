@@ -1,15 +1,18 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import { ArrowRightLeft, ClipboardCopy, Copy, History, MessageSquareQuote } from 'lucide-react';
+import { ArrowRightLeft, BookMarked, ClipboardCopy, Copy, History, MessageSquareQuote } from 'lucide-react';
 import { HANDOFF_NOTE_MAX_LENGTH } from '../constants.js';
+import { findStory, storyCode, storySentence } from '../lib/stories.js';
 import { getPastContributors } from '../lib/tasks.js';
 import { getMember } from '../lib/team.js';
 import Avatar from './Avatar.jsx';
 import DueBadge from './DueBadge.jsx';
+import StoryBadge from './StoryBadge.jsx';
 import { smallButtonStyles } from './styles.js';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 
 // One task on the board: the title with its type badge in the corner, its due
-// state, the start of its handoff (PRD FR17) and past contributors, who it's
+// state, its user story (PRD FR27), the start of its handoff (PRD FR17) and
+// past contributors, who it's
 // assigned to, and a row of actions: "Hand off" (PRD FR10), "Copy context"
 // (PRD FR18) and, when there's a handoff, "Copy handoff" (PRD FR22).
 // The title is a button that opens the task. Its ::after layer stretches over
@@ -18,7 +21,7 @@ import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 // own clicks.
 const actionStyles = `relative z-10 shrink-0 ${smallButtonStyles.plain}`;
 
-export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopyHandoff, highlighted, now, dragProps, dragOffset }) {
+export default function TaskCard({ task, team, stories = [], onOpen, onHandOff, onCopy, onCopyHandoff, highlighted, now, dragProps, dragOffset }) {
   const member = getMember(team, task.assignee);
   const others = team.filter((m) => m.id !== task.assignee);
   const pastNames = getPastContributors(task)
@@ -26,6 +29,7 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
     .filter(Boolean);
   const latestHandoff = task.handoffs?.length ? task.handoffs[task.handoffs.length - 1] : null;
   const handoffFrom = latestHandoff ? getMember(team, latestHandoff.from)?.name : null;
+  const story = findStory(stories, task.storyId);
 
   const [handOffOpen, setHandOffOpen] = useState(false);
   const [note, setNote] = useState('');
@@ -75,6 +79,27 @@ export default function TaskCard({ task, team, onOpen, onHandOff, onCopy, onCopy
       <div className="mt-2 empty:hidden">
         <DueBadge task={task} now={now} />
       </div>
+
+      {/* The linked user story on one line; the full sentence is in the tooltip
+          and read out in full. It sits above the card's click layer so the
+          tooltip shows, and a click on it still opens the task. No new tab stop. */}
+      {story && (
+        <p
+          title={storySentence(story)}
+          onClick={() => onOpen(task)}
+          className="relative z-10 mt-2 flex min-w-0 cursor-pointer items-center gap-1.5 text-sm text-ink-muted"
+        >
+          <BookMarked aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-brand" />
+          <StoryBadge story={story} aria-hidden="true" />
+          {/* w-0 + flex-1: the line takes the card's width and never widens it. */}
+          <span aria-hidden="true" className="w-0 min-w-0 flex-1 truncate">
+            {story.want}
+          </span>
+          <span className="sr-only">
+            User story {storyCode(story)}: {storySentence(story)}
+          </span>
+        </p>
+      )}
 
       {/* The pasted handoff comes first; otherwise the last hand-off note. */}
       {(task.handoffText || latestHandoff?.note) && (
