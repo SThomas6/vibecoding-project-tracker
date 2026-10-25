@@ -15,7 +15,7 @@ export default function ResetDemoDialog({ onConfirm, onClose }) {
           Reset to the demo project?
         </h2>
         <p className="text-sm text-ink">
-          This replaces all tasks, links, team members and the project name in this browser with the demo project. This can't be
+          This replaces all tasks, user stories, links, team members and the project name in this browser with the demo project. This can't be
           undone.
         </p>
         <div className="flex flex-wrap justify-end gap-3">
