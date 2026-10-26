@@ -95,13 +95,13 @@ What the tracker stores, why, and where it comes from (Wiegers and Beatty, 2013)
 | DR6 | **Handoff history:** from, to, note, when. | Shows who has worked on a task (FR10). | Recorded by Hand off. | Should |
 | DR7 | **Member:** name (required), email, GitHub handle. | What IA and N asked for (FR9 to FR12). | Each member, when added. | ✅ |
 | DR8 | **Project:** name and four deliverable links. | One project per team; "key milestones" (Brief). | Typed or pasted by the team. | ✅ |
-| DR9 | **Briefing:** Markdown in TACO sections. | A clear prompt for any AI tool (FR18, FR22). | Built from the task, DR15 and DR16. | ✅ |
+| DR9 | **Briefing:** Markdown with Task, Actor, Context and Output sections. | A clear prompt for any AI tool (FR18, FR22). | Built from the task, DR15 and DR16. | ✅ |
 | DR10 | **Demo:** a fictional team, 12 tasks, four stories. | Every feature can be seen at once (FR3, FR20). | Written by the developer. | ✅ |
 | DR11 | **Calculated:** due states, counts, progress. | Stored copies would go out of date. | Worked out when shown. | ✅ |
-| DR12 | **Storage:** the browser's localStorage only. | No backend needed (FL); keeps data private (NFR11). | Saved on every change (NFR9). | ✅ |
-| DR13 | **Filters and theme.** | To narrow the board and keep the theme (FR21, FR23). | The filter bar, Tasks buttons and header. | Should |
+| DR12 | **Storage:** JSON in the browser's localStorage, under four keys. | No backend needed (FL); keeps data private (NFR11). | Saved on every change (NFR9). | ✅ |
+| DR13 | **Filters and theme:** filters held in memory; the theme saved. | To narrow the board and keep the theme (FR21, FR23). | The filter bar, Tasks buttons and header. | Should |
 | DR14 | **Personal data:** names, emails and handles only. | UK GDPR data minimisation (ICO, 2026). | Applies to DR7. | ✅ |
-| DR15 | **Prompt goals:** Task, Actor and Output text. | Fills the briefing's TACO sections (FR18). | The developer, from IA's TACO structure. | ✅ |
+| DR15 | **Prompt goals:** four goals, each with Task, Actor and Output text. | Fills the briefing's TACO sections (FR18). | The developer, from IA's TACO structure. | ✅ |
 | DR16 | **User story:** role, want and benefit. | Links tasks to the needs they meet (FR26 to FR28). | Typed by the team. | ✅ |
 
 ---
