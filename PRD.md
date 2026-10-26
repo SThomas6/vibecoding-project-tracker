@@ -18,34 +18,34 @@ What the tracker must do (Sommerville, 2016). Each one completes "The tracker sh
 
 | ID | Requirement | Source and reason | MVP? |
 |---|---|---|---|
-| FR1 | Show tasks as cards on a Kanban board: To Do, In Progress, Review, Done. | Brief: "a kanban board"; IA's four stages. | ✅ |
-| FR2 | Show how many tasks each column holds, and a message when one is empty. | Extra: Kanban makes work visible (Anderson, 2010). | Should |
-| FR3 | Load a demo project (DR10) the first time it opens. | FL: one example must "work with all the features". | ✅ |
-| FR4 | Add tasks through a "New task" form; a title is required. | IA: tasks must be "editable and configurable"; Starter PRD. | ✅ |
-| FR5 | Open a card to edit its task; changing the status moves the card. | Starter PRD: "Move the task across columns as you work". | ✅ |
-| FR6 | Delete a task from the form. | IA. NFR7 makes it ask first. | ✅ |
-| FR7 | Confirm each change or copy with a message shown for at least 6 seconds. | Extra: users see what has happened (Nielsen, 1994). | Should |
-| FR8 | Mark each task as a Feature or a Bug by colour, icon and label. | Starter PRD; N: colour alone fails colour-blind users. | Should |
-| FR9 | Assign each task to one team member, or leave it Unassigned (the default). | IA: to "ask for updates" from its owner. | ✅ |
-| FR10 | Hand a task to a teammate in one step, with an optional note. | Starter PRD; IA: the new owner isn't "starting from scratch". | Should |
-| FR11 | Show a Team strip with each member's name, email link, GitHub handle, current tasks and a filter. | IA: to "directly email the owner"; N: GitHub. | Should |
-| FR12 | Add team members: a name, with an optional email address and GitHub handle. | IA: "adding new members to the team". | Should |
-| FR13 | Show each due date relative to today, such as "Due in 3 days" or "Overdue by 1 day". | Brief: "track project tasks over time". | ✅ |
-| FR14 | Colour and icon the due label: calm, a warning under 24 hours, an alarm when overdue. | IA: yellow for "immediate", red for overdue. | Should |
-| FR15 | Keep a "Handoff for the next developer" on each task: what's done, what's left, the prompts that worked. | IA; Brief: "note useful prompts and results". | ✅ |
-| FR16 | Record the AI tool used: Claude, ChatGPT, Cursor, Lovable, Replit or Other. | IA: "log what tool this was". | ✅ |
-| FR17 | Show when the handoff was last updated, and preview it on the card. | Starter PRD. Shows how fresh it is. | Should |
-| FR18 | Copy a task, with its user story, as a TACO briefing (Task, Actor, Context, Output format). | IA's TACO, which matches the Persona and Template prompt patterns (White et al., 2023). | ✅ |
-| FR19 | Pin four deliverable links above the board: Presentation, Demo, Report and Documentation. | Brief: "key milestones"; IA; Starter PRD. | ✅ |
+| FR1 | Show tasks on a Kanban board: To Do, In Progress, Review, Done. | Brief: "a kanban board"; IA's four stages. | ✅ |
+| FR2 | Count the tasks in each column. | Extra: Kanban makes work visible (Anderson, 2010). | Should |
+| FR3 | Load a demo project (DR10) on first use. | FL: one example must "work with all the features". | ✅ |
+| FR4 | Add tasks; a title is required. | IA: tasks must be "editable and configurable"; Starter PRD. | ✅ |
+| FR5 | Edit tasks; changing the status moves the card. | Starter PRD: "Move the task across columns as you work". | ✅ |
+| FR6 | Delete tasks. | IA. NFR7 makes it ask first. | ✅ |
+| FR7 | Confirm each change with a message. | Extra: users see what has happened (Nielsen, 1994). | Should |
+| FR8 | Mark tasks as Feature or Bug by colour, icon and label. | Starter PRD; N: colour alone fails colour-blind users. | Should |
+| FR9 | Assign each task to one member, or none. | IA: to "ask for updates" from its owner. | ✅ |
+| FR10 | Hand a task to a teammate, with an optional note. | Starter PRD; IA: the new owner isn't "starting from scratch". | Should |
+| FR11 | Show the team, with contact links and a work filter. | IA: to "directly email the owner"; N: GitHub. | Should |
+| FR12 | Add team members. | IA: "adding new members to the team". | Should |
+| FR13 | Show due dates relative to today. | Brief: "track project tasks over time". | ✅ |
+| FR14 | Colour and icon due labels by urgency. | IA: yellow for "immediate", red for overdue. | Should |
+| FR15 | Keep a handoff on each task: what is done, what is left, prompts that worked. | IA; Brief: "note useful prompts and results". | ✅ |
+| FR16 | Record the AI tool used. | IA: "log what tool this was". | ✅ |
+| FR17 | Show when the handoff changed, and preview it on the card. | Starter PRD. Shows how fresh it is. | Should |
+| FR18 | Copy a task as a TACO briefing for an AI tool. | IA's TACO, which matches the Persona and Template prompt patterns (White et al., 2023). | ✅ |
+| FR19 | Pin four deliverable links above the board. | Brief: "key milestones"; IA; Starter PRD. | ✅ |
 | FR20 | Reset to the demo project. | Extra: a demo or assessment starts from a known state. | Should |
-| FR21 | Search tasks, and filter by person, type, due state, handoff, AI tool or user story. | Extra: "overview first, zoom and filter" (Shneiderman, 1996). | Should |
-| FR22 | Copy just a task's handoff for the next developer's AI agent. | IA invited extras; resuming without context is slow (Parnin and Rugaber, 2011). | Should |
-| FR23 | Start in the device's Light or Dark setting, and remember the user's own choice. | N: "make it customizable", if time allows. | Could |
-| FR24 | Drag a card to any place in any column with a mouse or pen. | N; the form's Position field works without dragging. | Could |
-| FR25 | Rename the project in the header and browser tab. | IA: one project per team. | Should |
-| FR26 | Add, edit and delete user stories ("As a…, I want…, so that…"), coded US1, US2 and so on. | FL (06/10): "match user stories" (Cohn, 2004). | ✅ |
-| FR27 | Link each task to one user story, shown on its card. | FL. Shows why a task exists. | ✅ |
-| FR28 | Show how many of each story's tasks are done, and filter the board to them. | FL. Shows which users' needs are met. | Should |
+| FR21 | Search and filter the board. | Extra: "overview first, zoom and filter" (Shneiderman, 1996). | Should |
+| FR22 | Copy just a task's handoff. | IA invited extras; resuming without context is slow (Parnin and Rugaber, 2011). | Should |
+| FR23 | Offer Light and Dark mode. | N: "make it customizable", if time allows. | Could |
+| FR24 | Drag cards with a mouse or pen. | N; the form's Position field works without dragging. | Could |
+| FR25 | Rename the project. | IA: one project per team. | Should |
+| FR26 | Add, edit and delete user stories. | FL (06/10): "match user stories" (Cohn, 2004). | ✅ |
+| FR27 | Link each task to one user story. | FL. Shows why a task exists. | ✅ |
+| FR28 | Show each story's progress, and filter by it. | FL. Shows which users' needs are met. | Should |
 
 **Out of scope:**
 - **Login:** optional for the clients (IA), and assessors mustn't have to register (FL).
@@ -63,21 +63,21 @@ How well the tracker must work, each labelled by a quality concern from ISO/IEC 
 
 | ID | Requirement | Test | Why | MVP? |
 |---|---|---|---|---|
-| NFR1 | **Accessibility:** WCAG 2.2 AA (W3C, 2023) in both themes, respecting "reduce motion". | No axe-core violations, plus a manual check. | IA: "always design for accessibility in mind". | ✅ |
-| NFR2 | **Colour:** contrast of 4.5:1 for text and 3:1 for icons; never colour alone. | Every colour pair measured; colour-blindness checks. | N: colour-blind users "might struggle". | ✅ |
-| NFR3 | **Keyboard:** everything works by keyboard, with visible focus and a "Skip to board" link. | A keyboard-only run of every FR. | Not everyone uses a mouse (WCAG 2.1.1). | ✅ |
-| NFR4 | **Screen readers:** landmarks, labelled controls and messages read out. | A VoiceOver run of the main tasks. | IA: accessibility includes the code (ARIA). | ✅ |
-| NFR5 | **Any screen size:** works from 320 px wide; main buttons and fields are at least 44 px. | Checked from 320 to 1440 px, and zoomed to 400%. | Phones and zoom users (WCAG 1.4.10, 2.5.8). | ✅ |
-| NFR6 | **Easy to learn:** a first-time user can add, hand off and copy a task unaided. | 4 of 5 users finish each within 2 minutes; SUS (Brooke, 1996) above the average, 68 (Sauro, 2011). | Brief: it must be "intuitive". | ✅ |
-| NFR7 | **Error protection:** deleting, resetting or discarding edits asks first, with the safe choice focused. | Cancelling changes nothing. | Extra: there's no backup (Nielsen, 1994). | ✅ |
-| NFR8 | **Speed:** loads within 1 s on a computer and 2.5 s on a phone; reacts within 0.1 s, even with 100 tasks. | Lighthouse; a 100-task board timed. | "Good" Core Web Vitals on phones (web.dev, n.d.); 0.1 s feels instant (Shneiderman and Plaisant, 2005, p. 462). | Should |
-| NFR9 | **No lost work:** changes save at once and survive reloads; damaged data never blanks the page. | Reopen the browser; corrupt the saved data. | A tracker that forgets is useless. | ✅ |
-| NFR10 | **Always available:** a public HTTPS link with no login, live until graduation. | Opens in a private window on a new device. | FL: assessors mustn't register. | ✅ |
-| NFR11 | **Privacy:** data stays on the device, with no server, analytics or outside requests; only what the user copies leaves it. | No outside requests in the Network panel. | IA: a "secretive project" mustn't be exposed. | ✅ |
-| NFR12 | **Security:** pasted text never runs as code, and links must use http or https. | Pasting `<script>` into each field runs nothing. | AI output can contain code. | ✅ |
-| NFR13 | **Browsers:** current Chrome, Edge, Firefox and Safari, on desktop and mobile. | Every MVP requirement passes in each. | IA: the web is "the default here". | ✅ |
-| NFR14 | **Technology:** React, Vite and Tailwind CSS; a static site with no backend. | `npm run build` gives static files only. | N: a "leading web framework"; FL: no backend. | ✅ |
-| NFR15 | **Maintainability:** small components, shared settings in one place, and a README. | No source file over 300 lines. | The prototype continues in Nathan's module. | Should |
+| NFR1 | **Accessibility:** WCAG 2.2 AA in both themes; no axe-core violations. | No axe-core violations, plus a manual check. | IA: "always design for accessibility in mind". | ✅ |
+| NFR2 | **Colour:** 4.5:1 text contrast; never colour alone. | Every colour pair measured; colour-blindness checks. | N: colour-blind users "might struggle". | ✅ |
+| NFR3 | **Keyboard:** everything works by keyboard, with visible focus. | A keyboard-only run of every FR. | Not everyone uses a mouse (WCAG 2.1.1). | ✅ |
+| NFR4 | **Screen readers:** controls labelled and messages read out (VoiceOver). | A VoiceOver run of the main tasks. | IA: accessibility includes the code (ARIA). | ✅ |
+| NFR5 | **Any screen:** works from 320 px; main targets at least 44 px. | Checked from 320 to 1440 px, and zoomed to 400%. | Phones and zoom users (WCAG 1.4.10, 2.5.8). | ✅ |
+| NFR6 | **Easy to learn:** 4 of 5 new users add, hand off and copy a task within 2 minutes. | 4 of 5 users finish each within 2 minutes; SUS (Brooke, 1996) above the average, 68 (Sauro, 2011). | Brief: it must be "intuitive". | ✅ |
+| NFR7 | **Error protection:** deleting, resetting or discarding asks first. | Cancelling changes nothing. | Extra: there's no backup (Nielsen, 1994). | ✅ |
+| NFR8 | **Speed:** loads within 2.5 s on a phone; reacts within 0.1 s. | Lighthouse; a 100-task board timed. | "Good" Core Web Vitals on phones (web.dev, n.d.); 0.1 s feels instant (Shneiderman and Plaisant, 2005, p. 462). | Should |
+| NFR9 | **No lost work:** survives reloads and damaged data. | Reopen the browser; corrupt the saved data. | A tracker that forgets is useless. | ✅ |
+| NFR10 | **Available:** a public link, no login, until graduation. | Opens in a private window on a new device. | FL: assessors mustn't register. | ✅ |
+| NFR11 | **Privacy:** data stays on the device unless the user copies it. | No outside requests in the Network panel. | IA: a "secretive project" mustn't be exposed. | ✅ |
+| NFR12 | **Security:** pasted text never runs as code. | Pasting `<script>` into each field runs nothing. | AI output can contain code. | ✅ |
+| NFR13 | **Browsers:** Chrome, Edge, Firefox and Safari. | Every MVP requirement passes in each. | IA: the web is "the default here". | ✅ |
+| NFR14 | **Technology:** React, Vite and Tailwind; no backend. | `npm run build` gives static files only. | N: a "leading web framework"; FL: no backend. | ✅ |
+| NFR15 | **Maintainability:** no source file over 300 lines. | No source file over 300 lines. | The prototype continues in Nathan's module. | Should |
 
 ---
 
@@ -87,22 +87,22 @@ What the tracker stores, why, and where it comes from (Wiegers and Beatty, 2013)
 
 | ID | Data | Why | Where from | MVP? |
 |---|---|---|---|---|
-| DR1 | **Task:** ID; title (required, 120 characters); description (2,000); type; status; user story; column position. | To show, edit and move tasks (FR1 to FR8). | The form; the tracker makes the ID. | ✅ |
-| DR2 | **Owner:** a member's ID, or Unassigned. | IA: "see who we assigned" (FR9). | The form, or Hand off. | ✅ |
-| DR3 | **Dates:** an optional due date, and the date created. | To track tasks over time (FR13, FR14). | The user; the device's clock. | ✅ |
-| DR4 | **Handoff and AI tool:** up to 20,000 characters, and the tool used. | So no one starts "from scratch" (IA). | The outgoing developer or their AI agent. | ✅ |
-| DR5 | **Handoff last updated:** a date and time. | Shows how fresh it is (FR17). | Set when the handoff changes. | Should |
-| DR6 | **Handoff history:** from whom, to whom, an optional note (280 characters) and when. | Shows who has worked on a task (FR10). | Recorded by Hand off. | Should |
-| DR7 | **Team member:** ID; name (required, 60 characters); optional email address and GitHub handle. | What IA and N asked for (FR9 to FR12). | Each member, when added. | ✅ |
-| DR8 | **Project:** name (80 characters) and four optional deliverable links (http or https). | One project per team; "key milestones" (Brief). | Typed or pasted by the team. | ✅ |
-| DR9 | **Copied briefing:** Markdown with Task, Actor, Context and Output format sections. | A clear prompt for any AI tool (FR18, FR22). | Built from the task, DR15 and DR16. | ✅ |
-| DR10 | **Demo project:** a fictional team, 12 tasks covering every state, and four user stories. | Every feature can be seen at once (FR3, FR20). | Written by the developer. | ✅ |
-| DR11 | **Calculated, not stored:** due states, counts, filter results and story progress. | Stored copies would go out of date. | Worked out when shown. | ✅ |
-| DR12 | **Storage:** JSON in the browser's localStorage, under four keys; nothing on a server. | No backend needed (FL); keeps data private (NFR11). | Saved on every change (NFR9). | ✅ |
-| DR13 | **Filters and theme:** filters held in memory; the chosen theme saved. | To narrow the board and keep the theme (FR21, FR23). | The filter bar, Tasks buttons and header. | Should |
-| DR14 | **Personal data limits:** names, and optional email addresses and GitHub handles, only. | UK GDPR data minimisation (ICO, 2026). | Applies to DR7. | ✅ |
-| DR15 | **Prompt goals:** four goals, each with Task, Actor and Output format text. | Fills the briefing's TACO sections (FR18). | The developer, from IA's TACO structure. | ✅ |
-| DR16 | **User story:** ID; number (shown as US1); role (required, 60); want (required, 160); benefit (160). | Links tasks to the needs they meet (FR26 to FR28). | Typed by the team. | ✅ |
+| DR1 | **Task:** title (required, 120 characters), description, type, status, story, position. | To show, edit and move tasks (FR1 to FR8). | The form; the tracker makes the ID. | ✅ |
+| DR2 | **Owner:** a member, or none. | IA: "see who we assigned" (FR9). | The form, or Hand off. | ✅ |
+| DR3 | **Dates:** due (optional) and created. | To track tasks over time (FR13, FR14). | The user; the device's clock. | ✅ |
+| DR4 | **Handoff:** up to 20,000 characters, and the AI tool. | So no one starts "from scratch" (IA). | The outgoing developer or their AI agent. | ✅ |
+| DR5 | **Handoff updated:** date and time. | Shows how fresh it is (FR17). | Set when the handoff changes. | Should |
+| DR6 | **Handoff history:** from, to, note, when. | Shows who has worked on a task (FR10). | Recorded by Hand off. | Should |
+| DR7 | **Member:** name (required), email, GitHub handle. | What IA and N asked for (FR9 to FR12). | Each member, when added. | ✅ |
+| DR8 | **Project:** name and four deliverable links. | One project per team; "key milestones" (Brief). | Typed or pasted by the team. | ✅ |
+| DR9 | **Briefing:** Markdown in TACO sections. | A clear prompt for any AI tool (FR18, FR22). | Built from the task, DR15 and DR16. | ✅ |
+| DR10 | **Demo:** a fictional team, 12 tasks, four stories. | Every feature can be seen at once (FR3, FR20). | Written by the developer. | ✅ |
+| DR11 | **Calculated:** due states, counts, progress. | Stored copies would go out of date. | Worked out when shown. | ✅ |
+| DR12 | **Storage:** the browser's localStorage only. | No backend needed (FL); keeps data private (NFR11). | Saved on every change (NFR9). | ✅ |
+| DR13 | **Filters and theme.** | To narrow the board and keep the theme (FR21, FR23). | The filter bar, Tasks buttons and header. | Should |
+| DR14 | **Personal data:** names, emails and handles only. | UK GDPR data minimisation (ICO, 2026). | Applies to DR7. | ✅ |
+| DR15 | **Prompt goals:** Task, Actor and Output text. | Fills the briefing's TACO sections (FR18). | The developer, from IA's TACO structure. | ✅ |
+| DR16 | **User story:** role, want and benefit. | Links tasks to the needs they meet (FR26 to FR28). | Typed by the team. | ✅ |
 
 ---
 
