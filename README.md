@@ -11,8 +11,8 @@ Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10
 | Feature | PRD |
 |---|---|
 | Four-column board (To Do, In Progress, Review, Done) with task counts; below 1280 px a bar of column links stays at the top | FR1, FR2, NFR5 |
-| Demo project on first load, and Reset demo after confirming | FR3, FR20 |
-| Add, edit and delete tasks in a dialog; closing the form or leaving the page with unsaved changes asks first | FR4–FR6, NFR7 |
+| Demo project on first load, and Reset demo after confirming | FR3, FR20, NFR7 |
+| Add, edit and delete tasks in a dialog; closing the form or leaving the page with unsaved changes asks first | FR4 to FR6, NFR7 |
 | Drag a card to any place in any column with a mouse or pen (a line shows where it lands), or set its Status and Position in the form | FR5, FR24 |
 | A confirmation message after every change | FR7 |
 | Feature or Bug, each with its own colour, icon and label | FR8 |
