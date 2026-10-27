@@ -38,7 +38,7 @@ What the tracker must do (Sommerville, 2016). Each one completes "The tracker sh
 | FR18 | Copy a task as a TACO briefing for an AI tool. | IA's TACO, which matches the Persona and Template prompt patterns (White et al., 2023). | ✅ |
 | FR19 | Pin four deliverable links above the board. | Brief: "key milestones"; IA; Starter PRD. | ✅ |
 | FR20 | Reset to the demo project. | Extra: a demo or assessment starts from a known state. | Should |
-| FR21 | Search and filter the board. | Extra: "overview first, zoom and filter" (Shneiderman, 1996). | Should |
+| FR21 | Search; filter by person, type, due, handoff, tool or story. | Extra: "overview first, zoom and filter" (Shneiderman, 1996). | Should |
 | FR22 | Copy just a task's handoff. | IA invited extras; resuming without context is slow (Parnin and Rugaber, 2011). | Should |
 | FR23 | Offer Light and Dark mode. | N: "make it customizable", if time allows. | Could |
 | FR24 | Drag cards with a mouse or pen. | N; the form's Position field works without dragging. | Could |
@@ -71,7 +71,7 @@ How well the tracker must work, each labelled by a quality concern from ISO/IEC 
 | NFR6 | **Easy to learn:** 4 of 5 new users add, hand off and copy a task within 2 minutes. | 4 of 5 users finish each within 2 minutes; SUS (Brooke, 1996) above the average, 68 (Sauro, 2011). | Brief: it must be "intuitive". | ✅ |
 | NFR7 | **Error protection:** deleting, resetting or discarding asks first. | Cancelling changes nothing. | Extra: there's no backup (Nielsen, 1994). | ✅ |
 | NFR8 | **Speed:** loads within 2.5 s on a phone; reacts within 0.1 s. | Lighthouse; a 100-task board timed. | "Good" Core Web Vitals on phones (web.dev, n.d.); 0.1 s feels instant (Shneiderman and Plaisant, 2005, p. 462). | Should |
-| NFR9 | **No lost work:** survives reloads and damaged data. | Reopen the browser; corrupt the saved data. | A tracker that forgets is useless. | ✅ |
+| NFR9 | **Reliability:** survives reloads and damaged data. | Reopen the browser; corrupt the saved data. | A tracker that forgets is useless. | ✅ |
 | NFR10 | **Available:** a public link, no login, until graduation. | Opens in a private window on a new device. | FL: assessors mustn't register. | ✅ |
 | NFR11 | **Privacy:** data stays on the device unless the user copies it. | No outside requests in the Network panel. | IA: a "secretive project" mustn't be exposed. | ✅ |
 | NFR12 | **Security:** pasted text never runs as code. | Pasting `<script>` into each field runs nothing. | AI output can contain code. | ✅ |
@@ -92,9 +92,9 @@ What the tracker stores, why, and where it comes from (Wiegers and Beatty, 2013)
 | DR3 | **Dates:** due (optional) and created. | To track tasks over time (FR13, FR14). | The user; the device's clock. | ✅ |
 | DR4 | **Handoff:** up to 20,000 characters, and the AI tool. | So no one starts "from scratch" (IA). | The outgoing developer or their AI agent. | ✅ |
 | DR5 | **Handoff updated:** date and time. | Shows how fresh it is (FR17). | Set when the handoff changes. | Should |
-| DR6 | **Handoff history:** from, to, note, when. | Shows who has worked on a task (FR10). | Recorded by Hand off. | Should |
-| DR7 | **Member:** name (required), email, GitHub handle. | What IA and N asked for (FR9 to FR12). | Each member, when added. | ✅ |
-| DR8 | **Project:** name and four deliverable links. | One project per team; "key milestones" (Brief). | Typed or pasted by the team. | ✅ |
+| DR6 | **Handoff history:** from, to, note (280), when. | Shows who has worked on a task (FR10). | Recorded by Hand off. | Should |
+| DR7 | **Member:** name (required, 60), email, GitHub handle. | What IA and N asked for (FR9 to FR12). | Each member, when added. | ✅ |
+| DR8 | **Project:** name (80) and four http(s) links. | One project per team; "key milestones" (Brief). | Typed or pasted by the team. | ✅ |
 | DR9 | **Briefing:** Markdown with Task, Actor, Context and Output sections. | A clear prompt for any AI tool (FR18, FR22). | Built from the task, DR15 and DR16. | ✅ |
 | DR10 | **Demo:** a fictional team, 12 tasks, four stories. | Every feature can be seen at once (FR3, FR20). | Written by the developer. | ✅ |
 | DR11 | **Calculated:** due states, counts, progress. | Stored copies would go out of date. | Worked out when shown. | ✅ |
