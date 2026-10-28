@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { Info, LogIn, SquareKanban } from 'lucide-react';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 
-// The MVP login page, shown before the board. It's only the interface of a
+// The MVP login page (PRD FR16), shown before the board. It's only the interface of a
 // login, as the stakeholders asked for one: there's no register page, nothing
 // typed is checked, saved or sent, and pressing Login always signs in the demo
 // user, John Doe. The notice says so plainly at the top, so a reviewer knows
