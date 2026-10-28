@@ -59,7 +59,7 @@ How well the tracker must work, each labelled by a quality concern from ISO/IEC 
 | NFR6 | **Speed:** loads within 2.5 s on a phone; reacts within 0.1 s. | Lighthouse; a 100-task board timed. | Feels instant (web.dev, n.d.; Shneiderman and Plaisant, 2005, p. 462). | Should |
 | NFR7 | **Reliability:** a public link needing no account; survives reloads and damaged data. | Opens in a private window on a new device; reopen the browser; corrupt the saved data. | Brief: no registering; a tracker that forgets is useless. | ✅ |
 | NFR8 | **Privacy and security:** data stays on the device unless the user copies it; pasted text never runs as code. | No outside requests in the Network panel; pasting `<script>` into each field runs nothing. | Client: a "secretive project"; AI output can contain code. | ✅ |
-| NFR9 | **Browsers:** Chrome, Edge, Firefox and Safari. | Every MVP requirement passes in each. | Client: the web is "the default here". | ✅ |
+| NFR9 | **Browsers:** Chrome, Edge and Safari. | Every MVP requirement passes in each; Edge shares Chrome's engine. | Client: the web is "the default here". | ✅ |
 | NFR10 | **Technology:** React, Vite and Tailwind; no backend; no source file over 300 lines. | `npm run build` gives static files only; no source file over 300 lines. | Client: a "leading web framework"; another team will extend it. | ✅ |
 
 ---
