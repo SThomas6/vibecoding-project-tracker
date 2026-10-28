@@ -1,11 +1,16 @@
-import { HardDrive, Pencil, SquareKanban } from 'lucide-react';
+import { HardDrive, LogOut, Pencil, SquareKanban } from 'lucide-react';
+import { useSession } from '../hooks/useSession.js';
+import Avatar from './Avatar.jsx';
 import { smallButtonStyles } from './styles.js';
 
 // Logo, product name and the project's name (with "Rename", PRD FR25), top
 // left on every page, then one line saying what the tracker is for and that
 // it saves only in this browser (PRD NFR6, NFR11). The logo and the name both
-// go home. `children` is a slot for header actions (e.g. "New task").
+// go home. `children` is a slot for header actions (e.g. "New task"). Under
+// the project, who is signed in through the MVP login, with Log out.
 export default function Header({ projectName, onRename, children }) {
+  const { user, logout } = useSession();
+
   return (
     <header className="border-b border-line bg-surface-card">
       <div className="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
@@ -33,6 +38,18 @@ export default function Header({ projectName, onRename, children }) {
                 Rename<span className="sr-only"> project</span>
               </button>
             </p>
+            {user && (
+              <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-sm text-ink-muted">
+                <Avatar member={user} />
+                <span>
+                  Signed in as <span className="font-medium text-ink">{user.name}</span>
+                </span>
+                <button type="button" onClick={logout} className={smallButtonStyles.plain}>
+                  <LogOut aria-hidden="true" className="h-3.5 w-3.5" />
+                  Log out
+                </button>
+              </p>
+            )}
             <p className="mt-0.5 flex items-start gap-1.5 text-sm text-ink-muted">
               <HardDrive aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
               <span>

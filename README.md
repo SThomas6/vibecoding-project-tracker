@@ -4,7 +4,7 @@ A Kanban board for vibecoding projects that keeps a handoff with each task (what
 
 Built for the clients Prof. Dr. Ignacio Alvarez and Nathan, starting from the client's starter repo (github.com/ignacioalvmar/vibecoding-project-tracker) on 20/10/2026. Requirements are in [`PRD.md`](PRD.md) and the design system in [`DESIGN.md`](DESIGN.md).
 
-**Live demo:** <https://vibecoding-project-tracker-tau.vercel.app/>. It opens without login; all data stays in your browser.
+**Live demo:** <https://vibecoding-project-tracker-tau.vercel.app/>. It opens on an MVP login page: press **Login**, no details needed. All data stays in your browser.
 
 ## What it does
 
@@ -16,8 +16,9 @@ Built for the clients Prof. Dr. Ignacio Alvarez and Nathan, starting from the cl
 | Drag a card to any place in any column with a mouse or pen (a line shows where it lands), or set its Status and Position in the form | FR5, FR24 |
 | A confirmation message after every change | FR7 |
 | Feature or Bug, each with its own colour, icon and label | FR8 |
-| Owner on every card (Unassigned by default); one-step "Hand off" with an optional note, a handoff history and "Previously worked on by…" | FR9, FR10 |
-| Team strip: email, GitHub handle, what each person is driving, a one-click work filter and "Add member" | FR11, FR12 |
+| MVP login page before the board: only the interface of a login, with no Register page. Whatever is typed (nothing is checked or saved), Login signs in the demo user, John Doe, until the tab closes; the header shows who's signed in, with Log out | Stakeholder Q&A, 28/10 |
+| Owner on every card (a new task starts with whoever is signed in, John Doe; Unassigned is still an option); one-step "Hand off" with an optional note, a handoff history and "Previously worked on by…" | FR9, FR10 |
+| Team strip: email, GitHub handle, what each person is driving, a one-click work filter and "Add member"; the demo team includes John Doe, the signed-in demo user | FR11, FR12 |
 | Due-date badge: calm, warning (under 24 hours), overdue or done | FR13, FR14 |
 | Handoff for the next developer (what's done, what's left, the prompts that worked): paste or write it, Insert template, Paste from clipboard, a secrets reminder, "Last updated" and a preview on the card | FR15, FR17 |
 | "Copy handoff" on cards and in the form (the secret sauce) | FR22 |
@@ -66,6 +67,8 @@ There's no server or database. Everything is saved as JSON in the browser's loca
 - `vibetracker.project`: the project name, deliverable links and user stories
 - `vibetracker.team`: the team members (starts with the demo team)
 - `vibetracker.theme`: `'light'` or `'dark'` theme preference
+
+The MVP login keeps one more key, in `sessionStorage` so it ends when the tab closes: `vibetracker.session`, which only says the demo user is signed in. Nothing typed on the login page is stored.
 
 The first visit loads the demo project. **Reset demo** in the header (or clearing site data) brings it back.
 

@@ -43,7 +43,7 @@ export default function TeamStrip({ team, tasks, activeMember, onFilterMember, o
         </div>
       </div>
       {/* minmax(0, 1fr) columns, so long emails wrap rather than widen the page at 320px. */}
-      <ul id={listId} className={`${open ? 'grid' : 'hidden'} mt-3 grid-cols-1 gap-3 sm:grid-cols-2 lg:grid lg:grid-cols-3`}>
+      <ul id={listId} className={`${open ? 'grid' : 'hidden'} mt-3 grid-cols-1 gap-3 sm:grid-cols-2 lg:grid lg:grid-cols-3 xl:grid-cols-4`}>
         {team.map((member) => {
           const driving = tasks.filter(
             (task) => task.assignee === member.id && task.status === 'in-progress'

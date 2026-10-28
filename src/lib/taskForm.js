@@ -3,7 +3,9 @@ import { newId, nextInColumn } from './tasks.js';
 
 // The task form's values, kept apart from the form's layout (TaskModal.jsx).
 
-// New tasks start Unassigned (PRD FR9, DR2).
+// A new task's starting values. It's assigned to whoever is signed in (the MVP
+// login's demo user, John Doe), as their own work, so its card shows their
+// initials and name; Unassigned and everyone else are still in the list.
 const NEW_TASK = {
   title: '',
   description: '',
@@ -17,9 +19,10 @@ const NEW_TASK = {
 // `beforeId` is the Position field (PRD FR24): the task this one sits above in
 // its column, or '' for the bottom, where new tasks go. A link to a story that
 // no longer exists starts as None (PRD FR27).
-export function formFor(task, tasks, stories = []) {
+export function formFor(task, tasks, stories = [], userId = '') {
   return {
     ...NEW_TASK,
+    assignee: userId,
     ...task,
     dueDate: task?.dueDate ?? '',
     contextTool: task?.contextTool ?? '',

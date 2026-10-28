@@ -86,6 +86,7 @@ Sizes (in `rem`, so browser zoom and user font settings still work):
 - **Empty states:** A dashed border with muted text that says what to do next ("Add one with New task, or move a card here."). Never sad.
 - **Deliverables:** One slim row of four (two by two on tablets), each with its status in words and an icon, so the board starts near the top of the page.
 - **Small screens:** Below 1280 px a bar of column links stays at the top, and below 1024 px the filters and team cards fold behind buttons, so the board comes up sooner. On phones New task floats at the bottom right, within thumb reach; scroll padding keeps the focused control clear of both (WCAG 2.4.11). On touch screens compact controls grow to 44 px with 8 px gaps.
+- **Login page (MVP):** One centred card before the board: the product name, a "Login" heading, then the notice in an outlined indigo box at the top, in bold, so no one can miss that it's only an interface: "MVP login page. Please press Login to log in. No login details required." Email and Password are labelled "(optional)", with no placeholders, and Login fills the width. There's no Register link, and a line says why. Once signed in, the header shows the demo user's initials, "Signed in as John Doe" and a small Log out button under the project name.
 - **User stories:** A section between Team and the filters, folded on every screen so the board stays near the top; its heading line says how far the stories have got ("4 stories · 5 of 9 linked tasks done"). Each story card bolds "As a", "I want" and "so that", gives progress in words with a thin bar that only repeats the number, and has Tasks, Edit and Delete in one quiet row. The **story badge** is the code ("US2") in mono type on the indigo tint, the same shape as the type badge; it's text, so it never relies on colour (7:1 or better in both themes). A linked task card shows one line under the due badge: a bookmark icon, the badge and the start of the "I want" text, with the whole sentence in the tooltip and read out to screen readers, and no extra tab stop.
 - **Drag affordance:** Cards can be dragged with a mouse or pen to any place in any column. The card follows the pointer, tilted slightly; a 4 px line in the focus colour shows the gap it will land in, and another column also gets a dashed outline (an empty one says "Drop to move to …"). The Status and Position fields in the form stay as the keyboard and touch alternative, and the board's hint says which applies.
 
@@ -114,6 +115,9 @@ Plain, short and calm: the words a stressed user reads at 11pm.
 | Header line | "Plan tasks, hand them off and brief your AI tool. Saved only in this browser: to pass work on, use Copy handoff." |
 | Saving fails | "Couldn't save: this browser's storage is full or blocked, so changes will be lost on reload." |
 | Footer | "Vibecoding Project Tracker · Data stays in this browser · Source code on GitHub" |
+| Login page notice | "MVP login page" · "Please press Login to log in. No login details required." · "Whatever you type, you'll be logged in as John Doe, the demo user. Nothing you type is checked, saved or sent." |
+| Login page | "Login" (heading and button) · "Email (optional)" · "Password (optional)" · "There's no Register page: in this MVP everyone uses the one demo account." |
+| Signed in | "Signed in as John Doe" · "Log out" · after Log out: "You've logged out." · read out on login: "Logged in as John Doe." |
 
 ## 6. Logo / wordmark
 

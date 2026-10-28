@@ -17,12 +17,17 @@ export const TASK_TYPES = [
 // a task is assigned to), an email (to contact a task's owner directly) and a
 // GitHub handle. `Task.assignee` holds a member's `id`.
 // These are made-up people for the demo; more can be added in the Team strip
-// (PRD FR12), so the live list is kept in localStorage.
+// (PRD FR12), so the live list is kept in localStorage. John Doe is the demo
+// account the MVP login signs in as (LoginPage.jsx), so he's on the team too.
 export const TEAM = [
   { id: 'alex',   name: 'Alex Kim',   email: 'alex.kim@example.com',   github: 'alexkim-demo' },
   { id: 'jordan', name: 'Jordan Lee', email: 'jordan.lee@example.com', github: 'jordanlee-demo' },
   { id: 'priya',  name: 'Priya Shah', email: 'priya.shah@example.com', github: 'priyashah-demo' },
+  { id: 'john',   name: 'John Doe',   email: 'john.doe@example.com',   github: 'johndoe-demo' },
 ];
+
+// The member the MVP login always signs in as, whatever is typed.
+export const DEMO_USER_ID = 'john';
 
 // The AI tools a task can be worked on with (PRD FR16).
 export const AI_TOOLS = ['Claude', 'ChatGPT', 'Cursor', 'Lovable', 'Replit', 'Other'];

@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import { STAGES, TASK_TYPES } from '../constants.js';
 import { formatDate } from '../lib/dates.js';
+import { useSession } from '../hooks/useSession.js';
 import { fieldsFromForm, formFor } from '../lib/taskForm.js';
 import { inputStyles, labelStyles } from './styles.js';
 import BriefingFields from './BriefingFields.jsx';
@@ -19,7 +20,8 @@ import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 // lost to a stray Escape (PRD NFR7). Escape again leaves without saving.
 export default function TaskModal({ task, tasks, team, stories, toast, onSave, onDelete, onCopy, onCopyHandoff, onClose }) {
   const isEdit = Boolean(task);
-  const [initialForm] = useState(() => formFor(task, tasks, stories));
+  const { user } = useSession();
+  const [initialForm] = useState(() => formFor(task, tasks, stories, user?.id ?? ''));
   const [form, setForm] = useState(initialForm);
   const changed = Object.keys(initialForm).some((key) => form[key] !== initialForm[key]);
   // Leaving the page (Back, refresh, closing the tab) with changes asks too.
