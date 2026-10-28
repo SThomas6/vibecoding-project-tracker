@@ -28,7 +28,7 @@ Built for the clients Prof. Dr. Ignacio Alvarez and Nathan, starting from the cl
 | Link a task to one user story (or none) in the form; the card shows the story, and Copy context includes it | FR27 |
 | Each story shows how many of its linked tasks are done, and its Tasks button filters the board to them | FR28 |
 | Search and filter the board by who worked on a task, type, due state, handoff or AI tool, and user story | FR21, FR28 |
-| Light and Dark mode (WCAG 2.2 AA contrast in both), starting from the device's setting; a choice is saved across visits | FR23 |
+| Light and Dark mode (WCAG 2.2 AA contrast in both), starting in Light mode whatever the device's setting; a choice is saved across visits | FR23 |
 
 ## Run it
 

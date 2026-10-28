@@ -7,16 +7,17 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='1' y='1' width='22' height='22' rx='5' fill='%234338CA'/%3E%3Cpath d='M8 7v7M12 7v4M16 7v9' stroke='white' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E" />
     <title>Vibecoding Project Tracker</title>
     <script>
-      // Apply Dark mode before the first paint, so the page doesn't flash
-      // light first (PRD FR23): the saved choice, or else the device's own
-      // setting. The app keeps it in sync after that.
+      // Apply a saved Dark mode before the first paint, so the page doesn't
+      // flash light first (PRD FR23). With nothing saved, the tracker starts
+      // in Light mode, whatever the device's setting. The app keeps it in sync
+      // after that.
       let theme = null;
       try {
         theme = localStorage.getItem('vibetracker.theme');
       } catch (error) {
-        /* storage blocked: follow the device */
+        /* storage blocked: Light mode */
       }
-      if (theme === '"dark"' || (theme !== '"light"' && matchMedia('(prefers-color-scheme: dark)').matches)) {
+      if (theme === '"dark"') {
         document.documentElement.classList.add('dark');
       }
     </script>
