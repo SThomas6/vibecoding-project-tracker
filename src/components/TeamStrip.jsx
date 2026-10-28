@@ -5,14 +5,14 @@ import Avatar from './Avatar.jsx';
 import { smallButtonStyles } from './styles.js';
 import { typeStyle } from './TypeBadge.jsx';
 
-// "Who is driving what" (PRD FR11): one card per team member with their
+// "Who is driving what" (PRD FR7): one card per team member with their
 // contact details, the tasks they have in progress (each with its type's icon
-// and colour, as everywhere else a task appears, PRD FR8), and a quick filter
-// button to show everything they have worked on (PRD FR21).
+// and colour, as everywhere else a task appears, PRD FR5), and a quick filter
+// button to show everything they have worked on (PRD FR12).
 // GitHub handles are shown as text, not links, because the demo handles are
 // made up and could belong to real people.
 // Under 1024px the cards fold behind a "Members" button, as the filters do,
-// so the board isn't pushed far down the page (NFR5).
+// so the board isn't pushed far down the page (NFR3).
 export default function TeamStrip({ team, tasks, activeMember, onFilterMember, onAddMember }) {
   const listId = useId();
   const [open, setOpen] = useState(false);
@@ -35,7 +35,7 @@ export default function TeamStrip({ team, tasks, activeMember, onFilterMember, o
             Members ({team.length})
             <ChevronDown aria-hidden="true" className={`h-3.5 w-3.5 transition-transform ${open ? 'rotate-180' : ''}`} />
           </button>
-          {/* Adding members (PRD FR12). */}
+          {/* Adding members (PRD FR7). */}
           <button type="button" onClick={onAddMember} className={smallButtonStyles.plain}>
             <UserPlus aria-hidden="true" className="h-3.5 w-3.5" />
             Add member

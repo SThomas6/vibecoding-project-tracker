@@ -3,7 +3,7 @@ import { SessionContext } from '../hooks/useSession.js';
 import { DEMO_USER, endSession, readSession, startSession } from '../lib/session.js';
 import LoginPage from './LoginPage.jsx';
 
-// Shows the MVP login page until someone presses Login, then the tracker,
+// Shows the MVP login page (PRD FR16) until someone presses Login, then the tracker,
 // signed in as the demo user (John Doe) until the tab is closed or they log
 // out. The status line, always on the page, tells screen-reader users that
 // they've logged in or out.

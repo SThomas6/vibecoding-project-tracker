@@ -1,7 +1,7 @@
-// User stories (PRD FR26–FR28, DR16): "As a <role>, I want <want>, so that
+// User stories (PRD FR13, DR14): "As a <role>, I want <want>, so that
 // <benefit>." Each has a number, shown as a code such as "US2". A task links
 // to one story by its id; an id that matches no story counts as none. How far
-// a story has got is worked out when it's shown, never stored (DR11).
+// a story has got is worked out when it's shown, never stored (DR10).
 
 export const STORY_LIMITS = { role: 60, want: 160, benefit: 160 };
 
@@ -38,7 +38,7 @@ export function storySentence(story) {
   return `${lead} ${role}, I want ${want}${benefit ? `, so that ${benefit}` : ''}.`;
 }
 
-// How many of the tasks linked to a story are done (PRD FR28).
+// How many of the tasks linked to a story are done (PRD FR13).
 export function storyProgress(story, tasks) {
   const linked = tasks.filter((task) => task.storyId === story.id);
   return { done: linked.filter((task) => task.status === 'done').length, total: linked.length };

@@ -3,10 +3,10 @@ import { STORY_LIMITS, storyCode, storySentence } from '../lib/stories.js';
 import Dialog from './Dialog.jsx';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 
-// Adds or edits a user story (PRD FR26, DR16): "As a …, I want …, so that …".
+// Adds or edits a user story (PRD FR13, DR14): "As a …, I want …, so that …".
 // Each field has a visible label and a hint, and a live line shows how the
 // story will read. Errors appear under their field, and focus moves to the
-// first one (NFR1, NFR7). Pasted text is shown as text and never run (NFR12).
+// first one (NFR1, NFR5). Pasted text is shown as text and never run (NFR8).
 const FIELDS = [
   { key: 'role', label: 'As a', hint: 'Who the story is for, such as a recruiter or a visitor on a phone.', rows: 1 },
   { key: 'want', label: 'I want', hint: 'What they want to do, such as download the CV.', rows: 2 },

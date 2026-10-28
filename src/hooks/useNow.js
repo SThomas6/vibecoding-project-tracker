@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 // The current time, refreshed every `intervalMs` and whenever the tab becomes
 // visible again (browsers slow timers down in background tabs). Used so the
-// due-date colours update by themselves (PRD FR14).
+// due-date colours update by themselves (PRD FR8).
 export function useNow(intervalMs = 60_000) {
   const [now, setNow] = useState(() => new Date());
 

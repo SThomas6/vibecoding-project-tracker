@@ -10,11 +10,11 @@ import { todayISO } from './dates.js';
  * @property {string} assignee               id of a team member, or '' for Unassigned
  * @property {string|null} dueDate           ISO 'YYYY-MM-DD'
  * @property {string} createdDate            ISO 'YYYY-MM-DD'
- * @property {string|null} contextTool       the AI tool used (PRD FR16, DR4)
- * @property {string} handoffText            pasted handoff for the next developer's AI agent (PRD FR15, DR4)
- * @property {string|null} handoffUpdatedAt  ISO timestamp, set when the handoff text changes (PRD DR5)
- * @property {Array} handoffs                handoff history ({ id, from, to, note, at }) (PRD FR10, DR6)
- * @property {string|null} storyId           the user story it delivers, or null (PRD FR27, DR1)
+ * @property {string|null} contextTool       the AI tool used (PRD FR9, DR4)
+ * @property {string} handoffText            pasted handoff for the next developer's AI agent (PRD FR9, DR4)
+ * @property {string|null} handoffUpdatedAt  ISO timestamp, set when the handoff text changes (PRD DR4)
+ * @property {Array} handoffs                handoff history ({ id, from, to, note, at }) (PRD FR6, DR5)
+ * @property {string|null} storyId           the user story it delivers, or null (PRD FR13, DR1)
  */
 
 // Builds a complete new task from the form fields. The id and created date
@@ -37,7 +37,7 @@ export function newId() {
 }
 
 // Every team member ID who currently owns or has previously worked on / handed
-// off this task (PRD FR10, FR21).
+// off this task (PRD FR6, FR12).
 export function getContributors(task) {
   const ids = new Set();
   if (task.assignee) ids.add(task.assignee);
@@ -54,7 +54,7 @@ export function getPastContributors(task) {
 }
 
 // Moves a task to a column, just above the task `beforeId`, or to the bottom
-// of the column when `beforeId` is null (PRD FR24: drag and drop, and the
+// of the column when `beforeId` is null (PRD FR14: drag and drop, and the
 // form's Position field). A column shows its tasks in list order, so moving a
 // task in the list is all it takes. Returns the same list when nothing moves,
 // so the caller can tell.

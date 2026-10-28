@@ -5,8 +5,8 @@ import { findStory, storyCode, storySentence } from './stories.js';
 import { getPastContributors } from './tasks.js';
 import { getMember } from './team.js';
 
-// Turns a task into a Markdown briefing to paste into an AI tool (PRD FR18,
-// DR9). With a prompt goal it follows Ignacio's TACO structure: Task, Actor,
+// Turns a task into a Markdown briefing to paste into an AI tool (PRD FR10,
+// DR8). With a prompt goal it follows the client's TACO structure: Task, Actor,
 // Context (the key facts, including the user story, then the description,
 // pasted handoff and handoff notes) and Output format. Without one it's a
 // plain briefing of the same facts. Empty fields are left out.
@@ -73,7 +73,7 @@ function formatHandoff(item, team) {
   return `- **${formatDateTime(item.at)} (${from} → ${to})**${note}`;
 }
 
-// Just the pasted handoff, with the task title, for "Copy handoff" (PRD FR22).
+// Just the pasted handoff, with the task title, for "Copy handoff" (PRD FR10).
 export function buildHandoff(task) {
   return `# Handoff: ${task.title || 'Untitled task'}\n\n${task.handoffText}\n`;
 }

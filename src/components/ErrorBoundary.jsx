@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { STORAGE_KEYS } from '../constants.js';
 import { buttonStyles } from './styles.js';
 
-// The last line of defence (PRD NFR7, DR12): if something still breaks while
+// The last line of defence (PRD NFR5, DR11): if something still breaks while
 // the page is drawn, say so and offer a way out instead of a blank screen.
 // Resetting removes this tracker's saved data in this browser and reloads,
 // which brings back the demo project.

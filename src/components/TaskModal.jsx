@@ -17,7 +17,7 @@ import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 // The add / edit form, in the shared native <dialog> (Dialog.jsx).
 // `task` is null when adding a new task, or the task being edited.
 // Closing a form that has changes asks first, so a long pasted handoff isn't
-// lost to a stray Escape (PRD NFR7). Escape again leaves without saving.
+// lost to a stray Escape (PRD NFR5). Escape again leaves without saving.
 export default function TaskModal({ task, tasks, team, stories, toast, onSave, onDelete, onCopy, onCopyHandoff, onClose }) {
   const isEdit = Boolean(task);
   const { user } = useSession();
@@ -201,7 +201,7 @@ export default function TaskModal({ task, tasks, team, stories, toast, onSave, o
               </select>
             </div>
 
-            {/* Where the card sits in its column: the non-drag way to reorder (PRD FR24). */}
+            {/* Where the card sits in its column: the non-drag way to reorder (PRD FR14). */}
             <div>
               <label htmlFor={`${id}-position`} className={labelStyles}>Position in column</label>
               <select id={`${id}-position`} value={form.beforeId} onChange={update('beforeId')} className={inputStyles}>

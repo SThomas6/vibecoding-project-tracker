@@ -3,7 +3,7 @@ import { storyCode, storySentence } from '../lib/stories.js';
 import Dialog from './Dialog.jsx';
 import { buttonStyles } from './styles.js';
 
-// Confirms deleting a user story (PRD FR26, NFR7). The safe choice, "Keep
+// Confirms deleting a user story (PRD FR13, NFR5). The safe choice, "Keep
 // story", has focus first, so pressing Enter by accident deletes nothing.
 // Deleting unlinks the story's tasks; the tasks themselves stay.
 export default function DeleteStoryDialog({ story, linkedCount, fallbackFocusRef, onConfirm, onClose }) {

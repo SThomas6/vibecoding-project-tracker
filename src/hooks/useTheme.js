@@ -3,7 +3,7 @@ import { STORAGE_KEYS } from '../constants.js';
 import { cleanTheme } from '../lib/storage.js';
 import { useLocalStorage } from './useLocalStorage.js';
 
-// Light or Dark mode (PRD FR23, DR13). The tracker starts in Light mode,
+// Light or Dark mode (PRD FR15, DR12). The tracker starts in Light mode,
 // whatever the device's setting, until the user picks one with the header
 // toggle; a choice is saved between visits. index.html puts a saved Dark mode
 // on <html> before the first paint; this keeps it in step.

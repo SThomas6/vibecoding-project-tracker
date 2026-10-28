@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Trash2 } from 'lucide-react';
 import { buttonStyles } from './styles.js';
 
-// The task form's footer (PRD FR5, FR6, NFR7): Delete, Cancel and Save, or,
+// The task form's footer (PRD FR3, NFR5): Delete, Cancel and Save, or,
 // while a question is open, the question and its two answers. The safe
 // answer gets focus first, so pressing Enter by accident never loses work.
 function question(confirming, isEdit) {

@@ -3,9 +3,9 @@ import { Copy } from 'lucide-react';
 import { AI_TOOLS, PROMPT_MODES } from '../constants.js';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 
-// "Copy for your AI agent" (PRD FR16, FR18): the AI tool used and a prompt
+// "Copy for your AI agent" (PRD FR9, FR10): the AI tool used and a prompt
 // goal, then one button that copies the whole task as a Markdown briefing in
-// Ignacio's TACO structure (Task, Actor, Context, Output format).
+// the client's TACO structure (Task, Actor, Context, Output format).
 export default function BriefingFields({ id, tool, onChange, onCopy }) {
   const [modeId, setModeId] = useState('continue');
 

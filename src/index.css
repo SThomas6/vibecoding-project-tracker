@@ -32,7 +32,7 @@
   --due-neutral-tint: 241 245 249;
 }
 
-/* Accessible dark palette (PRD FR23, NFR2): every text pair meets WCAG 2.2 AA
+/* Accessible dark palette (PRD FR15, NFR2): every text pair meets WCAG 2.2 AA
    (6.47:1 to 16.96:1), form borders exceed 3:1 (5.71:1), and focus rings and
    state outlines use a lighter indigo (#A5B4FC, 7.34:1 on cards). */
 html.dark {

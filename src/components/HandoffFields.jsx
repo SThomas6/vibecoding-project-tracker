@@ -6,14 +6,14 @@ import { formatDateTime, timeAgo } from '../lib/dates.js';
 import { getMember } from '../lib/team.js';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 
-// The handoff for the next developer (PRD FR15, FR17, FR22: the secret sauce).
+// The handoff for the next developer (PRD FR9, FR10: the secret sauce).
 // Instead of logging every prompt by hand, the outgoing developer pastes in one
 // handoff text, such as the summary their AI agent wrote at the end of a
 // session, with any logs or traces. Whoever picks the task up reads it here
 // (and on the card) and copies it straight into their own AI agent. It's a
-// plain textarea, so pasted code is never run (NFR12).
+// plain textarea, so pasted code is never run (NFR8).
 // Text past the limit is cut off, so say so rather than lose it silently,
-// and show the count once the box is nearly full (PRD DR4, NFR7).
+// and show the count once the box is nearly full (PRD DR4, NFR5).
 const LIMIT = HANDOFF_TEXT_MAX_LENGTH.toLocaleString('en-GB');
 const CUT_MESSAGE = `Only the first ${LIMIT} characters fit, so the end of what you pasted was left out.`;
 

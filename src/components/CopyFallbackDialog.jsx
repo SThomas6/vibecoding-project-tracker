@@ -2,7 +2,7 @@ import { useEffect, useId, useRef } from 'react';
 import Dialog from './Dialog.jsx';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 
-// Shown when the browser blocks copying (M10, PRD FR18): the briefing is
+// Shown when the browser blocks copying (M10, PRD FR10): the briefing is
 // selected in a read-only box, so it can still be copied with the keyboard.
 export default function CopyFallbackDialog({ text, onClose }) {
   const id = useId();

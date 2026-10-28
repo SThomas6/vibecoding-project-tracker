@@ -1,6 +1,6 @@
 import { storyCode } from '../lib/stories.js';
 
-// A user story's code ("US2") as a small badge (PRD FR26, FR27). The code is
+// A user story's code ("US2") as a small badge (PRD FR13). The code is
 // text, so it never depends on colour; indigo on its tint is 7:1 or better in
 // both themes.
 export default function StoryBadge({ story, ...props }) {

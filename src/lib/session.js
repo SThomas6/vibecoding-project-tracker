@@ -1,6 +1,6 @@
 import { DEMO_USER_ID, STORAGE_KEYS, TEAM } from '../constants.js';
 
-// The MVP login (LoginPage.jsx): pressing Login signs in the demo user, John
+// The MVP login (LoginPage.jsx, PRD FR16): pressing Login signs in the demo user, John
 // Doe, whatever was typed. The session lasts until the tab is closed
 // (sessionStorage) or Log out is pressed. Nothing typed on the login page is
 // ever kept: only the fact that someone is signed in.

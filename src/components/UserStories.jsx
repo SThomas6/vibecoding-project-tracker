@@ -6,11 +6,11 @@ import StoryBadge from './StoryBadge.jsx';
 import StoryDialog from './StoryDialog.jsx';
 import { smallButtonStyles } from './styles.js';
 
-// The project's user stories (PRD FR26–FR28): "As a …, I want …, so that …",
+// The project's user stories (PRD FR13): "As a …, I want …, so that …",
 // each with its code, how many of its linked tasks are done, and a button
 // that filters the board to them, like the Team strip's Work button. The
 // list is folded on every screen size, so the board stays near the top of
-// the page (NFR5); the summary line says how far the stories have got.
+// the page (NFR3); the summary line says how far the stories have got.
 export default function UserStories({ stories, tasks, activeStory, onFilterStory, onAdd, onUpdate, onDelete }) {
   const id = useId();
   const [open, setOpen] = useState(false);

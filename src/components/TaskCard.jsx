@@ -11,10 +11,10 @@ import { smallButtonStyles } from './styles.js';
 import TypeBadge, { typeStyle } from './TypeBadge.jsx';
 
 // One task on the board: the title with its type badge in the corner, its due
-// state, its user story (PRD FR27), the start of its handoff (PRD FR17) and
+// state, its user story (PRD FR13), the start of its handoff (PRD FR9) and
 // past contributors, who it's
-// assigned to, and a row of actions: "Hand off" (PRD FR10), "Copy context"
-// (PRD FR18) and, when there's a handoff, "Copy handoff" (PRD FR22).
+// assigned to, and a row of actions: "Hand off" (PRD FR6), "Copy context"
+// (PRD FR10) and, when there's a handoff, "Copy handoff" (PRD FR10).
 // The title is a button that opens the task. Its ::after layer stretches over
 // the whole card, so the full card is clickable but is only one tab stop.
 // The action buttons sit above that layer (relative z-10) so they get their

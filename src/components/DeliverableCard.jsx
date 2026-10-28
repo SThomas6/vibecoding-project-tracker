@@ -17,7 +17,7 @@ const ICONS = { presentation: Presentation, demo: MonitorPlay, report: FileText,
 
 const smallButton = smallButtonStyles.plain;
 
-// One deliverable (PRD FR19, DR8), kept to a single slim row so the board
+// One deliverable (PRD FR11, DR7), kept to a single slim row so the board
 // stays near the top of the page: its name, whether a link has been added
 // (an icon and words, not just colour), and Open / Add / Edit. Editing opens
 // an inline form across the full width. Only http(s) links are saved or opened.

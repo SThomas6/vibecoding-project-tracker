@@ -16,9 +16,9 @@ const NEW_TASK = {
 };
 
 // The form's starting values: a blank new task, or the task being edited.
-// `beforeId` is the Position field (PRD FR24): the task this one sits above in
+// `beforeId` is the Position field (PRD FR14): the task this one sits above in
 // its column, or '' for the bottom, where new tasks go. A link to a story that
-// no longer exists starts as None (PRD FR27).
+// no longer exists starts as None (PRD FR13).
 export function formFor(task, tasks, stories = [], userId = '') {
   return {
     ...NEW_TASK,

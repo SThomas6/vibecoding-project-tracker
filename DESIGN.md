@@ -126,7 +126,7 @@ Plain, short and calm: the words a stressed user reads at 11pm.
 
 ## 7. Theme switching and out of scope
 
-- **Light and Dark mode (FR23):** the tracker starts in Light mode ("Clear desk") until the user picks Dark mode, whatever the device's setting. A header toggle switches between them, and that choice is saved. Dark mode uses `html.dark` CSS variables in `src/index.css`, and every text pair in it meets WCAG 2.2 AA (`#F8FAFC` ink on `#1E293B` card = 13.98:1; `#CBD5E1` muted on `#1E293B` = 9.85:1; `#94A3B8` control borders on `#1E293B` = 5.71:1; all type and due-state badges between 6.47:1 and 10.62:1). Focus rings and state outlines use the `focus` token: `#4338CA` in Light mode and `#A5B4FC` in Dark mode (7.34:1 on dark cards).
+- **Light and Dark mode (FR15):** the tracker starts in Light mode ("Clear desk") until the user picks Dark mode, whatever the device's setting. A header toggle switches between them, and that choice is saved. Dark mode uses `html.dark` CSS variables in `src/index.css`, and every text pair in it meets WCAG 2.2 AA (`#F8FAFC` ink on `#1E293B` card = 13.98:1; `#CBD5E1` muted on `#1E293B` = 9.85:1; `#94A3B8` control borders on `#1E293B` = 5.71:1; all type and due-state badges between 6.47:1 and 10.62:1). Focus rings and state outlines use the `focus` token: `#4338CA` in Light mode and `#A5B4FC` in Dark mode (7.34:1 on dark cards).
 - **Out of scope:** arbitrary user-picked colour wheels (which could break contrast), extra palettes such as black on yellow (each is more pairs to check), animations beyond short fades of 300 ms or less, and custom icon sets (Lucide icons are used throughout).
 
 ## 8. Accessibility rules

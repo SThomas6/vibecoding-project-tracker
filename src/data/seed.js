@@ -1,12 +1,12 @@
 import { daysFromToday } from '../lib/dates.js';
 
-// The demo project shown on first load (M13, PRD FR3, DR10): one made-up team
+// The demo project shown on first load (M13, PRD FR2, DR9): one made-up team
 // building a personal portfolio site, with three tasks per column. `due` and
 // `created` are days relative to today and `ago` is hours before now, so every
 // due-date state (calm, warning, overdue, done, none) shows whenever the
 // prototype is opened. Two tasks carry a pasted handoff (one with a log line)
 // and a handoff history; a third has a handoff note only. Seven tasks deliver
-// one of the four demo user stories (PRD FR27); set-up tasks such as the PRD
+// one of the four demo user stories (PRD FR13); set-up tasks such as the PRD
 // deliver none, so "No user story" has something to show.
 const SEED_TASKS = [
   // To Do
@@ -124,7 +124,7 @@ export function createSeedTasks() {
   }));
 }
 
-// The demo project (M11, PRD DR8, DR16): its name, one link per deliverable,
+// The demo project (M11, PRD DR7, DR14): its name, one link per deliverable,
 // and four user stories. Demo and Documentation point at the live site and the
 // repo; the rest are left for the team to add, so both card states show.
 export function createSeedProject() {

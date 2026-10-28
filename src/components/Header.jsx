@@ -3,9 +3,9 @@ import { useSession } from '../hooks/useSession.js';
 import Avatar from './Avatar.jsx';
 import { smallButtonStyles } from './styles.js';
 
-// Logo, product name and the project's name (with "Rename", PRD FR25), top
+// Logo, product name and the project's name (with "Rename", PRD FR11), top
 // left on every page, then one line saying what the tracker is for and that
-// it saves only in this browser (PRD NFR6, NFR11). The logo and the name both
+// it saves only in this browser (PRD NFR4, NFR8). The logo and the name both
 // go home. `children` is a slot for header actions (e.g. "New task"). Under
 // the project, who is signed in through the MVP login, with Log out.
 export default function Header({ projectName, onRename, children }) {

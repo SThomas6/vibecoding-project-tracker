@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 // Drag a card to another column, or to another place in its own column, with
-// a mouse or pen (PRD FR24). The card lands where it's dropped: above the
+// a mouse or pen (PRD FR14). The card lands where it's dropped: above the
 // first card whose middle is below the pointer, or at the bottom. It uses
 // pointer events rather than native drag and drop, which can't start from a
 // <button> in Firefox (and each card is mostly its title button). Touch and

@@ -1,8 +1,8 @@
 import { nextStoryNumber, storyCode } from '../lib/stories.js';
 import { newId } from '../lib/tasks.js';
 
-// Adds, edits and deletes the project's user stories (PRD FR26), with the
-// message each change shows. Stories live in the project object (DR16).
+// Adds, edits and deletes the project's user stories (PRD FR13), with the
+// message each change shows. Stories live in the project object (DR14).
 // Deleting one unlinks its tasks and turns off the board's story filter if it
 // was showing that story. Kept out of App.jsx so it stays under 300 lines.
 export function useStoryActions({ project, setProject, tasks, setTasks, setFilters, showToast }) {

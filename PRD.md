@@ -4,11 +4,11 @@
 
 **Problem:** In a vibecoding team, what was tried with the AI on a task lives in one person's chat history, so whoever picks it up next starts from scratch.
 **Project:** A Kanban-style tracker in which each task keeps its last developer's handoff and copies as a ready-made briefing for the next developer's AI tool.
-**Clients:** Prof. Dr. Ignacio Alvarez (THI) and Nathan (Cardiff University).
+**Clients:** two clients, a product owner and the lead of the team that will extend the tracker.
 
 **Key**
 - **MVP:** ✅ marks the minimum viable product: one team manages its tasks, owners and due dates, links tasks to user stories, keeps a handoff with each task, copies it as an AI briefing and pins its deliverables. The rest are **Should** or **Could** (MoSCoW: Clegg and Barker, 1994), and all are built.
-- **Sources:** **IA** and **N** are Ignacio and Nathan on client day (20/10/2026); **Brief** is the client brief; **Starter PRD** is the client's starter PRD; **Extra** means not asked for, so a reason is given.
+- **Sources:** **Client** is the clients' interview (20/10/2026) or Q&A (28/10/2026); **Brief** is the client brief; **Starter PRD** is the client's starter PRD; **Extra** means not asked for, so a reason is given.
 
 ---
 
@@ -18,40 +18,28 @@ What the tracker must do (Sommerville, 2016). Each one completes "The tracker sh
 
 | ID | Requirement | Source and reason | MVP? |
 |---|---|---|---|
-| FR1 | Show tasks on a Kanban board: To Do, In Progress, Review, Done. | Brief: "a kanban board"; IA's four stages. | ✅ |
-| FR2 | Count the tasks in each column. | Extra: Kanban makes work visible (Anderson, 2010). | Should |
-| FR3 | Load a demo project (DR10) on first use. | Brief: one example must "work with all the features". | ✅ |
-| FR4 | Add tasks; a title is required. | IA: tasks must be "editable and configurable"; Starter PRD. | ✅ |
-| FR5 | Edit tasks; changing the status moves the card. | Starter PRD: "Move the task across columns as you work". | ✅ |
-| FR6 | Delete tasks. | IA. NFR7 makes it ask first. | ✅ |
-| FR7 | Confirm each change with a message. | Extra: users see what has happened (Nielsen, 1994). | Should |
-| FR8 | Mark tasks as Feature or Bug by colour, icon and label. | Starter PRD; N: colour alone fails colour-blind users. | Should |
-| FR9 | Assign each task to one member, or none. | IA: to "ask for updates" from its owner. | ✅ |
-| FR10 | Hand a task to a teammate, with an optional note. | Starter PRD; IA: the new owner isn't "starting from scratch". | Should |
-| FR11 | Show the team, with contact links and a work filter. | IA: to "directly email the owner"; N: GitHub. | Should |
-| FR12 | Add team members. | IA: "adding new members to the team". | Should |
-| FR13 | Show due dates relative to today. | Brief: "track project tasks over time". | ✅ |
-| FR14 | Colour and icon due labels by urgency. | IA: yellow for "immediate", red for overdue. | Should |
-| FR15 | Keep a handoff on each task: what is done, what is left, prompts that worked. | IA; Brief: "note useful prompts and results". | ✅ |
-| FR16 | Record the AI tool used. | IA: "log what tool this was". | ✅ |
-| FR17 | Show when the handoff changed, and preview it on the card. | Starter PRD. Shows how fresh it is. | Should |
-| FR18 | Copy a task as a TACO briefing for an AI tool. | IA's TACO, which matches the Persona and Template prompt patterns (White et al., 2023). | ✅ |
-| FR19 | Pin four deliverable links above the board. | Brief: "key milestones"; IA; Starter PRD. | ✅ |
-| FR20 | Reset to the demo project. | Extra: a demo starts from a known state. | Should |
-| FR21 | Search; filter by person, type, due, handoff, tool or story. | Extra: "overview first, zoom and filter" (Shneiderman, 1996). | Should |
-| FR22 | Copy just a task's handoff. | IA invited extras; resuming without context is slow (Parnin and Rugaber, 2011). | Should |
-| FR23 | Offer Light and Dark mode. | N: "make it customizable", if time allows. | Could |
-| FR24 | Drag cards with a mouse or pen. | N; the form's Position field works without dragging. | Could |
-| FR25 | Rename the project. | IA: one project per team. | Should |
-| FR26 | Add, edit and delete user stories. | Brief: "match user stories" (Cohn, 2004). | ✅ |
-| FR27 | Link each task to one user story. | Brief. Shows why a task exists. | ✅ |
-| FR28 | Show each story's progress, and filter by it. | Brief. Shows which users' needs are met. | Should |
+| FR1 | Show tasks on a Kanban board (To Do, In Progress, Review, Done), with a count on each column. | Brief: "a kanban board"; the client's four stages. Counts make the load on each stage visible. | ✅ |
+| FR2 | Load a demo project (DR9) on first use, and reset to it. | Brief: one example must "work with all the features"; a demo starts from a known state. | ✅ |
+| FR3 | Add, edit and delete tasks; a title is required, and changing the status moves the card. | Client: tasks must be "editable and configurable"; Starter PRD: "Move the task across columns as you work". NFR5 makes deleting ask first. | ✅ |
+| FR4 | Confirm each change with a message. | Extra: users see what has happened (Nielsen, 1994). | Should |
+| FR5 | Mark tasks as Feature or Bug by colour, icon and label. | Starter PRD; Client: colour alone fails colour-blind users. | Should |
+| FR6 | Assign each task to one member, or none, and hand it to a teammate with an optional note. | Client: to "ask for updates" from its owner, and so the new owner isn't "starting from scratch"; Starter PRD. | ✅ |
+| FR7 | Show the team, with contact links and a work filter, and add members. | Client: to "directly email the owner", see GitHub handles and allow "adding new members to the team". | Should |
+| FR8 | Show due dates relative to today, with a colour and icon for urgency. | Brief: "track project tasks over time"; Client: yellow for "immediate", red for overdue. | ✅ |
+| FR9 | Keep a handoff on each task (what is done, what is left, prompts that worked), the AI tool used and when it changed. | Client: "log what tool this was"; Brief: "note useful prompts and results"; Starter PRD: show how fresh it is, with a preview on the card. | ✅ |
+| FR10 | Copy a task as a TACO briefing for an AI tool, or copy just its handoff. | Client's TACO format, which matches the Persona and Template prompt patterns (White et al., 2023); resuming without context is slow (Parnin and Rugaber, 2011). | ✅ |
+| FR11 | Pin four deliverable links above the board, under a project name the team can change. | Brief: "key milestones"; Client: one project per team. | ✅ |
+| FR12 | Search; filter by person, type, due date, handoff, tool or story. | Extra: "overview first, zoom and filter" (Shneiderman, 1996). | Should |
+| FR13 | Add, edit and delete user stories, link each task to one, and show each story's progress. | Brief: "match user stories" (Cohn, 2004). Shows why a task exists, and which needs are met. | ✅ |
+| FR14 | Drag cards with a mouse or pen. | Client; the form's Status and Position fields work without dragging. | Could |
+| FR15 | Offer Light and Dark mode, starting in Light. | Client: "make it customizable", if time allows. | Could |
+| FR16 | Show an MVP login page that signs in a demo user with no details, and Log out. | Client Q&A (28/10): a login page; the Brief says reviewers must not register, so no details are needed. | ✅ |
 
 **Out of scope:**
-- **Login:** optional for the clients (IA), and reviewers mustn't have to register (Brief).
-- **More than one team or project:** IA said this can come later.
+- **Real accounts:** FR16 is only the interface of a login, because reviewers mustn't have to register (Brief); accounts need a backend.
+- **More than one team or project:** the clients said this can come later.
 - **A shared, real-time board:** it needs a server and a database (Brief, Starter PRD); Copy handoff carries a task on instead.
-- **Free colour choice:** it could break NFR2's contrast, so FR23 offers two checked palettes.
+- **Free colour choice:** it could break NFR2's contrast, so FR15 offers two checked palettes.
 - **Dragging by touch:** it fights page scrolling, so touch users set the Status and Position instead.
 - **Editing or removing members, several stories per task, progress charts, prompt history, sounds, exports and other languages:** not asked for.
 
@@ -63,21 +51,16 @@ How well the tracker must work, each labelled by a quality concern from ISO/IEC 
 
 | ID | Requirement | Test | Why | MVP? |
 |---|---|---|---|---|
-| NFR1 | **Accessibility:** WCAG 2.2 AA in both themes; no axe-core violations. | No axe-core violations, plus a manual check. | IA: "always design for accessibility in mind". | ✅ |
-| NFR2 | **Colour:** 4.5:1 text contrast; never colour alone. | Every colour pair measured; colour-blindness checks. | N: colour-blind users "might struggle". | ✅ |
-| NFR3 | **Keyboard:** everything works by keyboard, with visible focus. | A keyboard-only run of every FR. | Not everyone uses a mouse (WCAG 2.1.1). | ✅ |
-| NFR4 | **Screen readers:** controls labelled and messages read out (VoiceOver). | A VoiceOver run of the main tasks. | IA: accessibility includes the code (ARIA). | ✅ |
-| NFR5 | **Any screen:** works from 320 px; main targets at least 44 px. | Checked from 320 to 1440 px, and zoomed to 400%. | Phones and zoom users (WCAG 1.4.10, 2.5.8). | ✅ |
-| NFR6 | **Easy to learn:** 4 of 5 new users add, hand off and copy a task within 2 minutes. | 4 of 5 users finish each within 2 minutes; SUS (Brooke, 1996) above the average, 68 (Sauro, 2011). | Brief: it must be "intuitive". | ✅ |
-| NFR7 | **Error protection:** deleting, resetting or discarding asks first. | Cancelling changes nothing. | Extra: there's no backup (Nielsen, 1994). | ✅ |
-| NFR8 | **Speed:** loads within 2.5 s on a phone; reacts within 0.1 s. | Lighthouse; a 100-task board timed. | "Good" Core Web Vitals on phones (web.dev, n.d.); 0.1 s feels instant (Shneiderman and Plaisant, 2005, p. 462). | Should |
-| NFR9 | **Reliability:** survives reloads and damaged data. | Reopen the browser; corrupt the saved data. | A tracker that forgets is useless. | ✅ |
-| NFR10 | **Available:** a public link with no login. | Opens in a private window on a new device. | Brief: reviewers mustn't register. | ✅ |
-| NFR11 | **Privacy:** data stays on the device unless the user copies it. | No outside requests in the Network panel. | IA: a "secretive project" mustn't be exposed. | ✅ |
-| NFR12 | **Security:** pasted text never runs as code. | Pasting `<script>` into each field runs nothing. | AI output can contain code. | ✅ |
-| NFR13 | **Browsers:** Chrome, Edge, Firefox and Safari. | Every MVP requirement passes in each. | IA: the web is "the default here". | ✅ |
-| NFR14 | **Technology:** React, Vite and Tailwind; no backend. | `npm run build` gives static files only. | N: a "leading web framework"; Brief: no backend. | ✅ |
-| NFR15 | **Maintainability:** no source file over 300 lines. | No source file over 300 lines. | Another team will extend it. | Should |
+| NFR1 | **Accessibility:** WCAG 2.2 AA in both themes, with no axe-core violations; everything works by keyboard with visible focus, and screen readers announce controls and messages. | No axe-core violations; a keyboard-only run of every FR; a VoiceOver run of the main tasks. | Client: "always design for accessibility in mind". | ✅ |
+| NFR2 | **Colour:** 4.5:1 text contrast; never colour alone. | Every colour pair measured; colour-blindness simulations. | Client: colour-blind users "might struggle". | ✅ |
+| NFR3 | **Any screen:** works from 320 px; main targets at least 44 px. | Checked from 320 to 1440 px, and zoomed to 400%. | Phones and zoom users (WCAG 1.4.10, 2.5.8). | ✅ |
+| NFR4 | **Easy to learn:** 4 of 5 new users add, hand off and copy a task within 2 minutes. | 4 of 5 users finish each within 2 minutes; SUS (Brooke, 1996) above the average, 68 (Sauro, 2011). | Brief: it must be "intuitive". | ✅ |
+| NFR5 | **Error protection:** deleting, resetting or discarding asks first. | Cancelling changes nothing. | Extra: there is no backup (Nielsen, 1994). | ✅ |
+| NFR6 | **Speed:** loads within 2.5 s on a phone; reacts within 0.1 s. | Lighthouse; a 100-task board timed. | Feels instant (web.dev, n.d.; Shneiderman and Plaisant, 2005, p. 462). | Should |
+| NFR7 | **Reliability:** a public link needing no account; survives reloads and damaged data. | Opens in a private window on a new device; reopen the browser; corrupt the saved data. | Brief: no registering; a tracker that forgets is useless. | ✅ |
+| NFR8 | **Privacy and security:** data stays on the device unless the user copies it; pasted text never runs as code. | No outside requests in the Network panel; pasting `<script>` into each field runs nothing. | Client: a "secretive project"; AI output can contain code. | ✅ |
+| NFR9 | **Browsers:** Chrome, Edge, Firefox and Safari. | Every MVP requirement passes in each. | Client: the web is "the default here". | ✅ |
+| NFR10 | **Technology:** React, Vite and Tailwind; no backend; no source file over 300 lines. | `npm run build` gives static files only; no source file over 300 lines. | Client: a "leading web framework"; another team will extend it. | ✅ |
 
 ---
 
@@ -87,28 +70,25 @@ What the tracker stores, why, and where it comes from (Wiegers and Beatty, 2013)
 
 | ID | Data | Why | Where from | MVP? |
 |---|---|---|---|---|
-| DR1 | **Task:** title (required, 120 characters), description, type, status, story, position. | To show, edit and move tasks (FR1 to FR8). | The form; the tracker makes the ID. | ✅ |
-| DR2 | **Owner:** a member, or none. | IA: "see who we assigned" (FR9). | The form, or Hand off. | ✅ |
-| DR3 | **Dates:** due (optional) and created. | To track tasks over time (FR13, FR14). | The user; the device's clock. | ✅ |
-| DR4 | **Handoff:** up to 20,000 characters, and the AI tool. | So no one starts "from scratch" (IA). | The outgoing developer or their AI agent. | ✅ |
-| DR5 | **Handoff updated:** date and time. | Shows how fresh it is (FR17). | Set when the handoff changes. | Should |
-| DR6 | **Handoff history:** from, to, note (280), when. | Shows who has worked on a task (FR10). | Recorded by Hand off. | Should |
-| DR7 | **Member:** name (required, 60), email, GitHub handle. | What IA and N asked for (FR9 to FR12). | Each member, when added. | ✅ |
-| DR8 | **Project:** name (80) and four http(s) links. | One project per team; "key milestones" (Brief). | Typed or pasted by the team. | ✅ |
-| DR9 | **Briefing:** Markdown with Task, Actor, Context and Output sections. | A clear prompt for any AI tool (FR18, FR22). | Built from the task, DR15 and DR16. | ✅ |
-| DR10 | **Demo:** a fictional team, 12 tasks, four stories. | Every feature can be seen at once (FR3, FR20). | Written by the developer. | ✅ |
-| DR11 | **Calculated:** due states, counts, progress. | Stored copies would go out of date. | Worked out when shown. | ✅ |
-| DR12 | **Storage:** JSON in the browser's localStorage, under four keys. | No backend needed (Brief); keeps data private (NFR11). | Saved on every change (NFR9). | ✅ |
-| DR13 | **Filters and theme:** filters held in memory; the theme saved. | To narrow the board and keep the theme (FR21, FR23). | The filter bar, Tasks buttons and header. | Should |
-| DR14 | **Personal data:** names, emails and handles only. | UK GDPR data minimisation (ICO, 2026). | Applies to DR7. | ✅ |
-| DR15 | **Prompt goals:** four goals, each with Task, Actor and Output text. | Fills the briefing's TACO sections (FR18). | The developer, from IA's TACO structure. | ✅ |
-| DR16 | **User story:** role, want and benefit. | Links tasks to the needs they meet (FR26 to FR28). | Typed by the team. | ✅ |
+| DR1 | **Task:** title (required, 120 characters), description, type, status, story, position. | Show and move tasks (FR1, FR3). | The form. | ✅ |
+| DR2 | **Owner:** a member, or none. | Client: "see who we assigned". | Form; Hand off. | ✅ |
+| DR3 | **Dates:** due (optional) and created. | Track tasks over time (FR8). | User; clock. | ✅ |
+| DR4 | **Handoff:** up to 20,000 characters, the AI tool and when it was updated. | No "starting from scratch" (FR9). | Outgoing developer. | ✅ |
+| DR5 | **Handoff history:** from, to, note (280), when. | Shows who worked on it (FR6). | Hand off. | Should |
+| DR6 | **Member:** name (required, 60), email, GitHub handle. | Contact owners (FR7). | The team. | ✅ |
+| DR7 | **Project:** name (80) and four http(s) links. | "Key milestones" (FR11). | The team. | ✅ |
+| DR8 | **Briefing:** Markdown with Task, Actor, Context and Output sections, from one of four prompt goals. | A clear prompt for any AI tool (FR10). | Built from the task. | ✅ |
+| DR9 | **Demo:** a fictional team, 12 tasks, four stories. | Show every feature (FR2). | The developer. | ✅ |
+| DR10 | **Calculated:** due states, counts, progress. | Stored copies would go stale. | Computed. | ✅ |
+| DR11 | **Storage:** JSON in the browser's localStorage, under four keys; the sign-in lasts for the tab. | No backend; privacy (NFR8). | Saved on each change. | ✅ |
+| DR12 | **Filters and theme:** filters held in memory; the theme saved. | Narrow the board (FR12); keep the theme (FR15). | Filter bar; header. | Should |
+| DR13 | **Personal data:** names, emails and handles only. | Data minimisation (ICO, 2026). | Members, when added. | ✅ |
+| DR14 | **User story:** role, want and benefit. | Link tasks to needs (FR13). | The team. | ✅ |
 
 ---
 
 ## References
 
-- Anderson, D.J. (2010) *Kanban: Successful Evolutionary Change for Your Technology Business*. Sequim, WA: Blue Hole Press.
 - Brooke, J. (1996) 'SUS: a "quick and dirty" usability scale', in Jordan, P.W., Thomas, B., Weerdmeester, B.A. and McClelland, I.L. (eds) *Usability Evaluation in Industry*. London: Taylor & Francis, pp. 189-194.
 - Clegg, D. and Barker, R. (1994) *Case Method Fast-Track: A RAD Approach*. Wokingham: Addison-Wesley.
 - Cohn, M. (2004) *User Stories Applied: For Agile Software Development*. Boston, MA: Addison-Wesley.
@@ -127,4 +107,4 @@ What the tracker stores, why, and where it comes from (Wiegers and Beatty, 2013)
 
 ---
 
-*PRD version 4.4 · 26/10/2026: a shorter rewrite of 4.3, with the same IDs and MVP marks.*
+*PRD version 5.0 · 28/10/2026: 16 functional, 10 non-functional and 14 data requirements, merged from version 4.6's 28, 15 and 16 with nothing dropped from the prototype, plus the MVP login (FR16).*

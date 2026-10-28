@@ -1,4 +1,4 @@
-// Due-date states (M8, PRD FR13–FR14).
+// Due-date states (M8, PRD FR8).
 // A task is due at the END of its due date, in local time.
 //   overdue : past the end of the due date
 //   warning : due in under 24 hours

@@ -17,7 +17,7 @@ export const TASK_TYPES = [
 // a task is assigned to), an email (to contact a task's owner directly) and a
 // GitHub handle. `Task.assignee` holds a member's `id`.
 // These are made-up people for the demo; more can be added in the Team strip
-// (PRD FR12), so the live list is kept in localStorage. John Doe is the demo
+// (PRD FR7), so the live list is kept in localStorage. John Doe is the demo
 // account the MVP login signs in as (LoginPage.jsx), so he's on the team too.
 export const TEAM = [
   { id: 'alex',   name: 'Alex Kim',   email: 'alex.kim@example.com',   github: 'alexkim-demo' },
@@ -29,13 +29,13 @@ export const TEAM = [
 // The member the MVP login always signs in as, whatever is typed.
 export const DEMO_USER_ID = 'john';
 
-// The AI tools a task can be worked on with (PRD FR16).
+// The AI tools a task can be worked on with (PRD FR9).
 export const AI_TOOLS = ['Claude', 'ChatGPT', 'Cursor', 'Lovable', 'Replit', 'Other'];
 
 // The longest handoff text that can be saved.
 export const HANDOFF_TEXT_MAX_LENGTH = 20000;
 
-// Prompt goals for "Copy context" (PRD FR18, DR15), in Ignacio's TACO
+// Prompt goals for "Copy context" (PRD FR10, DR8), in the client's TACO
 // structure: the Task (what the AI should do), the Actor (the persona it
 // takes) and the Output format. briefing.js fills in the Context.
 export const PROMPT_MODES = [
@@ -69,10 +69,10 @@ export const PROMPT_MODES = [
   },
 ];
 
-export const HANDOFF_NOTE_MAX_LENGTH = 280; // PRD DR6
+export const HANDOFF_NOTE_MAX_LENGTH = 280; // PRD DR5
 
 // The project's deliverables, pinned above the board as link cards
-// (M11, PRD FR19).
+// (M11, PRD FR11).
 export const DELIVERABLES = [
   { id: 'presentation',  label: 'Presentation' },
   { id: 'demo',          label: 'Demo' },

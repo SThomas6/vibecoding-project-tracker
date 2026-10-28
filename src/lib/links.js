@@ -1,5 +1,5 @@
 // True only for web links (http:// or https://). Anything else, such as
-// javascript: links, is refused, so a saved link can never run code (NFR12).
+// javascript: links, is refused, so a saved link can never run code (NFR8).
 export function isWebLink(value) {
   try {
     const url = new URL(value);

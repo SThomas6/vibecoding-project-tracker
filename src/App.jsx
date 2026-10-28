@@ -57,24 +57,24 @@ export default function App() {
   // The briefing to copy by hand when the browser blocks copying (M10).
   const [fallbackText, setFallbackText] = useState(null);
 
-  // The team, which can grow (PRD FR12). Starts with the demo team.
+  // The team, which can grow (PRD FR7). Starts with the demo team.
   const [team, setTeam] = useLocalStorage(STORAGE_KEYS.team, TEAM, cleanTeam);
   const [addingMember, setAddingMember] = useState(false);
 
-  // The project's name and deliverable links (PRD FR19, FR25, DR8).
+  // The project's name and deliverable links (PRD FR11, DR7).
   const [project, setProject] = useLocalStorage(STORAGE_KEYS.project, createSeedProject, cleanProject);
   const [renaming, setRenaming] = useState(false);
 
-  // "Reset demo" confirmation (PRD FR20).
+  // "Reset demo" confirmation (PRD FR2).
   const [resetting, setResetting] = useState(false);
 
-  // Light / Dark theme preference (PRD FR23, DR13), saved across visits.
+  // Light / Dark theme preference (PRD FR15, DR12), saved across visits.
   const [theme, setTheme] = useTheme();
 
-  // Search and advanced board filters (PRD FR21, FR28).
+  // Search and advanced board filters (PRD FR12, FR13).
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
-  // User stories (PRD FR26–FR28), kept in the project object (DR16).
+  // User stories (PRD FR13), kept in the project object (DR14).
   const { stories, ...storyActions } = useStoryActions({ project, setProject, tasks, setTasks, setFilters, showToast });
   const filteredTasks = filterTasks(tasks, filters, now, stories);
 
@@ -143,7 +143,7 @@ export default function App() {
     flash(taskId);
   }
 
-  // Dropped on the board (PRD FR24): in another column, or at another place in
+  // Dropped on the board (PRD FR14): in another column, or at another place in
   // the same one, just above `beforeId` (null for the bottom).
   function moveTo(taskId, status, beforeId) {
     const next = moveTask(tasks, taskId, status, beforeId);

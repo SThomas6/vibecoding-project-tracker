@@ -2,7 +2,7 @@ import { useId, useRef } from 'react';
 import Dialog from './Dialog.jsx';
 import { buttonStyles } from './styles.js';
 
-// Confirms "Reset demo" (PRD FR20, NFR7). The safe choice, "Keep my data",
+// Confirms "Reset demo" (PRD FR2, NFR5). The safe choice, "Keep my data",
 // has focus first, so pressing Enter by accident never wipes anything.
 export default function ResetDemoDialog({ onConfirm, onClose }) {
   const id = useId();

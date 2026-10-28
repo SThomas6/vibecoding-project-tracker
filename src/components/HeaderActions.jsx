@@ -1,9 +1,9 @@
 import { Moon, Plus, RotateCcw, Sun } from 'lucide-react';
 import { buttonStyles } from './styles.js';
 
-// The header's buttons: Light or Dark mode (PRD FR23), Reset demo (FR20) and
-// New task (FR4). On phones New task floats at the bottom right, within thumb
-// reach (NFR5); from 640px it sits in the header with the others.
+// The header's buttons: Light or Dark mode (PRD FR15), Reset demo (FR2) and
+// New task (FR3). On phones New task floats at the bottom right, within thumb
+// reach (NFR3); from 640px it sits in the header with the others.
 export default function HeaderActions({ theme, onToggleTheme, onReset, onNewTask }) {
   return (
     <div className="flex flex-wrap gap-2">

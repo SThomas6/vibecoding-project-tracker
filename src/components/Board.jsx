@@ -3,10 +3,10 @@ import { useBoardDrag } from '../hooks/useBoardDrag.js';
 import { smallButtonStyles } from './styles.js';
 import TaskCard from './TaskCard.jsx';
 
-// The Kanban board (PRD FR1, FR2): one column per stage, each showing the
+// The Kanban board (PRD FR1): one column per stage, each showing the
 // tasks whose status matches, in list order. Four columns on wide screens, two
 // on tablets, one on phones. Cards can be dragged to any place in any column
-// with a mouse or pen (useBoardDrag, PRD FR24), and a line shows where the card
+// with a mouse or pen (useBoardDrag, PRD FR14), and a line shows where the card
 // will land. The Status and Position fields in the task form do the same
 // without dragging, and the hint says so on touch screens, where dragging is off.
 export default function Board({ tasks, team, stories, hasFilters, onOpenTask, onHandOff, onCopy, onCopyHandoff, onMove, highlightedId, now }) {
@@ -126,7 +126,7 @@ function DropLine({ below = false }) {
 }
 
 // Below 1280px the columns stack, so a bar that stays at the top of the screen
-// jumps to each one, with its count (PRD NFR5). index.css keeps focused
+// jumps to each one, with its count (PRD NFR3). index.css keeps focused
 // controls clear of it. The list is `relative` so its hidden screen-reader
 // text scrolls with it instead of widening the page at 320px.
 function ColumnLinks({ tasks }) {

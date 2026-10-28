@@ -8,13 +8,13 @@ import { buttonStyles, inputStyles, labelStyles, smallButtonStyles } from './sty
 // The five filters that sit behind the "Filters" button on small screens.
 const FILTER_KEYS = ['member', 'type', 'due', 'context', 'story'];
 
-// Search and filters for the board (PRD FR21): search tasks, and filter by who
+// Search and filters for the board (PRD FR12): search tasks, and filter by who
 // has worked on or owns a task, task type, due-date state, handoff or AI tool,
-// and user story (PRD FR28). From 1280px everything sits in one row; from
+// and user story (PRD FR13). From 1280px everything sits in one row; from
 // 1024px the filters have a row of their own under the search, so each select
 // is wide enough to read; on small screens the five filters fold behind a
-// "Filters" button, so the board isn't pushed far down the page (NFR5). Every
-// control has a visible label and no placeholder (NFR1, NFR3).
+// "Filters" button, so the board isn't pushed far down the page (NFR3). Every
+// control has a visible label and no placeholder (NFR1).
 export default function FilterBar({ filters, team, stories = [], totalCount, shownCount, onChange }) {
   const id = useId();
   const [open, setOpen] = useState(false);

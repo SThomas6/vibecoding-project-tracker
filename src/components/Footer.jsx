@@ -1,5 +1,5 @@
 // The page footer: the product name, a reminder that data stays in this
-// browser (PRD NFR11, DR12) and a link to the source code (NFR15). The extra
+// browser (PRD NFR8, DR11) and a link to the source code (NFR10). The extra
 // space at the bottom on phones keeps it clear of the floating New task button.
 export default function Footer() {
   return (

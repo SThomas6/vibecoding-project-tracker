@@ -1,7 +1,7 @@
 import { DELIVERABLES } from '../constants.js';
 import DeliverableCard from './DeliverableCard.jsx';
 
-// The project's deliverables, pinned above the board (PRD FR19): the clients'
+// The project's deliverables, pinned above the board (PRD FR11): the clients'
 // "big anchors" for the presentation, demo, report and documentation, in one
 // slim row on wide screens so the board starts near the top of the page.
 export default function Deliverables({ links, onSave }) {

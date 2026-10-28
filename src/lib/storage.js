@@ -1,6 +1,6 @@
 import { STORY_LIMITS } from './stories.js';
 
-// Checks data loaded from localStorage before the app uses it (PRD DR12).
+// Checks data loaded from localStorage before the app uses it (PRD DR11).
 // Each function returns the usable part of what was saved, or undefined if
 // none of it is usable, in which case the demo value is used instead. That
 // way data edited by hand, or left by an older version, can't blank the page.
@@ -19,7 +19,7 @@ function isTask(task) {
 
 const isText = (value) => typeof value === 'string' && value.trim() !== '';
 
-// A user story needs an id, a whole number, a role and a want (PRD DR16).
+// A user story needs an id, a whole number, a role and a want (PRD DR14).
 function isStory(story) {
   return (
     isObject(story) &&

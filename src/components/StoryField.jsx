@@ -1,9 +1,9 @@
 import { storyLabel } from '../lib/stories.js';
 import { inputStyles, labelStyles } from './styles.js';
 
-// The task form's "User story" field (PRD FR27): the one story this task
+// The task form's "User story" field (PRD FR13): the one story this task
 // delivers, or None. A separate component so TaskModal.jsx stays under 300
-// lines (NFR15).
+// lines (NFR10).
 export default function StoryField({ id, stories, value, onChange }) {
   const hintId = `${id}-story-hint`;
 

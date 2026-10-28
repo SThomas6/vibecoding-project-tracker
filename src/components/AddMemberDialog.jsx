@@ -3,7 +3,7 @@ import { newId } from '../lib/tasks.js';
 import Dialog from './Dialog.jsx';
 import { buttonStyles, inputStyles, labelStyles } from './styles.js';
 
-// Adds a team member (PRD FR12, DR7): a name is required so tasks can be
+// Adds a team member (PRD FR7, DR6): a name is required so tasks can be
 // assigned; email and GitHub handle are optional but must look right.
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const GITHUB = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$/;
