@@ -2,7 +2,7 @@
 
 A Kanban board for vibecoding projects that keeps a handoff with each task (what's done, what's left, logs and next steps), so anyone can pick a task up and paste its briefing straight into an AI tool.
 
-Built for CM6312 (Cardiff University) during the UXD Vibecoding Hackathon, 20/10/2026, starting from Prof. Dr. Ignacio Alvarez's hackathon starter repo (github.com/ignacioalvmar/vibecoding-project-tracker). Clients: Prof. Dr. Ignacio Alvarez and Nathan. Requirements are in [`PRD.md`](PRD.md) and the design system in [`DESIGN.md`](DESIGN.md).
+Built for the clients Prof. Dr. Ignacio Alvarez and Nathan, starting from the client's starter repo (github.com/ignacioalvmar/vibecoding-project-tracker) on 20/10/2026. Requirements are in [`PRD.md`](PRD.md) and the design system in [`DESIGN.md`](DESIGN.md).
 
 **Live demo:** <https://vibecoding-project-tracker-tau.vercel.app/>. It opens without login; all data stays in your browser.
 
