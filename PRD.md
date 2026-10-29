@@ -51,16 +51,16 @@ How well the tracker must work, each labelled by a quality concern from ISO/IEC 
 
 | ID | Requirement | Test | Why | MVP? |
 |---|---|---|---|---|
-| NFR1 | **Accessibility:** WCAG 2.2 AA in both themes, with no axe-core violations; everything works by keyboard with visible focus, and screen readers announce controls and messages. | No axe-core violations; a keyboard-only run of every FR. | Client: "always design for accessibility in mind". | ✅ |
-| NFR2 | **Colour:** 4.5:1 text contrast; never colour alone. | Every colour pair measured; colour-blindness simulations. | Client: colour-blind users "might struggle". | ✅ |
-| NFR3 | **Any screen:** works from 320 px; main targets at least 44 px. | Checked from 320 to 1440 px, and zoomed to 400%. | Phones and zoom users (WCAG 1.4.10, 2.5.8). | ✅ |
-| NFR4 | **Easy to learn:** new users add, hand off and copy a task without help. | New users finish all three tasks without help. | Brief: it must be "intuitive". | ✅ |
-| NFR5 | **Error protection:** deleting, resetting or discarding asks first. | Cancelling changes nothing. | Extra: there is no backup (Nielsen, 1994). | ✅ |
-| NFR6 | **Speed:** loads within 2.5 s on a phone; reacts within 0.1 s. | Lighthouse; a 100-task board timed. | Feels instant (web.dev, n.d.; Shneiderman and Plaisant, 2005, p. 462). | Should |
-| NFR7 | **Reliability:** a public link needing no account; survives reloads and damaged data. | Opens in a private window on a new device; reopen the browser; corrupt the saved data. | Brief: no registering; a tracker that forgets is useless. | ✅ |
-| NFR8 | **Privacy and security:** data stays on the device unless the user copies it; pasted text never runs as code. | No outside requests in the Network panel; pasting `<script>` into each field runs nothing. | Client: a "secretive project"; AI output can contain code. | ✅ |
-| NFR9 | **Browsers:** Chrome, Edge and Safari. | Every MVP requirement passes in each; Edge shares Chrome's engine. | Client: the web is "the default here". | ✅ |
-| NFR10 | **Technology:** React, Vite and Tailwind; no backend; no source file over 300 lines. | `npm run build` gives static files only; no source file over 300 lines. | Client: a "leading web framework"; another team will extend it. | ✅ |
+| NFR1 | **Accessibility:** the tracker meets WCAG 2.2 AA in Light and Dark mode. Every feature works with a keyboard alone, and screen readers can read every button and message. | No axe-core violations; every FR completed using only a keyboard. | Client: "always design for accessibility in mind". | ✅ |
+| NFR2 | **Colour:** all text has a contrast of at least 4.5:1, and colour is never the only clue to meaning. | Every colour pair measured; checked in colour-blindness simulations. | Client: colour-blind users "might struggle". | ✅ |
+| NFR3 | **Screen sizes:** the tracker works on screens from 320 px wide, and main buttons are at least 44 px. | Checked from 320 to 1440 px wide, and zoomed to 400%. | People use phones and zoom in (WCAG 1.4.10, 2.5.8). | ✅ |
+| NFR4 | **Easy to learn:** new users can add, hand off and copy a task without help. | New users finish all three tasks without help. | Brief: it must be "intuitive". | ✅ |
+| NFR5 | **Preventing mistakes:** deleting, resetting or discarding changes always asks first. | Pressing Cancel changes nothing. | Extra: a task's handoff and history take hours to rebuild (Nielsen, 1994). | ✅ |
+| NFR6 | **Speed:** pages load within 2.5 seconds on a phone, and the tracker responds within 0.1 seconds. | Lighthouse; a 100-task board timed. | Anything under 0.1 s feels instant (web.dev, n.d.; Shneiderman and Plaisant, 2005, p. 462). | Should |
+| NFR7 | **Reliability:** anyone can open the link without an account, and no work is lost after a reload or if saved data is damaged. | Opens in a private window on a new device; reopen the browser; corrupt the saved data. | Brief: reviewers must not register; a tracker that loses work is useless. | ✅ |
+| NFR8 | **Privacy and security:** data never leaves the device unless the user copies it, and pasted text can never run as code. | No outside requests in the Network panel; pasting `<script>` into each field runs nothing. | Client: a "secretive project"; AI output can contain code. | ✅ |
+| NFR9 | **Browsers:** the tracker works in Chrome, Edge and Safari. | Every MVP requirement passes in each; Edge shares Chrome's engine. | Client: the web is "the default here". | ✅ |
+| NFR10 | **Technology:** built with React, Vite and Tailwind, with no backend and no code file over 300 lines. | `npm run build` gives static files only; no source file over 300 lines. | Client: a "leading web framework"; another team will build on it. | ✅ |
 
 ---
 
