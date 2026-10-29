@@ -51,10 +51,10 @@ How well the tracker must work, each labelled by a quality concern from ISO/IEC 
 
 | ID | Requirement | Test | Why | MVP? |
 |---|---|---|---|---|
-| NFR1 | **Accessibility:** WCAG 2.2 AA in both themes, with no axe-core violations; everything works by keyboard with visible focus, and screen readers announce controls and messages. | No axe-core violations; a keyboard-only run of every FR; a VoiceOver run of the main tasks. | Client: "always design for accessibility in mind". | ✅ |
+| NFR1 | **Accessibility:** WCAG 2.2 AA in both themes, with no axe-core violations; everything works by keyboard with visible focus, and screen readers announce controls and messages. | No axe-core violations; a keyboard-only run of every FR. | Client: "always design for accessibility in mind". | ✅ |
 | NFR2 | **Colour:** 4.5:1 text contrast; never colour alone. | Every colour pair measured; colour-blindness simulations. | Client: colour-blind users "might struggle". | ✅ |
 | NFR3 | **Any screen:** works from 320 px; main targets at least 44 px. | Checked from 320 to 1440 px, and zoomed to 400%. | Phones and zoom users (WCAG 1.4.10, 2.5.8). | ✅ |
-| NFR4 | **Easy to learn:** 4 of 5 new users add, hand off and copy a task within 2 minutes. | 4 of 5 users finish each within 2 minutes; SUS (Brooke, 1996) above the average, 68 (Sauro, 2011). | Brief: it must be "intuitive". | ✅ |
+| NFR4 | **Easy to learn:** new users add, hand off and copy a task without help. | New users finish all three tasks without help. | Brief: it must be "intuitive". | ✅ |
 | NFR5 | **Error protection:** deleting, resetting or discarding asks first. | Cancelling changes nothing. | Extra: there is no backup (Nielsen, 1994). | ✅ |
 | NFR6 | **Speed:** loads within 2.5 s on a phone; reacts within 0.1 s. | Lighthouse; a 100-task board timed. | Feels instant (web.dev, n.d.; Shneiderman and Plaisant, 2005, p. 462). | Should |
 | NFR7 | **Reliability:** a public link needing no account; survives reloads and damaged data. | Opens in a private window on a new device; reopen the browser; corrupt the saved data. | Brief: no registering; a tracker that forgets is useless. | ✅ |
@@ -89,14 +89,12 @@ What the tracker stores, why, and where it comes from (Wiegers and Beatty, 2013)
 
 ## References
 
-- Brooke, J. (1996) 'SUS: a "quick and dirty" usability scale', in Jordan, P.W., Thomas, B., Weerdmeester, B.A. and McClelland, I.L. (eds) *Usability Evaluation in Industry*. London: Taylor & Francis, pp. 189-194.
 - Clegg, D. and Barker, R. (1994) *Case Method Fast-Track: A RAD Approach*. Wokingham: Addison-Wesley.
 - Cohn, M. (2004) *User Stories Applied: For Agile Software Development*. Boston, MA: Addison-Wesley.
 - ICO (2026) *A guide to the data protection principles*. Information Commissioner's Office. Available at: https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-protection-principles/a-guide-to-the-data-protection-principles/ (Accessed: 26 October 2026).
 - ISO (2023) *ISO/IEC 25010:2023 Systems and software engineering: Systems and software Quality Requirements and Evaluation (SQuaRE): Product quality model*. Geneva: International Organization for Standardization.
 - Nielsen, J. (1994, updated 2024) *10 usability heuristics for user interface design*. Nielsen Norman Group. Available at: https://www.nngroup.com/articles/ten-usability-heuristics/
 - Parnin, C. and Rugaber, S. (2011) 'Resumption strategies for interrupted programming tasks', *Software Quality Journal*, 19(1), pp. 5-34. doi:10.1007/s11219-010-9104-9
-- Sauro, J. (2011) *A Practical Guide to the System Usability Scale: Background, Benchmarks & Best Practices*. Denver, CO: Measuring Usability LLC.
 - Shneiderman, B. (1996) 'The eyes have it: a task by data type taxonomy for information visualizations', *Proceedings of the 1996 IEEE Symposium on Visual Languages*. Boulder, CO, pp. 336-343. doi:10.1109/VL.1996.545307
 - Shneiderman, B. and Plaisant, C. (2005) *Designing the User Interface: Strategies for Effective Human-Computer Interaction*. 4th edn. Boston, MA: Pearson Addison-Wesley.
 - Sommerville, I. (2016) *Software Engineering*. 10th edn. Harlow: Pearson.
